@@ -43,6 +43,7 @@ if [ $RESULT -ne 0 ]; then
   echo ""
   echo "[MDS GATE] PHÁT HIỆN TÀI LIỆU SAI QUY CHUẨN!"
   echo "Commit đã bị chặn lại. Vui lòng sửa các lỗi trên trước khi commit lại."
+  echo "Tip: Bạn có thể tạm thời bỏ qua rào chắn bằng cách dùng: git commit -m \\"message\\" --no-verify"
   echo "=================================================="
   exit 1
 fi
