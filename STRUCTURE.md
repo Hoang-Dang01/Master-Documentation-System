@@ -1,6 +1,6 @@
-# MDS v7.0 - Directory Tree Map
+# MDS v7.0.0 - Directory Tree Map
 
-Bản đồ chi tiết cấu trúc cây thư mục 2 cấp của **MDS (Master Documentation System) v7.0 — UX Optimized Edition**.
+Bản đồ chi tiết cấu trúc cây thư mục 2 cấp của **MDS (Master Documentation System) v7.0.0 — UX Optimized Edition**.
 
 ```text
 MDS/
@@ -84,7 +84,7 @@ MDS/
 │   ├── 28_[AI_DEVOPS]_AUTOMATION_ENGINE/     # Kịch bản tự động hóa, kiểm tra tài liệu drift & AI tools
 │   │   ├── ci_gate_config.yml                # Cấu hình mẫu Git Gate tự động chặn PR khi drift tài liệu
 │   │   ├── scripts/                          # Thư mục chứa scripts mẫu đối soát
-│   │   │   └── detect_drift.py               # Script Python đối soát tài liệu
+│   │   │   └── detect_drift.js               # Script Node.js đối soát tài liệu
 │   │   └── ai_agent_prompts.md               # Prompt hệ thống nạp đồ thị tri thức MDS vào Chatbot AI
 │   └── 90_[ALL]_ORCHESTRATION_ENGINE/        # Động cơ điều phối AI Agents, nhật ký phiên và ngữ cảnh chạy
 │       ├── ACTIVE_CONTEXTS/                  # Đóng gói ngữ cảnh chạy (Context Capsules) nạp cho AI

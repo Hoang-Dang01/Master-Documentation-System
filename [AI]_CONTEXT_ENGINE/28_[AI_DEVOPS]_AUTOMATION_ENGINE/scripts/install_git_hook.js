@@ -19,7 +19,7 @@ console.log(`MDS Git Hook Installer initialized.`);
 console.log(`Workspace root: ${workspaceRoot}`);
 
 if (!fs.existsSync(gitDir)) {
-    console.error(`❌ ERROR: Thư mục '.git' không tồn tại ở thư mục gốc dự án.`);
+    console.error(`ERROR: Thư mục '.git' không tồn tại ở thư mục gốc dự án.`);
     console.error(`Vui lòng khởi tạo Git trước (chạy lệnh: git init) để kích hoạt cơ chế bọc thép Level 3.`);
     process.exit(1);
 }
@@ -32,7 +32,7 @@ if (!fs.existsSync(hooksDir)) {
 const hookContent = `#!/bin/sh
 # MDS Gate - Pre-commit Validation Hook
 echo "=================================================="
-echo "🛡️  [MDS GATE] Đang quét tri thức hệ thống trước khi commit..."
+echo "[MDS GATE] Đang quét tri thức hệ thống trước khi commit..."
 echo "=================================================="
 
 # Chạy trình linter Node.js để kiểm tra tính nhất quán tài liệu
@@ -41,14 +41,14 @@ RESULT=$?
 
 if [ $RESULT -ne 0 ]; then
   echo ""
-  echo "❌ [MDS GATE] PHÁT HIỆN TÀI LIỆU SAI QUY CHUẨN!"
+  echo "[MDS GATE] PHÁT HIỆN TÀI LIỆU SAI QUY CHUẨN!"
   echo "Commit đã bị chặn lại. Vui lòng sửa các lỗi trên trước khi commit lại."
   echo "=================================================="
   exit 1
 fi
 
 echo ""
-echo "✅ [MDS GATE] Tài liệu hợp lệ. Tiến hành commit."
+echo "[MDS GATE] Tài liệu hợp lệ. Tiến hành commit."
 echo "=================================================="
 exit 0
 `;
@@ -61,11 +61,11 @@ try {
     } catch (e) {
         // chmod might fail on native Windows filesystems, but Git Bash will usually handle the file mode
     }
-    console.log(`\n✅ BỌC THÉP THÀNH CÔNG!`);
+    console.log(`\nBỌC THÉP THÀNH CÔNG!`);
     console.log(`Đã cài đặt Git Pre-commit Hook tại: ${preCommitHookPath}`);
     console.log(`Mỗi lần commit, hệ thống sẽ tự động kích hoạt camera kiểm soát tài liệu.`);
     process.exit(0);
 } catch (err) {
-    console.error(`❌ ERROR: Không thể ghi file pre-commit hook: ${err.message}`);
+    console.error(`ERROR: Không thể ghi file pre-commit hook: ${err.message}`);
     process.exit(1);
 }

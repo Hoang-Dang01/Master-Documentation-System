@@ -418,13 +418,12 @@ const totalEntities = Object.keys(linter.registry).length;
 console.log("\n" + "=".repeat(50));
 console.log("MDS LINTER VALIDATION SUMMARY");
 console.log("=".repeat(50));
-console.log(`Total Registered Entities: {totalEntities}`); // Wait, this had a missing $ too! Fixed.
 console.log(`Total Registered Entities: ${totalEntities}`);
 console.log(`Total Validation Errors:   ${totalErrors}`);
 console.log("=".repeat(50));
 
 if (totalErrors > 0) {
-    console.log("\n❌ VALIDATION FAILED! Found the following errors:\n");
+    console.log("\n[FAIL] VALIDATION FAILED! Found the following errors:\n");
     
     // Group errors by file for cleaner output
     const errorsByFile = {};
@@ -436,7 +435,7 @@ if (totalErrors > 0) {
     }
 
     for (const [file, errs] of Object.entries(errorsByFile)) {
-        console.log(`📁 File: [ ${file} ]`);
+        console.log(`File: [ ${file} ]`);
         for (const e of errs) {
             console.log(`   - VI: ${e.vi}`);
             console.log(`   - EN: ${e.en}`);
@@ -445,6 +444,6 @@ if (totalErrors > 0) {
     }
     process.exit(1);
 } else {
-    console.log("\n✅ VALIDATION SUCCESSFUL! All files and relationships comply with the 4 Canonical Rules.\n");
+    console.log("\n[SUCCESS] VALIDATION SUCCESSFUL! All files and relationships comply with the 4 Canonical Rules.\n");
     process.exit(0);
 }
