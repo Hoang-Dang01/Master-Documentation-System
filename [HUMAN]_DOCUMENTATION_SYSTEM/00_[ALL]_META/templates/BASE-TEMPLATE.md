@@ -1,42 +1,81 @@
 ---
 id: BASE-TEMPLATE
 name: Base Metadata Template
+
+artifact_type: AST
+domain: META
+
 owner: ALL
 status: APPROVED
-version: 1.0
+version: 2.0.0
+
+tags:
+  - system
+  - template
+  - metadata
+  - base
+
 created_at: 2026-06-26
 updated_at: 2026-06-26
+
+last_updated_by: Human-Chief-Architect
+change_summary: v2 — added artifact_type, domain, tags, audit trail, references, supersedes; fixed SemVer; stripped guide content (moved to BASE_GUIDE.md)
+
 links:
   depends_on: []
   implements: []
   tested_by: []
   broken_by: []
   impacts_cost: []
+  references:
+    - BASE_GUIDE
+  supersedes: []
 ---
 
 # Base Metadata Template
 
-Đây là biểu mẫu nền tảng (Base Template) quy định cấu trúc siêu dữ liệu bắt buộc cho **tất cả** các tệp tin tài liệu trong hệ thống MDS. Tất cả các tài liệu chuyên biệt (Specialized Templates) bắt buộc phải kế thừa (extend) cấu trúc này.
+> **Guide**: [BASE_GUIDE.md](../guides/BASE_GUIDE.md) — field definitions, lifecycle rules, links graph semantics.
+> **Example**: [BASE-EXAMPLE.md](../examples/BASE-EXAMPLE.md) — gold standard reference.
 
 ---
 
-## 1. Giải Thích Các Trường Metadata Chung
+## Blueprint (Copy-Paste Below This Line)
 
-*   **`id`**: Mã định danh duy nhất toàn cầu của thực thể (ví dụ: `REQ-ATT-001`, `API-USER-002`).
-*   **`name`**: Tên hiển thị ngắn gọn của thực thể (ví dụ: `Attendance Engine`).
-*   **`owner`**: Vai trò chịu trách nhiệm chính về mặt nội dung (`PM`, `BA`, `SA`, `ARC`, `DBA`, `BE`, `FE`, `QA`, `DEVOPS`, `SEC`, `SRE`, `OPS`, `AI`).
-*   **`status`**: Trạng thái vòng đời của tài liệu (`DRAFT`, `REVIEW`, `APPROVED`, `IN_PROGRESS`, `DEPRECATED`, `ARCHIVED`, `BLOCKED`, `NOT_APPLICABLE`).
-*   **`version`**: Phiên bản tài liệu (`X.Y`).
-*   **`created_at`**: Ngày khởi tạo tài liệu (`YYYY-MM-DD`).
-*   **`updated_at`**: Ngày cập nhật tài liệu gần nhất (`YYYY-MM-DD`).
+```yaml
+---
+id: [GLOBAL-UNIQUE-ID]
+name: [Artifact Name]
 
+artifact_type: [REQ|ADR|API|DB|TC|BUG|INC|FIN|AST]
+domain: [DOMAIN_NAME]
+
+owner: [ALL|PM|BA|SA|ARC|DBA|BE|FE|QA|DEVOPS|SEC|SRE|OPS|AI]
+
+status: [DRAFT|REVIEW|APPROVED|IN_PROGRESS|BLOCKED|DEPRECATED|ARCHIVED|NOT_APPLICABLE]
+
+version: 1.0.0
+
+tags:
+  - [tag1]
+  - [tag2]
+
+created_at: [YYYY-MM-DD]
+updated_at: [YYYY-MM-DD]
+
+last_updated_by: [Actor]
+change_summary: [Short summary of this version]
+
+links:
+  depends_on: []
+  implements: []
+  tested_by: []
+  broken_by: []
+  impacts_cost: []
+  references: []
+  supersedes: []
 ---
 
-## 2. Giải Thích Mạng Lưới Liên Kết Động (Links Graph)
+# [Artifact Name]
 
-Mục `links` định nghĩa mối quan hệ chéo giữa thực thể này và các phần tử khác trong hệ thống:
-*   **`depends_on`**: Danh sách các ID thực thể mà thực thể này phụ thuộc trực tiếp để hoạt động.
-*   **`implements`**: Danh sách các ID thiết kế kỹ thuật (như API, Table) hiện thực hóa yêu cầu này.
-*   **`tested_by`**: Danh sách các ID kịch bản kiểm thử (Test Case) dùng để xác thực thực thể này.
-*   **`broken_by`**: Danh sách các ID lỗi (Bug) hoặc Sự cố (Incident) đang gây ảnh hưởng/làm hỏng thực thể này.
-*   **`impacts_cost`**: Danh sách các ID chi phí (Financial/Infra Cost) bị tác động bởi thực thể này.
+> See [BASE_GUIDE.md](../guides/BASE_GUIDE.md) for field definitions, lifecycle rules, and links graph semantics.
+```
