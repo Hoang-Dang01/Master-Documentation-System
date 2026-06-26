@@ -39,9 +39,29 @@ Guide này giải thích:
 
 | Field | Type | Required | Valid Values |
 |---|---|---|---|
-| `artifact_type` | `enum` | ✅ | `REQ`, `ADR`, `API`, `DB`, `TC`, `BUG`, `INC`, `FIN`, `AST` |
+| `artifact_type` | `enum` | ✅ | Xem bảng Artifact Types bên dưới |
 | `domain` | `string` | ✅ | Domain nghiệp vụ. Ví dụ: `AUTH`, `MEETING`, `BILLING`, `ATTENDANCE`. |
 | `tags` | `list[string]` | ⬜ | Free-form tags phục vụ search và filtering. |
+
+#### Artifact Types
+
+| Type | Ý nghĩa |
+|---|---|
+| `REQ` | Software Requirement Specification |
+| `ADR` | Architectural Decision Record |
+| `API` | API Specification |
+| `DB` | Database Schema (DDL) |
+| `TC` | Test Case |
+| `BUG` | Bug Report |
+| `INC` | Incident Report |
+| `FIN` | Financial / Cost artifact |
+| `AST` | System Asset (generic) |
+| `GUIDE` | Reference Guide / Manual |
+| `TPL` | Template file |
+| `EXM` | Example / Gold Standard |
+| `REG` | Registry / Catalog |
+| `POL` | Policy / Governance rule |
+| `LOG` | Session Log / Changelog |
 
 **Why `artifact_type`?**
 AI agent không thể chỉ parse filename để biết file là loại gì — đặc biệt khi file bị move hoặc rename. Field này đảm bảo classification luôn ở trong file.
@@ -57,8 +77,11 @@ Phục vụ impact analysis:
 
 | Field | Type | Required | Valid Values |
 |---|---|---|---|
-| `owner` | `enum` | ✅ | `ALL`, `PM`, `BA`, `SA`, `ARC`, `DBA`, `BE`, `FE`, `QA`, `DEVOPS`, `SEC`, `SRE`, `OPS`, `AI` |
+| `owner` | `enum` | ✅ | `ALL`, `PM`, `BA`, `SA`, `ARC`, `DBA`, `BE`, `FE`, `QA`, `DEVOPS`, `SRE`, `OPS` |
 | `status` | `enum` | ✅ | Xem Lifecycle Diagram bên dưới |
+
+> **Why no `AI` in owner?**
+> `owner` = accountable actor. Khi có sự cố production, AI không chịu trách nhiệm — human chịu. Nếu muốn track AI involvement, dùng `last_updated_by: AI-Backend-Agent` thay vì `owner: AI`.
 
 #### Lifecycle States
 
@@ -112,8 +135,34 @@ Ví dụ: `1.0.0` → `1.1.0` (thêm section) → `1.1.1` (fix typo) → `2.0.0`
 
 | Field | Type | Required | Description |
 |---|---|---|---|
-| `last_updated_by` | `string` | ✅ | Actor thực hiện thay đổi cuối. Ví dụ: `Human-Chief-Architect`, `AI-Backend-Agent`. |
+| `last_updated_by` | `string` | ✅ | Actor thực hiện thay đổi cuối. Human role hoặc AI agent name. Ví dụ: `Human-Chief-Architect`, `AI-Backend-Agent`. |
 | `change_summary` | `string` | ✅ | Tóm tắt ngắn gọn thay đổi của version hiện tại. Ví dụ: `Added observability section`. |
+
+---
+
+### 2.7 Review Gate
+
+| Field | Type | Required | Description |
+|---|---|---|---|
+| `review_required_by` | `list[enum]` | ⬜ | Danh sách roles phải review artifact này trước khi approve. |
+
+**Valid values**: `PM`, `BA`, `SA`, `ARC`, `DBA`, `BE`, `FE`, `QA`, `DEVOPS`, `SRE`, `OPS`
+
+**Why this matters (solo engineer context)**:
+Khi ông đang context-switch giữa nhiều roles (BA → BE → QA), field này nhắc nhở:
+> "File này cần tui đọc lại bằng góc nhìn ARC trước khi APPROVE."
+
+AI agent cũng dùng field này để know khi nào cần human review trước khi thực thi.
+
+**Ví dụ per artifact type**:
+
+| Artifact | review_required_by |
+|---|---|
+| ADR | `ARC`, `DEVOPS` |
+| API | `BE`, `FE`, `QA` |
+| REQ | `BA`, `SA` |
+| DB | `DBA`, `BE` |
+| TC | `QA`, `BE` |
 
 **Why audit trail in metadata?**
 Git log cho biết *ai commit*, nhưng không cho biết *ai là owner logic* của thay đổi đó (có thể human copy-paste từ AI output). `last_updated_by` capture điều này.

@@ -1,13 +1,13 @@
 ---
-id: BASE-TEMPLATE
+id: AST-META-001
 name: Base Metadata Template
 
-artifact_type: AST
+artifact_type: TPL
 domain: META
 
 owner: ALL
 status: APPROVED
-version: 2.0.0
+version: 2.1.0
 
 tags:
   - system
@@ -19,7 +19,7 @@ created_at: 2026-06-26
 updated_at: 2026-06-26
 
 last_updated_by: Human-Chief-Architect
-change_summary: v2 — added artifact_type, domain, tags, audit trail, references, supersedes; fixed SemVer; stripped guide content (moved to BASE_GUIDE.md)
+change_summary: v2.1 — fixed id to AST-META-001, expanded artifact_type enum, removed AI from owner, added review_required_by field
 
 links:
   depends_on: []
@@ -28,7 +28,7 @@ links:
   broken_by: []
   impacts_cost: []
   references:
-    - BASE_GUIDE
+    - AST-META-GUIDE
   supersedes: []
 ---
 
@@ -46,10 +46,10 @@ links:
 id: [GLOBAL-UNIQUE-ID]
 name: [Artifact Name]
 
-artifact_type: [REQ|ADR|API|DB|TC|BUG|INC|FIN|AST]
+artifact_type: [REQ|ADR|API|DB|TC|BUG|INC|FIN|AST|GUIDE|TPL|EXM|REG|POL|LOG]
 domain: [DOMAIN_NAME]
 
-owner: [ALL|PM|BA|SA|ARC|DBA|BE|FE|QA|DEVOPS|SEC|SRE|OPS|AI]
+owner: [ALL|PM|BA|SA|ARC|DBA|BE|FE|QA|DEVOPS|SRE|OPS]
 
 status: [DRAFT|REVIEW|APPROVED|IN_PROGRESS|BLOCKED|DEPRECATED|ARCHIVED|NOT_APPLICABLE]
 
@@ -64,6 +64,9 @@ updated_at: [YYYY-MM-DD]
 
 last_updated_by: [Actor]
 change_summary: [Short summary of this version]
+
+review_required_by:
+  - [ROLE]
 
 links:
   depends_on: []
