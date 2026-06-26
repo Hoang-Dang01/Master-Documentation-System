@@ -158,3 +158,23 @@ state_machine:
 ### 2. Ràng buộc Hướng của Đồ thị (Directed Acyclic Graph - DAG Constraints)
 *   **Quy tắc Một chiều (One-Way Link)**: Hướng liên kết luôn đi từ Thực thể bậc cao xuống Thực thể bậc thấp (`REQ` -> `implements` -> `API`). Nghiêm cấm API khai báo ngược lại (`API` -> `implements` -> `REQ`). Việc này giúp đồ thị tri thức luôn là đồ thị có hướng không vòng lặp (DAG), giúp thuật toán truy vết tác động (Change Impact Analysis) chạy chính xác tuyệt đối.
 *   **Phát hiện liên kết mồ côi (Orphan Link)**: Nếu trường `links` khai báo một ID thực thể không tồn tại trong **Master Registry (phân vùng 23)**, pipeline CI/CD sẽ lập tức đánh lỗi build.
+
+---
+
+## RULE 5: Template-Guide Separation (Quy tắc Phân tách Biểu mẫu & Hướng dẫn)
+
+Để tối ưu hóa trải nghiệm sử dụng (UX) cho cả Con người và AI, tránh hiện tượng tài liệu bị quá tải thông tin hoặc nhập nhằng giữa cấu trúc và kiến thức, MDS áp dụng nghiêm ngặt quy tắc phân tách:
+
+```text
+Artifact = Template (Structure) + Guide (Knowledge)
+```
+
+### 1. Phân biệt cấu trúc và kiến thức:
+*   **Template (Biểu mẫu - Structure)**: Giống như một **"phiếu khám bệnh"**. Chỉ chứa các ô trống và tiêu đề đề mục chuẩn để điền dữ liệu (ví dụ: `ADR-TEMPLATE.md`, `REQ-SRS-TEMPLATE.md`). Tuyệt đối không nhét các bài viết giải thích hay cẩm nang tri thức dài dòng vào đây để phục vụ cho việc sao chép nhanh và giúp AI sinh mã nguồn tự động không bị nhiễu ngữ cảnh.
+*   **Guide (Hướng dẫn - Knowledge)**: Giống như một **"sách y khoa"**. Giải thích chi tiết triết lý, lý do tồn tại, hướng dẫn cách điền, các tiêu chí chấm điểm và quy chuẩn nghiệp vụ (ví dụ: `ADR_GUIDE.md`, `API_GUIDE.md`). Tài liệu này dùng để đào tạo con người, làm nền tảng tri thức cho AI chiến lược (Strategic AI) thẩm định và làm luật quản trị (Governance).
+
+### 2. Quy định lưu trữ thư mục:
+*   Tất cả các **Templates** (Biểu mẫu sạch) bắt buộc phải lưu tại thư mục: `[HUMAN]_DOCUMENTATION_SYSTEM/00_[ALL]_META/templates/` dưới định dạng đặt tên `[TYPE]-TEMPLATE.md`.
+*   Tất cả các **Guides** (Cẩm nang hướng dẫn) bắt buộc phải lưu tại thư mục: `[HUMAN]_DOCUMENTATION_SYSTEM/00_[ALL]_META/guides/` dưới định dạng đặt tên `[TYPE]_GUIDE.md`.
+
+> **Hiệu quả**: Con người và AI luôn có biểu mẫu siêu sạch để điền dữ liệu tốc độ cao, đồng thời tri thức chiều sâu của hệ thống vẫn được lưu trữ nguyên vẹn ở phân vùng cẩm nang hướng dẫn chuyên biệt.

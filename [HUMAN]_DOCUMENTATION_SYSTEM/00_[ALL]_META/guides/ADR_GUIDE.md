@@ -1,9 +1,9 @@
-# Khung Quy chuẩn Quyết định Kiến trúc (Decision Intelligence Framework)
+# Hướng Dẫn Quyết Định Kiến Trúc (ADR Guide)
 
 > **MDS — Master Documentation System**
-> *Governance Guide for Architectural Decision Records (ADR)*
+> *Cẩm nang thiết kế và vận hành Architectural Decision Records (ADR)*
 
-Tài liệu này định nghĩa triết lý, tiêu chuẩn vận hành và hướng dẫn chi tiết cách viết **Quyết định Kiến trúc (Architectural Decision Record - ADR)** trong hệ thống MDS. Tài liệu này đóng vai trò là cẩm nang tham chiếu cho cả Con người (Chief Architect) và các AI Agents.
+Tài liệu này định nghĩa triết lý, tiêu chuẩn và hướng dẫn chi tiết cách viết **Quyết định Kiến trúc (Architectural Decision Record - ADR)** trong hệ thống MDS. Đây là tài liệu tham chiếu cốt lõi cho cả Con người (Chief Architect) và các AI Agents.
 
 ---
 
@@ -55,7 +55,7 @@ Bắt buộc phải tạo và thẩm định ADR khi có quyết định liên q
 
 ## 4. Hướng dẫn Siêu dữ liệu & Liên kết Đồ thị (Metadata & Graph Links)
 
-Mỗi tài liệu ADR bắt buộc phải kế thừa cấu trúc metadata từ [ADR-TEMPLATE.md]([HUMAN]_DOCUMENTATION_SYSTEM/00_[ALL]_META/templates/ADR-TEMPLATE.md):
+Mỗi tài liệu ADR bắt buộc phải kế thừa cấu trúc metadata từ [ADR-TEMPLATE.md](../templates/ADR-TEMPLATE.md):
 
 ### A. Thuộc tính Quản trị lõi:
 *   `id`: Mã thực thể duy nhất dạng `DEC-[COMPONENT]-[NUMBER]` (Ví dụ: `DEC-ATT-001`).

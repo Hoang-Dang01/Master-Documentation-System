@@ -20,7 +20,7 @@ const TARGET_DIRS = [
 
 // Subdirectories completely excluded from linting
 const EXCLUDE_SUBDIRS = [
-    path.join("[HUMAN]_DOCUMENTATION_SYSTEM", "00_[ALL]_META", "templates"),
+    path.join("[HUMAN]_DOCUMENTATION_SYSTEM", "00_[ALL]_META"),
 ];
 
 // Structural system-wide files exempt from Rule 1
@@ -29,13 +29,8 @@ const EXCLUDE_FILENAMES = [
     "STRUCTURE.md",
     "TEMPLATES.md",
     "ENTITY_SCHEMA.md",
-    "DOCUMENT_STANDARDS.md",
-    "INDEX.md",
-    "TRACEABILITY_MATRIX.md",
-    "GLOSSARY.md",
     "ai_agent_prompts.md",
-    "ci_gate_config.yml",
-    "decision_intelligence_framework.md"
+    "ci_gate_config.yml"
 ];
 
 const ALLOWED_STATUSES = new Set([

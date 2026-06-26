@@ -3,7 +3,7 @@
 > **MDS — Master Documentation System**
 > *Canonical Standard & Design Philosophy for AI-Assisted Solo Engineering (Level 2)*
 
-Chào mừng bạn đến với **MDS v7.0.0 — Canonical Standard Edition**. Đây không đơn thuần là một bộ thư mục chứa tài liệu, mà là một **Hệ thống Quản trị Tri thức Kỹ thuật (Engineering Knowledge Operating System)**. MDS đóng vai trò là "bộ não thứ hai" (Second Brain) và không gian điều khiển (Control Plane) cho sự hợp tác tối ưu giữa Con người (Human Orchestrator) và Trí tuệ nhân tạo (AI Agents).
+Chào mừng bạn đến với **MDS v7.1.0 — Canonical Standard Edition**. Đây không đơn thuần là một bộ thư mục chứa tài liệu, mà là một **Hệ thống Quản trị Tri thức Kỹ thuật (Engineering Knowledge Operating System)**. MDS đóng vai trò là "bộ não thứ hai" (Second Brain) và không gian điều khiển (Control Plane) cho sự hợp tác tối ưu giữa Con người (Human Orchestrator) và Trí tuệ nhân tạo (AI Agents).
 
 ---
 
@@ -106,14 +106,15 @@ Hệ thống được tổ chức thành cấu trúc 2 cấp tinh gọn với **
 
 ---
 
-## 6. 4 Quy Tắc Hiến Pháp (4 Canonical Rules)
+## 6. 5 Quy Tắc Hiến Pháp (5 Canonical Rules)
 
-Mọi hoạt động cập nhật tri thức trên MDS bắt buộc phải tuân thủ tuyệt đối 4 quy tắc được đặc tả chi tiết tại [DOCUMENT_STANDARDS.md]([HUMAN]_DOCUMENTATION_SYSTEM/00_[ALL]_META/DOCUMENT_STANDARDS.md):
+Mọi hoạt động cập nhật tri thức trên MDS bắt buộc phải tuân thủ tuyệt đối 5 quy tắc được đặc tả chi tiết tại [DOCUMENT_STANDARDS.md]([HUMAN]_DOCUMENTATION_SYSTEM/00_[ALL]_META/DOCUMENT_STANDARDS.md):
 
 1.  **Rule 1 — Naming Convention**: Đặt tên file theo cú pháp nghiêm ngặt để máy tính có thể phân tích tự động: `[STATUS]_ROLE-TYPE-ID_NAME_vVERSION.extension` (ví dụ: `[APPROVED]_BA-REQ-001_ATTENDANCE_v1.0.0.md`).
 2.  **Rule 2 — ID Convention**: Mọi thực thể phải được gắn một ID độc nhất toàn cầu theo định dạng `[TYPE]-[COMPONENT]-[NUMBER]` (ví dụ: `REQ-ATT-001`). ID này hoạt động như các nút (Nodes) trong Đồ thị Tri thức.
 3.  **Rule 3 — Document Lifecycle**: Trạng thái tài liệu phải tuân thủ nghiêm ngặt ma trận chuyển đổi trạng thái: `DRAFT -> REVIEW -> APPROVED -> IN_PROGRESS -> DEPRECATED -> ARCHIVED`.
 4.  **Rule 4 — Relationship Rules**: Các liên kết chéo giữa các thực thể phải tuân thủ ma trận quan hệ cho phép và tuân theo cấu trúc đồ thị hướng không vòng lặp (DAG - Directed Acyclic Graph) để phục vụ phân tích tác động thay đổi (Change Impact Analysis).
+5.  **Rule 5 — Template-Guide Separation**: Tách biệt hoàn toàn cấu trúc biểu mẫu sạch (`Templates/` - như phiếu khám bệnh) ra khỏi tri thức cẩm nang hướng dẫn (`Guides/` - như sách y khoa) để tối ưu hóa hiệu năng cho cả con người và AI.
 
 ---
 
