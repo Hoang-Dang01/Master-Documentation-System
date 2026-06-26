@@ -1,0 +1,2 @@
+﻿# Cấu hình CI/CD Git Gate cho việc tự động hóa kiểm tra lệch tài liệu (Documentation Drift)
+name: MDS Documentation Gate
