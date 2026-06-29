@@ -1,0 +1,1 @@
+# Vai Trò QA — Trách Nhiệm Cốt Lõi

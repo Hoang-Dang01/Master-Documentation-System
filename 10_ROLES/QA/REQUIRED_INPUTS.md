@@ -1,0 +1,1 @@
+# Vai Trò QA — Đầu Vào Cần Thiết

@@ -1,0 +1,1 @@
+# Vai Trò BA — Trách Nhiệm Cốt Lõi
