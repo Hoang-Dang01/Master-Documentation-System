@@ -1,0 +1,65 @@
+- artifact_id: AST-GLOSSARY-REL-001
+  term: depends_on
+  canonical_name: Outbound Dependency Edge
+  category: relation
+  namespace: mds
+  domain: graph
+  version: 1.1.0
+  status: APPROVED
+  owner: MDS_CORE
+  definition: An outbound edge representing that artifact A requires artifact B to function or be understood.
+  aliases:
+    - Requires
+  examples:
+    - FE spec depends_on API spec
+  notes:
+    - Used for dependency graph resolution.
+  inverse_relation: required_by
+  edge_direction: OUTBOUND
+  transitive: true
+  related_terms:
+    - implements
+
+- artifact_id: AST-GLOSSARY-REL-002
+  term: implements
+  canonical_name: Outbound Implementation Edge
+  category: relation
+  namespace: mds
+  domain: graph
+  version: 1.1.0
+  status: APPROVED
+  owner: MDS_CORE
+  definition: An outbound edge showing that a component, code, or technical spec implements a business requirement.
+  aliases:
+    - Realizes
+  examples:
+    - API-AUTH-001 implements REQ-AUTH-001
+  notes:
+    - Key for verifying requirement coverage.
+  inverse_relation: implemented_by
+  edge_direction: OUTBOUND
+  transitive: false
+  related_terms:
+    - depends_on
+
+- artifact_id: AST-GLOSSARY-REL-003
+  term: tested_by
+  canonical_name: Inbound Test Verification Edge
+  category: relation
+  namespace: mds
+  domain: graph
+  version: 1.1.0
+  status: APPROVED
+  owner: MDS_CORE
+  definition: An inbound edge indicating that a test case validates the correct operation of an artifact.
+  aliases:
+    - Verified by
+  examples:
+    - REQ-AUTH-001 tested_by TC-AUTH-001
+  notes:
+    - Used by QA Agents to check testing coverage.
+  inverse_relation: tests
+  edge_direction: INBOUND
+  transitive: false
+  related_terms:
+    - implements

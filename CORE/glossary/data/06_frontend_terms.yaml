@@ -1,0 +1,54 @@
+- artifact_id: AST-GLOSSARY-FE-001
+  term: state_management
+  canonical_name: Client State Management
+  category: frontend
+  namespace: frontend
+  domain: architecture
+  version: 1.1.0
+  status: APPROVED
+  owner: MDS_CORE
+  definition: An architectural approach for storing, updating, and synchronizing application state across UI components to ensure predictable rendering and user interactions.
+  aliases: []
+  examples:
+    - Redux, Zustand, Pinia state stores.
+  notes:
+    - Essential for single-page applications.
+  related_terms:
+    - client_side_routing
+    - hydration
+
+- artifact_id: AST-GLOSSARY-FE-002
+  term: hydration
+  canonical_name: Client-Side Hydration
+  category: frontend
+  namespace: frontend
+  domain: architecture
+  version: 1.1.0
+  status: APPROVED
+  owner: MDS_CORE
+  definition: The process of client-side JavaScript taking over static HTML rendered by the server and attaching event listeners to make it interactive.
+  aliases: []
+  examples:
+    - Next.js attaching React state to server-rendered HTML.
+  notes:
+    - Critical for fast First Contentful Paint.
+  related_terms:
+    - state_management
+
+- artifact_id: AST-GLOSSARY-FE-003
+  term: client_side_routing
+  canonical_name: Client-Side Routing
+  category: frontend
+  namespace: frontend
+  domain: architecture
+  version: 1.1.0
+  status: APPROVED
+  owner: MDS_CORE
+  definition: An architectural approach where routing and page transitions are handled dynamically by JavaScript on the client side without requesting a full page reload from the server.
+  aliases: []
+  examples:
+    - React Router page transitions.
+  notes:
+    - Enables smooth SPA transitions.
+  related_terms:
+    - state_management

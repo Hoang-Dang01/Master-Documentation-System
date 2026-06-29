@@ -1,0 +1,72 @@
+- artifact_id: AST-GLOSSARY-BE-001
+  term: idempotency
+  canonical_name: API Idempotency
+  category: backend
+  namespace: backend
+  domain: platform
+  version: 1.1.0
+  status: APPROVED
+  owner: MDS_CORE
+  definition: The property of certain operations in mathematics and computer science whereby they can be applied multiple times without changing the result beyond the initial application.
+  aliases: []
+  examples:
+    - Idempotent API requests using transaction keys.
+  notes:
+    - Crucial for network retry strategies.
+  related_terms:
+    - eventual_consistency
+
+- artifact_id: AST-GLOSSARY-BE-002
+  term: eventual_consistency
+  canonical_name: Eventual Consistency Model
+  category: backend
+  namespace: backend
+  domain: platform
+  version: 1.1.0
+  status: APPROVED
+  owner: MDS_CORE
+  definition: A consistency model used in distributed computing to achieve high availability.
+  aliases: []
+  examples:
+    - Replica read delays in distributed DBs.
+  notes:
+    - System becomes consistent over time.
+  related_terms:
+    - idempotency
+
+- artifact_id: AST-GLOSSARY-BE-003
+  term: retry
+  canonical_name: Automatic Retry
+  category: backend
+  namespace: backend
+  domain: platform
+  version: 1.1.0
+  status: APPROVED
+  owner: MDS_CORE
+  definition: A mechanism to automatically re-execute a failed operation (such as an API call or DB query) to handle transient errors.
+  aliases: []
+  examples:
+    - Exponential backoff retry on HTTP 503.
+  notes:
+    - Should be paired with idempotency to avoid side effects.
+  related_terms:
+    - idempotency
+    - circuit_breaker
+
+- artifact_id: AST-GLOSSARY-BE-004
+  term: circuit_breaker
+  canonical_name: Circuit Breaker Pattern
+  category: backend
+  namespace: backend
+  domain: platform
+  version: 1.1.0
+  status: APPROVED
+  owner: MDS_CORE
+  definition: A design pattern used to detect failures and encapsulate the logic of preventing a failure from constantly recurring.
+  aliases: []
+  examples:
+    - Tripping the breaker when a downstream service fails.
+  notes:
+    - Prevents cascading failures in microservices.
+  related_terms:
+    - retry

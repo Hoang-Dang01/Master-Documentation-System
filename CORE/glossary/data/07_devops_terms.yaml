@@ -1,0 +1,38 @@
+- artifact_id: AST-GLOSSARY-DEVOPS-001
+  term: error_budget
+  canonical_name: Error Budget
+  category: devops
+  namespace: devops
+  domain: platform
+  version: 1.1.0
+  status: APPROVED
+  owner: MDS_CORE
+  definition: The allowable threshold of service unreliability (typically derived as 100% - SLO) that can be consumed without violating user expectations or triggering alerts.
+  aliases: []
+  examples:
+    - 99.9% SLO allows 43.8 minutes of downtime per month.
+  notes:
+    - Derived from SLO, not SLA.
+    - Used to balance release velocity and stability.
+  related_terms:
+    - SLO
+    - availability
+
+- artifact_id: AST-GLOSSARY-DEVOPS-002
+  term: availability
+  canonical_name: Service Availability
+  category: devops
+  namespace: devops
+  domain: platform
+  version: 1.1.0
+  status: APPROVED
+  owner: MDS_CORE
+  definition: The percentage of time that a service is operational and capable of delivering its required function under normal conditions.
+  aliases: []
+  examples:
+    - A service maintaining 99.95% uptime.
+  notes:
+    - Serve as the foundation for SLIs and SLOs.
+  related_terms:
+    - error_budget
+    - SLO

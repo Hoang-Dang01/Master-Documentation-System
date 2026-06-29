@@ -1,0 +1,79 @@
+- artifact_id: AST-GLOSSARY-TYPES-001
+  term: REQ
+  canonical_name: Requirement Specification
+  category: artifact_type
+  namespace: mds
+  domain: requirements
+  version: 1.1.0
+  status: APPROVED
+  owner: MDS_CORE
+  definition: Requirement specification describing business or system goals.
+  aliases:
+    - Requirement
+  examples:
+    - REQ-AUTH-001
+  notes:
+    - Drafted by BA, approved by Chief Architect.
+  lifecycle_phase:
+    - ANALYSIS
+  related_terms: []
+
+- artifact_id: AST-GLOSSARY-TYPES-002
+  term: ADR
+  canonical_name: Architecture Decision Record
+  category: artifact_type
+  namespace: mds
+  domain: architecture
+  version: 1.1.0
+  status: APPROVED
+  owner: MDS_CORE
+  definition: Architecture Decision Record documenting significant technical decisions.
+  aliases:
+    - Design Decision
+  examples:
+    - ADR-DB-001
+  notes:
+    - Must include context, decision, and consequences.
+  lifecycle_phase:
+    - DESIGN
+  related_terms: []
+
+- artifact_id: AST-GLOSSARY-TYPES-003
+  term: API
+  canonical_name: API Interface Contract
+  category: artifact_type
+  namespace: mds
+  domain: integration
+  version: 1.1.0
+  status: APPROVED
+  owner: MDS_CORE
+  definition: API Contract defining endpoints, inputs, outputs, and status codes.
+  aliases:
+    - API Spec
+  examples:
+    - API-AUTH-001
+  notes:
+    - Strictly versioned and implemented by BE/FE.
+  lifecycle_phase:
+    - DESIGN
+  related_terms: []
+
+- artifact_id: AST-GLOSSARY-TYPES-004
+  term: DB
+  canonical_name: Database Schema Design
+  category: artifact_type
+  namespace: mds
+  domain: database
+  version: 1.1.0
+  status: APPROVED
+  owner: MDS_CORE
+  definition: Database Schema specification containing DDL statements.
+  aliases:
+    - DB Schema
+  examples:
+    - DB-AUTH-001
+  notes:
+    - Contains table structures, relationships, and index definitions.
+  lifecycle_phase:
+    - DESIGN
+  related_terms: []

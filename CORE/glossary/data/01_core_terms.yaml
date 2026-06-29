@@ -1,0 +1,174 @@
+- artifact_id: AST-GLOSSARY-CORE-001
+  term: Artifact
+  canonical_name: Engineering Artifact
+  category: core
+  namespace: mds
+  domain: core
+  version: 1.1.0
+  status: APPROVED
+  owner: MDS_CORE
+  definition: A uniquely identifiable unit of engineering knowledge.
+  aliases:
+    - Entity
+  examples:
+    - Requirement spec
+    - ADR
+    - API Contract
+  notes:
+    - Every artifact must have a unique ID and lifecycle status.
+  related_terms:
+    - Canonical
+    - Lifecycle
+    - Relation
+    - View
+
+- artifact_id: AST-GLOSSARY-CORE-002
+  term: Canonical
+  canonical_name: Canonical Source of Truth
+  category: core
+  namespace: mds
+  domain: core
+  version: 1.1.0
+  status: APPROVED
+  owner: MDS_CORE
+  definition: The officially approved and versioned Single Source of Truth for an engineering component.
+  aliases:
+    - Approved State
+  examples:
+    - APPROVED API Contract
+  notes:
+    - Non-canonical documents are drafts or work-in-progress.
+  related_terms:
+    - Artifact
+
+- artifact_id: AST-GLOSSARY-CORE-003
+  term: Drift
+  canonical_name: Knowledge Drift
+  category: core
+  namespace: mds
+  domain: core
+  version: 1.1.0
+  status: APPROVED
+  owner: MDS_CORE
+  definition: The misalignment or divergence between design specs, code, and standards.
+  aliases:
+    - Out of sync
+  examples:
+    - Code missing a field defined in DB DDL
+  notes:
+    - Drift is automatically detected via drift linter scripts.
+  related_terms:
+    - Linter
+
+- artifact_id: AST-GLOSSARY-CORE-004
+  term: TGE
+  canonical_name: Template Guide Example Pattern
+  category: core
+  namespace: mds
+  domain: core
+  version: 1.1.0
+  status: APPROVED
+  owner: MDS_CORE
+  definition: Template, Guide, and Example design pattern for organizing immutable core knowledge.
+  aliases:
+    - Core Structure
+  examples:
+    - BASE_TEMPLATE, BASE_GUIDE, BASE_EXAMPLE
+  notes:
+    - Ensures AI and humans have structure, usage rules, and gold standards.
+  related_terms:
+    - Template
+
+- artifact_id: AST-GLOSSARY-CORE-005
+  term: Lifecycle
+  canonical_name: Artifact Document Lifecycle
+  category: core
+  namespace: mds
+  domain: core
+  version: 1.1.0
+  status: APPROVED
+  owner: MDS_CORE
+  definition: The lifecycle states of an artifact (DRAFT, REVIEW, APPROVED, etc.) and transition rules.
+  aliases: []
+  examples:
+    - REVIEW state transitioning to APPROVED
+  notes:
+    - Enforced by the linter via Rule 3.
+  related_terms:
+    - Artifact
+
+- artifact_id: AST-GLOSSARY-CORE-006
+  term: Linter
+  canonical_name: MDS Validation Engine
+  category: core
+  namespace: mds
+  domain: core
+  version: 1.1.0
+  status: APPROVED
+  owner: MDS_CORE
+  definition: Automation script that validates document formatting, naming conventions, and constraints.
+  aliases:
+    - Drift Detector
+  examples:
+    - detect_drift.js
+  notes:
+    - Prevents out-of-sync documents from being committed.
+  related_terms:
+    - Drift
+
+- artifact_id: AST-GLOSSARY-CORE-007
+  term: Template
+  canonical_name: Document Blueprint Template
+  category: core
+  namespace: mds
+  domain: core
+  version: 1.1.0
+  status: APPROVED
+  owner: MDS_CORE
+  definition: Structured markdown blueprint with standardized empty headers ready for project specifications, following the TGE pattern.
+  aliases: []
+  examples:
+    - ROADMAP_TEMPLATE.md
+  notes:
+    - Located in CORE/templates/.
+  related_terms:
+    - TGE
+
+- artifact_id: AST-GLOSSARY-CORE-008
+  term: Relation
+  canonical_name: Graph Relation Link
+  category: core
+  namespace: mds
+  domain: core
+  version: 1.1.0
+  status: APPROVED
+  owner: MDS_CORE
+  definition: An edge definition in the MDS Engineering Knowledge Graph (EKG) representing semantic links between artifacts.
+  aliases:
+    - Graph Link
+  examples:
+    - depends_on
+    - implements
+  notes:
+    - Defines the semantic relationships between system nodes.
+  related_terms:
+    - Artifact
+
+- artifact_id: AST-GLOSSARY-CORE-009
+  term: View
+  canonical_name: Virtual Directory Projection
+  category: core
+  namespace: mds
+  domain: core
+  version: 1.1.0
+  status: APPROVED
+  owner: MDS_CORE
+  definition: A virtual projection of the MDS directory tree filtered by role, workflow, or project context.
+  aliases:
+    - Virtual View
+  examples:
+    - SOLO_VIEW.md
+  notes:
+    - Reduces cognitive load for both humans and AI.
+  related_terms:
+    - Artifact

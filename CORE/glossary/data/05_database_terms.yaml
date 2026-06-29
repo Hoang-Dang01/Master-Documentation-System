@@ -1,0 +1,20 @@
+- artifact_id: AST-GLOSSARY-DB-001
+  term: sharding
+  canonical_name: Database Sharding
+  category: database
+  namespace: database
+  domain: architecture
+  version: 1.1.0
+  status: APPROVED
+  owner: MDS_CORE
+  definition: A horizontal scaling strategy where a logical dataset is partitioned across multiple physical database nodes (shards).
+  aliases:
+    - database_sharding
+    - horizontal_partitioning
+  examples:
+    - Partitioning customer records by tenant ID hash.
+  notes:
+    - Increases write throughput and dataset capacity.
+    - Adds complexity for cross-shard joins and distributed transactions.
+  related_terms:
+    - DB

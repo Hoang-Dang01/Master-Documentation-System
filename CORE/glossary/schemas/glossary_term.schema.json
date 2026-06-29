@@ -1,0 +1,93 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "MDSTerm",
+  "type": "object",
+  "required": [
+    "artifact_id",
+    "term",
+    "canonical_name",
+    "category",
+    "namespace",
+    "domain",
+    "version",
+    "status",
+    "owner",
+    "definition"
+  ],
+  "properties": {
+    "artifact_id": {
+      "type": "string",
+      "pattern": "^AST-GLOSSARY-[A-Z_]+-\d{3}$"
+    },
+    "term": {
+      "type": "string"
+    },
+    "canonical_name": {
+      "type": "string"
+    },
+    "category": {
+      "type": "string"
+    },
+    "namespace": {
+      "type": "string"
+    },
+    "domain": {
+      "type": "string"
+    },
+    "lifecycle_phase": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": ["INTAKE", "DISCOVERY", "ANALYSIS", "DESIGN", "PLANNING", "IMPLEMENTATION", "TESTING", "DEPLOYMENT", "OPERATIONS", "EVOLUTION"]
+      }
+    },
+    "version": {
+      "type": "string",
+      "pattern": "^\d+\.\d+\.\d+$"
+    },
+    "status": {
+      "type": "string",
+      "enum": ["DRAFT", "REVIEW", "APPROVED", "DEPRECATED"]
+    },
+    "owner": {
+      "type": "string"
+    },
+    "definition": {
+      "type": "string"
+    },
+    "aliases": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "examples": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "notes": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "inverse_relation": {
+      "type": "string"
+    },
+    "edge_direction": {
+      "type": "string",
+      "enum": ["OUTBOUND", "INBOUND", "SYMMETRIC"]
+    },
+    "transitive": {
+      "type": "boolean"
+    },
+    "related_terms": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    }
+  }
+}

@@ -3,76 +3,110 @@
 Bản đồ chi tiết cấu trúc cây thư mục 2 cấp của **MDS vNext — Solo AI-Native Edition**.
 
 ```text
-MDS/
+mds/
 │
 ├── README.md                      # Landing page chính của MDS
 ├── STRUCTURE.md                   # Bản đồ toàn bộ cây thư mục (file này)
 ├── QUICK_START.md                 # Hướng dẫn setup nhanh cho Human + AI
 │
-├── 00_CORE/                       # Thư viện lõi bất biến (Immutable Core Library)
+├── ai_skills/                     # AI orchestration và cấu hình AI workers
+│   ├── orchestrator/              # Luật điều phối, context builder, task dispatcher
+│   ├── agents/                    # Prompts cụ thể cho từng AI Agent theo vai trò
+│   └── prompts/                   # Prompts dùng chung (System, Review, Coding prompts)
+│
+├── archive/                       # Lưu trữ tài liệu lịch sử cũ
+│
+├── automation/                    # Động cơ tự động hóa đối soát drift tài liệu
+│   ├── scripts/                   # Scripts thực thi tự động
+│   │   ├── detect_drift.js        # Script đối soát drift và liên kết toàn hệ thống
+│   │   └── glossary/              # Trình biên dịch từ điển tự động
+│   │       ├── load_terms.js
+│   │       ├── validate_terms.js
+│   │       ├── render_markdown.js
+│   │       ├── generate_index.js
+│   │       └── build_glossary.js
+│   │
+│   └── configs/                   # Cấu hình bộ luật
+│       └── paths.config.json      # Bản đồ định tuyến các đường dẫn hệ thống
+│
+├── core/                          # Thư viện lõi bất biến (Immutable Core Library)
 │   ├── standards/                 # Các quy tắc kỹ nghệ chuẩn tắc bắt buộc
-│   │   ├── DOCUMENT_STANDARDS.md  # 5 Canonical Rules chi tiết
-│   │   ├── NAMING_CONVENTION.md   # Quy ước đặt tên file chuẩn tắc
-│   │   ├── VERSIONING_RULES.md    # Hướng dẫn phiên bản SemVer 3 chỉ số
-│   │   ├── RELATIONSHIP_RULES.md  # Định nghĩa links graph (DAG)
-│   │   └── LIFECYCLE_RULES.md     # Ma trận trạng thái tài liệu
+│   │   ├── document_standards.md  # 5 Canonical Rules chi tiết
+│   │   ├── naming_convention.md   # Quy ước đặt tên file chuẩn tắc
+│   │   ├── versioning_rules.md    # Hướng dẫn phiên bản SemVer 3 chỉ số
+│   │   ├── relationship_rules.md  # Định nghĩa links graph (DAG)
+│   │   └── lifecycle_rules.md     # Ma trận trạng thái tài liệu
 │   │
 │   ├── schemas/                   # Lược đồ mô tả dữ liệu
-│   │   ├── ENTITY_SCHEMA.md       # Định nghĩa thực thể tri thức (REQ, API, DB...)
-│   │   ├── ROLE_SCHEMA.md         # Quy chuẩn định nghĩa vai trò nhân sự
-│   │   ├── PROJECT_SCHEMA.md      # Định dạng thiết kế bối cảnh dự án
-│   │   └── WORKFLOW_SCHEMA.md     # Sơ đồ hóa các giai đoạn vòng đời dự án
+│   │   ├── entity_schema.md       # Định nghĩa thực thể tri thức (REQ, API, DB...)
+│   │   ├── role_schema.md         # Quy chuẩn định nghĩa vai trò nhân sự
+│   │   ├── project_schema.md      # Định dạng thiết kế bối cảnh dự án
+│   │   └── workflow_schema.md     # Sơ đồ hóa các giai đoạn vòng đời dự án
 │   │
 │   ├── templates/                 # Thư viện biểu mẫu sạch (sử dụng TGE Model)
-│   │   ├── BASE/                  # Biểu mẫu nền tảng (BASE_TEMPLATE, BASE_GUIDE, BASE_EXAMPLE)
-│   │   ├── PM/                    # Biểu mẫu PM (ROADMAP, SCOPE, DELIVERY_PLAN)
-│   │   ├── BA/                    # Biểu mẫu BA (BRD, USE_CASE, BUSINESS_RULE, PROCESS_FLOW)
-│   │   ├── SA/                    # Biểu mẫu SA (SRS, DOMAIN_MODEL, DFD, LOGIC_SPEC)
-│   │   ├── ARCH/                  # Biểu mẫu Kiến trúc (ADR, HLD, SECURITY, NFR)
-│   │   ├── BE/                    # Biểu mẫu Backend (API, SERVICE, DB_DDL, INTEGRATION)
-│   │   ├── FE/                    # Biểu mẫu Frontend (UI_SPEC, COMPONENT, STATE_FLOW, UX_FLOW)
-│   │   ├── QA/                    # Biểu mẫu Đảm bảo chất lượng (TEST_PLAN, TEST_CASE, BUG_REPORT)
-│   │   └── DEVOPS/                # Biểu mẫu Vận hành (DEPLOYMENT, INFRA, MONITORING, INCIDENT)
+│   │   ├── base/                  # Biểu mẫu nền tảng (BASE_TEMPLATE, BASE_GUIDE, BASE_EXAMPLE)
+│   │   ├── pm/                    # Biểu mẫu PM (ROADMAP, SCOPE, DELIVERY_PLAN)
+│   │   ├── ba/                    # Biểu mẫu BA (BRD, USE_CASE, BUSINESS_RULE, PROCESS_FLOW)
+│   │   ├── sa/                    # Biểu mẫu SA (SRS, DOMAIN_MODEL, DFD, LOGIC_SPEC)
+│   │   ├── arch/                  # Biểu mẫu Kiến trúc (ADR, HLD, SECURITY, NFR)
+│   │   ├── be/                    # Biểu mẫu Backend (API, SERVICE, DB_DDL, INTEGRATION)
+│   │   ├── fe/                    # Biểu mẫu Frontend (UI_SPEC, COMPONENT, STATE_FLOW, UX_FLOW)
+│   │   ├── qa/                    # Biểu mẫu Đảm bảo chất lượng (TEST_PLAN, TEST_CASE, BUG_REPORT)
+│   │   └── devops/                # Biểu mẫu Vận hành (DEPLOYMENT, INFRA, MONITORING, INCIDENT)
 │   │
-│   └── glossary/                  # Từ điển thuật ngữ kỹ thuật và nghiệp vụ (AI-First Glossary)
-│       ├── GLOSSARY_CORE_TERMS.md # Thuật ngữ cốt lõi nền tảng (Artifact, Canonical, Drift...)
-│       ├── GLOSSARY_ARTIFACT_TYPES.md # Đặc tả các loại tài liệu thực thể (REQ, API, DB...)
-│       ├── GLOSSARY_RELATIONS.md  # Định nghĩa ngữ nghĩa của các liên kết graph
-│       ├── GLOSSARY_ACRONYMS.md   # Từ điển viết tắt (BA, SA, ADR, RBAC...)
-│       └── domain/                # Phân từ điển theo lĩnh vực chuyên biệt
-│           ├── BACKEND_TERMS.md   # Thuật ngữ Backend (idempotency, consistency...)
-│           ├── FRONTEND_TERMS.md  # Thuật ngữ Frontend (state management...)
-│           ├── DATABASE_TERMS.md  # Thuật ngữ Database (sharding...)
-│           └── DEVOPS_TERMS.md    # Thuật ngữ DevOps (error budget...)
+│   └── glossary/                  # Từ điển thuật ngữ (Versioned Semantic Knowledge Module)
+│       ├── MANIFEST.yaml          # File khai báo siêu dữ liệu của module glossary
+│       ├── glossary_index.md      # Bản đồ tra cứu chéo toàn bộ thuật ngữ
+│       │
+│       ├── schemas/               # Lược đồ cấu trúc dữ liệu máy đọc
+│       │   └── glossary_term.schema.json
+│       │
+│       ├── data/                  # Nguồn cấp dữ liệu gốc (YAML Single Source of Truth)
+│       │   ├── 01_core_terms.yaml
+│       │   ├── 02_relations.yaml
+│       │   ├── 03_artifact_types.yaml
+│       │   ├── 04_backend_terms.yaml
+│       │   ├── 05_database_terms.yaml
+│       │   ├── 06_frontend_terms.yaml
+│       │   ├── 07_devops_terms.yaml
+│       │   └── 08_acronyms.yaml
+│       │
+│       ├── glossary_01_core_terms.md # File generated - Thuật ngữ cốt lõi hệ thống
+│       ├── glossary_02_relations.md  # File generated - Ngữ nghĩa các mối liên kết
+│       ├── glossary_03_artifact_types.md # File generated - Các loại tài liệu thực thể
+│       ├── glossary_04_backend_terms.md # File generated - Thuật ngữ chuyên sâu Backend
+│       ├── glossary_05_database_terms.md # File generated - Thuật ngữ chuyên sâu Database
+│       ├── glossary_06_frontend_terms.md # File generated - Thuật ngữ chuyên sâu Frontend
+│       ├── glossary_07_devops_terms.md # File generated - Thuật ngữ chuyên sâu DevOps
+│       └── glossary_08_acronyms.md   # File generated - Từ điển viết tắt
 │
-├── 10_ROLES/                      # Mapping theo vai trò (PM, BA, SA, ARCH, BE, FE, QA, DEVOPS)
+├── lifecycle/                     # Bản đồ hóa theo 10 giai đoạn vòng đời dự án (00 - 09)
+│   ├── 00_intake/                 # Tiếp nhận yêu cầu ban đầu (Initial Request)
+│   ├── 01_discovery/              # Khảo sát bối cảnh và quy trình hiện tại (As-Is)
+│   ├── 02_analysis/               # Phân tích đặc tả yêu cầu (BRD, SRS, REQ)
+│   ├── 03_design/                 # Thiết kế hệ thống, DB, API và Infra (ADR)
+│   ├── 04_planning/               # Hoạch định lộ trình, chia sprint và quản lý rủi ro
+│   ├── 05_implementation/         # Viết mã nguồn và triển khai cấu trúc code (BE/FE)
+│   ├── 06_testing/                # Kiểm thử chức năng, tích hợp và bảo mật
+│   ├── 07_deployment/             # Triển khai hệ thống lên môi trường production
+│   ├── 08_operations/             # Vận hành, giám sát (metrics) và xử lý sự cố (SRE)
+│   └── 09_evolution/              # Bảo trì, tối ưu hóa và phát triển tính năng mới
 │
-├── 20_LIFECYCLE/                  # Mapping theo lifecycle phát triển của dự án (01 - 06)
-│
-├── 30_PROJECTS/                   # Ngữ cảnh runtime của dự án thực tế đang chạy
-│   ├── PROJECT_INDEX.md           # Danh sách theo dõi toàn bộ dự án
-│   ├── ACTIVE/                    # Dự án hiện tại đang chạy (Brief, Context, Constraints...)
-│   └── ARCHIVED/                  # Các dự án cũ đã đóng gói để tra cứu
-│
-├── 35_PATTERN_LIBRARY/            # Thư viện lưu trữ các mẫu thiết kế và giải pháp công nghệ
-│   ├── architecture/              # Mẫu kiến trúc (monolith, modulith, microservices)
+├── pattern_library/               # Thư viện lưu trữ các mẫu thiết kế và giải pháp công nghệ
+│   ├── architecture/              # Mẫu kiến trúc (monolith, PATTERN_CAPP...)
 │   ├── database/                  # Mẫu database (sharding, indexing)
 │   └── integration/               # Mẫu tích hợp (saga, event_bus)
 │
-├── 40_AI_SKILLS/                  # AI orchestration và cấu hình AI workers
-│   ├── ORCHESTRATOR/              # Luật điều phối, context builder, task dispatcher
-│   ├── AGENTS/                    # Prompts cụ thể cho từng AI Agent theo vai trò
-│   └── PROMPTS/                   # Prompts dùng chung (System, Review, Coding prompts)
+├── projects/                      # Ngữ cảnh runtime của dự án thực tế đang chạy
+│   ├── project_index.md           # Danh sách theo dõi toàn bộ dự án
+│   ├── active/                    # Dự án hiện tại đang chạy (Brief, Context, Constraints...)
+│   └── archived/                  # Các dự án cũ đã đóng gói để tra cứu
 │
-├── 50_AUTOMATION/                 # Động cơ tự động hóa đối soát drift tài liệu
-│   ├── scripts/                   # Scripts nodejs thực thi (detect_drift.js, validate_links.js...)
-│   └── configs/                   # Cấu hình bộ luật linter và workflow rules
+├── roles/                         # Mapping theo vai trò (PM, BA, SA, ARCH, BE, FE, QA, DEVOPS)
 │
-├── 90_VIEWS/                      # Phân vùng lưu trữ các góc nhìn ảo (Virtual Views)
-│   ├── SOLO_VIEW.md               # Góc nhìn tinh gọn hàng ngày
-│   ├── ROLE_VIEW.md               # Góc nhìn lọc theo vai trò
-│   ├── WORKFLOW_VIEW.md           # Góc nhìn theo vòng đời dự án
-│   └── PROJECT_VIEW.md            # Góc nhìn nhanh định vị thông tin dự án
-│
-└── 99_ARCHIVE/                    # Lưu trữ tài liệu lịch sử cũ
+└── views/                         # Phân vùng lưu trữ các góc nhìn ảo (Virtual Views)
+    ├── solo_view.md               # Góc nhìn tinh gọn hàng ngày
+    ├── role_view.md               # Góc nhìn lọc theo vai trò
+    ├── workflow_view.md           # Góc nhìn theo vòng đời dự án
+    └── project_view.md            # Góc nhìn nhanh định vị thông tin dự án
 ```

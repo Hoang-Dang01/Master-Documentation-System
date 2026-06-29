@@ -1,0 +1,15 @@
+module: glossary
+version: 1.1.0
+owner: MDS_CORE
+description: Canonical vocabulary for the MDS ecosystem, split into categories and domain specifications.
+schema_version: 1.1.0
+
+files:
+  - 01_core_terms.yaml
+  - 02_relations.yaml
+  - 03_artifact_types.yaml
+  - 04_backend_terms.yaml
+  - 05_database_terms.yaml
+  - 06_frontend_terms.yaml
+  - 07_devops_terms.yaml
+  - 08_acronyms.yaml

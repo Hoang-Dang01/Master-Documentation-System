@@ -1,0 +1,116 @@
+- artifact_id: AST-GLOSSARY-ACR-001
+  term: BA
+  canonical_name: Business Analyst
+  category: acronym
+  namespace: mds
+  domain: roles
+  version: 1.1.0
+  status: APPROVED
+  owner: MDS_CORE
+  definition: Business Analyst role.
+  aliases: []
+  examples:
+    - BA writes business rules.
+  notes: []
+  related_terms: []
+
+- artifact_id: AST-GLOSSARY-ACR-002
+  term: SA
+  canonical_name: System Analyst
+  category: acronym
+  namespace: mds
+  domain: roles
+  version: 1.1.0
+  status: APPROVED
+  owner: MDS_CORE
+  definition: System Analyst role.
+  aliases: []
+  examples:
+    - SA maps system data flows.
+  notes: []
+  related_terms: []
+
+- artifact_id: AST-GLOSSARY-ACR-003
+  term: PM
+  canonical_name: Project Manager
+  category: acronym
+  namespace: mds
+  domain: roles
+  version: 1.1.0
+  status: APPROVED
+  owner: MDS_CORE
+  definition: Project/Product Manager role.
+  aliases: []
+  examples:
+    - PM manages sprint milestones.
+  notes: []
+  related_terms: []
+
+- artifact_id: AST-GLOSSARY-ACR-004
+  term: QA
+  canonical_name: Quality Assurance
+  category: acronym
+  namespace: mds
+  domain: roles
+  version: 1.1.0
+  status: APPROVED
+  owner: MDS_CORE
+  definition: Quality Assurance role.
+  aliases: []
+  examples:
+    - QA designs test plans.
+  notes: []
+  related_terms: []
+
+- artifact_id: AST-GLOSSARY-ACR-005
+  term: SLI
+  canonical_name: Service Level Indicator
+  category: acronym
+  namespace: devops
+  domain: platform
+  version: 1.1.0
+  status: APPROVED
+  owner: MDS_CORE
+  definition: Service Level Indicator.
+  aliases: []
+  examples:
+    - Query response time percentage under 200ms.
+  notes: []
+  related_terms:
+    - SLO
+
+- artifact_id: AST-GLOSSARY-ACR-006
+  term: SLO
+  canonical_name: Service Level Objective
+  category: acronym
+  namespace: devops
+  domain: platform
+  version: 1.1.0
+  status: APPROVED
+  owner: MDS_CORE
+  definition: Service Level Objective.
+  aliases: []
+  examples:
+    - 99.9% of requests must succeed.
+  notes: []
+  related_terms:
+    - SLI
+    - SLA
+    - error_budget
+
+- artifact_id: AST-GLOSSARY-ACR-007
+  term: SLA
+  canonical_name: Service Level Agreement
+  category: acronym
+  namespace: devops
+  domain: platform
+  version: 1.1.0
+  status: APPROVED
+  owner: MDS_CORE
+  definition: Service Level Agreement.
+  aliases: []
+  examples:
+    - Legal agreement with financial penalties.
+  notes: []
+  related_terms:
+    - SLO
