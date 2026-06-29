@@ -34,6 +34,13 @@ Mọi hoạt động tư duy và sinh sản phẩm của AI phải tuân thủ n
 ### 2.5 Bảo toàn Tri thức gốc (Knowledge Integrity)
 *   Khi chỉnh sửa tệp tin, AI bắt buộc phải bảo toàn toàn bộ nội dung, chú thích (comments), docstrings hoặc tiêu đề không liên quan đến phạm vi thay đổi. Không được xóa hoặc làm sạch code cũ trái phép.
 
+### 2.6 Thứ tự Ưu tiên Hiệu lực (Precedence Hierarchy)
+Mọi quy chế vận hành phải tuân thủ nghiêm ngặt bậc phân cấp hiệu lực tối cao sau:
+
+$$\text{System Prompt (Hiến pháp)} > \text{Agent Spec (Luật vai trò)} > \text{Execution Prompt (Mệnh lệnh tác vụ)}$$
+
+*   *Chỉ thị Hệ thống Nền tảng (System Prompt)* nắm giữ hiệu lực tối thượng. Đặc tả vai trò (Agent Spec) không được phép ghi đè các quy tắc nền tảng, và Chỉ thị tác vụ (Execution Prompt) không được phép ghi đè cả hai lớp trên.
+
 ---
 
 ## 3. Quy chuẩn Ứng xử Kỹ thuật (Operational Rules)
@@ -48,6 +55,10 @@ Mọi hoạt động tư duy và sinh sản phẩm của AI phải tuân thủ n
     *   Mọi tài liệu thiết kế hoặc spec kỹ thuật mới tạo ra phải bắt đầu ở trạng thái `DRAFT` (ví dụ: `[draft]_ba-req-001...`). Chỉ có con người (Human Chief Architect) mới có quyền duyệt chuyển trạng thái sang `APPROVED`.
 *   **Rule 4 — Quy tắc Phản hồi Hành động (Actionable Feedback Rule)**:
     *   Khi review sản phẩm, không nhận xét chung chung (như "code tốt", "tài liệu đầy đủ"). Phải chỉ rõ số dòng, lỗi cụ thể và giải pháp sửa lỗi.
+*   **Rule 5 — Chế độ áp đặt runtime (Runtime Enforcement Mode)**:
+    *   Mỗi Agent khi thực thi phải hoạt động dưới một trong hai chế độ:
+        *   `strict` (Khắt khe): Bất kỳ vi phạm nào đối với quy chuẩn ứng xử đều phải chặn luồng thực thi (block execution) và kích hoạt Escalation Protocol ngay lập tức. Bắt buộc đối với môi trường Staging/Production và các đợt phát hành Release.
+        *   `advisory` (Khuyên nghị): Ghi nhận cảnh báo (warning logs) đối với các vi phạm nhưng cho phép đi tiếp. Chủ yếu sử dụng cho môi trường phát triển cục bộ (Local Development) và thử nghiệm ý tưởng.
 
 ---
 
