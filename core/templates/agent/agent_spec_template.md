@@ -37,36 +37,61 @@
 
 ## 4. Tài liệu đầu vào bắt buộc (Required Inputs)
 
-Đầu vào bắt buộc:
-* Quy chuẩn hệ thống: `core/standards/document_standards.md`
-* Ngữ cảnh dự án: `projects/active/project_brief.md`, `projects/active/business_context.md`, `projects/active/constraints.md`
-* [Tài liệu đầu vào đặc thù 1]
-* [Tài liệu đầu vào đặc thù 2]
+Đầu vào bắt buộc cho mọi hành động lý giải và vận hành:
+* **Quy chuẩn hệ thống**: 
+  - `core/standards/document_standards.md` (Tiêu chuẩn tài liệu meta-governance)
+  - `core/standards/naming_convention.md` (Quy ước đặt tên file)
+  - `core/standards/lifecycle_rules.md` (Vòng đời và 2 lớp trạng thái)
+  - `core/standards/relationship_rules.md` (Đồ thị và liên kết DAG)
+  - `core/standards/versioning_rules.md` (Nâng phiên bản SemVer)
+* **Ngữ cảnh dự án active**: 
+  - `projects/active/intake_brief.md`
+  - `projects/active/feasibility.md`
+  - `projects/active/project_brief.md`
+  - `projects/active/business_context.md`
+  - `projects/active/constraints.md`
+* **Tài liệu đặc thù của Agent**:
+  - [Tài liệu đầu vào đặc thù 1]
+  - [Tài liệu đầu vào đặc thù 2]
 
 ---
 
 ## 5. Kết quả đầu ra tiêu chuẩn (Expected Outputs)
 
-### 5.1 Định dạng tài liệu
-* **[Loại tài liệu 1]**: `projects/active/[path]/[trạng_thái]_[agent-prefix]-[type]-[id]_[tên]_v[phiên_bản].[ext]`
-* Trạng thái hợp lệ: `DRAFT`, `REVIEW`, `APPROVED`
+### 5.1 Định dạng tài liệu & Tên File
+Mọi tài liệu đầu ra bắt buộc phải được đặt tên chính xác theo cú pháp của **Naming Convention**:
+
+* **[Tên loại tài liệu 1]**: `projects/active/[thư_mục]/[LIFECYCLE_STATE]_[ROLE]-[TYPE]-[PROJECT]-[COMPONENT]-[NUMBER]_[NAME]_v[VERSION].md`
+  - *Ví dụ*: `[APPROVED]_BE-API-EDU-AUTH-001_LOGIN_ENDPOINT_v1.0.0.md`
 
 ### 5.2 Hợp đồng Siêu dữ liệu đầu ra (Output Metadata Contract)
-Mọi tài liệu do bạn tạo ra **bắt buộc** phải chứa phần YAML Frontmatter chuẩn tắc sau:
+Mọi tài liệu do bạn tạo ra **bắt buộc** phải chứa phần YAML Frontmatter chuẩn tắc theo **Hybrid Layered State Model** sau:
 
 ```yaml
 ---
-id: [PREFIX]-[TYPE]-[NUMBER]
-title: [Tên tài liệu]
-status: DRAFT | REVIEW | APPROVED
-version: [X.Y.Z]
-owner: [agent_id]
-created_at: YYYY-MM-DD
-updated_at: YYYY-MM-DD
+id: [ROLE]-[TYPE]-[PROJECT]-[COMPONENT]-[NUMBER]
+title: "[Tiêu đề tài liệu]"
+phase: "[00 -> 09]"
 
+# Layer 1 — Lifecycle State (độ trưởng thành nội dung)
+lifecycle_state: DRAFT | REVIEW | APPROVED | DEPRECATED | ARCHIVED
+
+# Layer 2 — Execution State (trạng thái vận hành thực tế)
+execution_state: NOT_STARTED | IN_PROGRESS | BLOCKED | COMPLETED | NOT_APPLICABLE
+blocked_reason: ""               # Điền chi tiết nếu execution_state = BLOCKED
+
+version: X.Y.Z
+owner: [agent_id]                # Ví dụ: pm_agent, ba_agent
+created_by: [agent_id]
+created_at: YYYY-MM-DD
+last_updated: YYYY-MM-DD
+last_synchronized: YYYY-MM-DD
+tags: []                         # Danh sách nhãn phân loại tìm kiếm
+
+# Mối quan hệ liên kết đồ thị tri thức (Outbound Links)
 links:
-  [mối_quan_hệ_1]: []           # Ví dụ: implements, depends_on
-  [mối_quan_hệ_2]: []
+  - type: depends_on | implements | adheres_to | verifies | validates_nfr | mitigates | broken_by | tested_by | resolves | linked_tsk | impacts_cost
+    target: [TARGET_ID]          # ID của thực thể được trỏ tới
 ---
 ```
 
@@ -82,7 +107,7 @@ Khi thực hiện tác vụ, bạn phải suy nghĩ và lập luận theo trình
 *   **Bước 4 — [Bước 4]**: ...
 *   **Bước 5 — [Bước 5]**: ...
 *   **Bước 6 — [Bước 6]**: ...
-*   **Bước 7 — [Bước 7]**: [Đóng gói tài liệu và thiết lập liên kết chéo]
+*   **Bước 7 — [Bước 7]**: [Đóng gói tài liệu, thiết lập liên kết chéo và chạy kiểm tra mồ côi (Orphan Check)]
 
 ---
 
@@ -141,7 +166,24 @@ Trước khi bàn giao tài liệu, bạn phải tự chấm điểm sản phẩ
 
 ---
 
-## 12. Chỉ thị hệ thống (System Prompt)
+## 12. Giao tiếp liên Agent (Inter-Agent Communication Contract)
+
+Quy định ranh giới giao tiếp và phân quyền ủy thác tác vụ giữa Agent này và các phân hệ AI khác trong hệ thống đa nhân (multi-agent) của MDS:
+
+*   **Ủy thác Tác vụ (Delegation Targets)**: Bạn được phép tự động gọi hoặc bàn giao/ủy thác tác vụ (`can_delegate_to`) cho các Agents sau:
+    - [Agent ID 1] (ví dụ: `kc_agent` để nhờ audit chéo glossary / links)
+    - [Agent ID 2]
+*   **Tiếp nhận Yêu cầu (Upstream Triggers)**: Bạn chỉ nhận chỉ thị trực tiếp hoặc xử lý đầu vào (`can_receive_from`) từ các Agents/Actors sau:
+    - [Agent ID / Actor 1] (ví dụ: `orch_agent` để nhận context bundle, hoặc `Human`)
+    - [Agent ID / Actor 2]
+*   **Leo Thang Báo Cáo (Escalation Targets)**: Khi gặp mâu thuẫn yêu cầu, bế tắc tài nguyên (deadlock) hoặc context không đủ rõ, bạn bắt buộc phải báo cáo (`escalate_to`) cho:
+    - [Agent ID / Actor 1] (ví dụ: `Human Chief Architect / PM`)
+    - [Agent ID / Actor 2] (ví dụ: `orch_agent` để phân bổ lại routing)
+*   **Chia sẻ Ngữ cảnh (Shared Context Access)**: Các kênh dữ liệu chung dùng để đồng bộ trạng thái (ví dụ: virtual views, shared event log).
+
+---
+
+## 13. Chỉ thị hệ thống (System Prompt)
 
 ```markdown
 Bạn là MDS [TÊN_AGENT] Agent.
