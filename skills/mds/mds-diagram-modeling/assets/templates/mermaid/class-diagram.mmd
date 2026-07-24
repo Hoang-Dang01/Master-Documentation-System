@@ -1,0 +1,13 @@
+%% diagram-id: SA-DGM-SYSTEM-CLASS-001
+%% derived-from: SA-DOM-SYSTEM-001
+%%{init: {"theme":"base","themeVariables":{"fontFamily":"Arial","lineColor":"#424242","primaryColor":"#FFFFFF","primaryBorderColor":"#616161"}}}%%
+classDiagram
+    class AggregateRoot {
+        +UUID id
+        +performAction()
+    }
+    class ChildEntity {
+        +UUID id
+        +Status status
+    }
+    AggregateRoot "1" *-- "0..*" ChildEntity : contains

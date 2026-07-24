@@ -9,7 +9,10 @@ Hướng dẫn này giúp bạn thiết lập dự án mới và tích hợp AI 
 
 ## Bước 1: Khởi Tạo Dự Án Mới (Define Project Context)
 
-Di chuyển vào thư mục [`workspace/projects/active/`](../workspace/projects/active/) và soạn thảo 4 file ngữ cảnh nền tảng:
+Tạo project id trong `workspace/projects/index.yaml`, rồi mở thư mục tương ứng
+trong `workspace/projects/active/<project-id>/`. Ví dụ hiện tại:
+[`workspace/projects/active/edumeet/`](../workspace/projects/active/edumeet/).
+Soạn thảo 4 file ngữ cảnh nền tảng:
 1.  **`PROJECT_BRIEF.md`**: Ghi nhận mô tả tổng quan nhất về dự án, mục tiêu, khách hàng.
 2.  **`BUSINESS_CONTEXT.md`**: Bối cảnh kinh doanh, các đối thủ cạnh tranh và giá trị mang lại.
 3.  **`CONSTRAINTS.md`**: Các giới hạn về công nghệ, ngân sách, thời gian bàn giao và tiêu chuẩn bảo mật.
@@ -30,7 +33,7 @@ Di chuyển vào thư mục [`workspace/projects/active/`](../workspace/projects
 Khi làm việc với các AI chuyên biệt (ví dụ: BE Agent, QA Agent):
 1.  Mở thư mục **[mds-core/prompts/agents/](../mds-core/prompts/agents/)** và tìm System Prompt tương ứng cho Agent đó.
 2.  Cung cấp file System Prompt này cho AI Agent của bạn. Nó sẽ tự động hiểu cách đọc/ghi các tài liệu theo đúng chuẩn tắc của MDS vNext.
-3.  Nạp các file yêu cầu tương ứng tại **`workspace/projects/active/requirements/`** làm ngữ cảnh đầu vào cho Agent.
+3.  Nạp các file yêu cầu tương ứng tại **`workspace/projects/active/<project-id>/requirements/`** làm ngữ cảnh đầu vào cho Agent.
 
 ---
 

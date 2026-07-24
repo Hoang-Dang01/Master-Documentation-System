@@ -1,0 +1,15 @@
+%% BPMN Process Flow Template
+flowchart TD
+    Start([Start]) --> Task1[Task 1]
+    Task1 --> Decision{Decision Gate}
+    Decision -- Yes --> Task2[Task 2]
+    Decision -- No --> Task3[Task 3]
+    Task2 --> End([End])
+    Task3 --> End
+    
+    style Start fill:#fef3c7,stroke:#f59e0b,stroke-width:2px;
+    style Task1 fill:#d1fae5,stroke:#10b981,stroke-width:2px;
+    style Decision fill:#fef3c7,stroke:#f59e0b,stroke-width:2px;
+    style Task2 fill:#d1fae5,stroke:#10b981,stroke-width:2px;
+    style Task3 fill:#d1fae5,stroke:#10b981,stroke-width:2px;
+    style End fill:#fef3c7,stroke:#f59e0b,stroke-width:2px;

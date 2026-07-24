@@ -1,3 +1,10 @@
+---
+ownership: mds
+status: canonical
+source: internal
+safe_to_modify: approval-gated
+---
+
 # Automation workflows
 
 Each automation is data: a versioned YAML definition with a trigger, inputs, ordered steps, approval gates, outputs and audit metadata. The desktop UI reads these definitions and displays progress; it does not own workflow policy.
@@ -27,4 +34,3 @@ CANCELLED
 ```
 
 The first vertical slice is `customer-change-analysis.yaml`.
-

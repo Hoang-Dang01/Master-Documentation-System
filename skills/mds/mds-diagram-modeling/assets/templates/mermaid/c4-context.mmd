@@ -1,0 +1,10 @@
+%% diagram-id: SA-DGM-SYSTEM-CONTEXT-001
+%% derived-from: BA-REQ-SYSTEM-001
+C4Context
+    title System Context Diagram
+    Person(staff, "Staff", "Uses the system to perform operational work")
+    System(system, "System Name", "Provides the core business capabilities")
+    System_Ext(thirdParty, "Third-party Platform", "Supplies or receives external data")
+
+    Rel(staff, system, "Uses", "HTTPS")
+    Rel(thirdParty, system, "Synchronizes data", "Webhook/API")

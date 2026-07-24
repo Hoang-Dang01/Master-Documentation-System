@@ -1,0 +1,27 @@
+output_format: |
+  # 1. Requirement Summary
+  [Summary of goals, business context, and target stack]
+
+  # 2. Completeness Score & Classification
+  [Score from 0.0 to 1.0; Size: Small/Medium/Enterprise; Logic details]
+
+  # 3. Gap Analysis
+  [List of assumptions, unresolved items, and missing fields]
+
+  # 4. Execution Mode
+  [Selected mode (Discovery/Generate/Review/Update) and justification]
+
+  # 5. Recommended Deliverables
+  [Checklist of artifacts and diagrams to be generated/updated]
+
+  # 6. Generated Artifacts
+  [Output code, specs, user stories, plans, etc. based on active phases]
+
+  # 7. Generated Diagrams
+  [Beautiful, clean Mermaid diagrams adhering to styling constraints]
+
+  # 8. Technical Recommendations
+  [Specific engineering designs, tools, stack advice, and best practices]
+
+  # 9. Risks & Tradeoffs
+  [Security, scalability, failover risks, and mitigation strategies]

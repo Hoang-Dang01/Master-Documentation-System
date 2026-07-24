@@ -10,6 +10,8 @@
     "smoke": "npm --workspace @mds/desktop run smoke",
     "start": "npm --workspace @mds/desktop run start",
     "validate:docs": "node scripts/automation/scripts/detect_drift.js",
+    "docs:structure": "node scripts/automation/scripts/generate_structure.js",
+    "validate:structure": "node scripts/automation/scripts/generate_structure.js --check",
     "build:glossary": "node scripts/automation/scripts/glossary/build_glossary.js"
   },
   "workspaces": [

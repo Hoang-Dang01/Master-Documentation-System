@@ -1,0 +1,20 @@
+%% Sequence Diagram Template
+sequenceDiagram
+    autonumber
+    actor Client as Client App
+    participant GW as API Gateway
+    participant Svc as Core Service
+    database DB as Primary Database
+    
+    Client->>GW: HTTP POST /login {email, password}
+    activate GW
+    GW->>Svc: Validate credentials
+    activate Svc
+    Svc->>DB: Query user records by email
+    activate DB
+    DB-->>Svc: Return user record & hash
+    deactivate DB
+    Svc-->>GW: Return validation success & JWT
+    deactivate Svc
+    GW-->>Client: HTTP 200 OK {token}
+    deactivate GW

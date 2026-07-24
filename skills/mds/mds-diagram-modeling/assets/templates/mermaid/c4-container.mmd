@@ -1,0 +1,14 @@
+%% diagram-id: SA-DGM-SYSTEM-CONTAINER-001
+%% derived-from: SA-ARC-SYSTEM-001
+C4Container
+    title Container Diagram
+    Person(staff, "Staff", "Uses the application")
+    System_Boundary(system, "System Name") {
+        Container(web, "Web Client", "React, TypeScript", "Presents the user interface")
+        Container(api, "API Service", "FastAPI, Python", "Executes application use cases")
+        ContainerDb(db, "Database", "PostgreSQL", "Stores application data")
+    }
+
+    Rel(staff, web, "Uses", "HTTPS")
+    Rel(web, api, "Calls", "HTTPS/JSON")
+    Rel(api, db, "Reads and writes", "SQL/TLS")

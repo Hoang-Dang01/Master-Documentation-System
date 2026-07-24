@@ -1,0 +1,10 @@
+devops_rules:
+  pipeline_format: YAML
+  release_strategies:
+    - canary
+    - blue_green
+    - rolling
+  diagrams:
+    - cicd
+    - deployment
+    - network

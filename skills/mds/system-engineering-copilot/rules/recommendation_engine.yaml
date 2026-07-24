@@ -1,0 +1,27 @@
+rules:
+  database_selection:
+    relational_if:
+      - "strong ACID transactional requirements"
+      - "complex SQL relational joins needed"
+      - "structured schema definitions"
+    nosql_document_if:
+      - "highly dynamic schema"
+      - "unstructured content metadata"
+      - "high write-to-read ratio"
+    cache_if:
+      - "highly repetitive read queries"
+      - "realtime session storage"
+      - "fast key-value retrieval"
+  architectural_style:
+    monolith_if:
+      - "team size < 5 members"
+      - "domain boundaries are tightly coupled"
+      - "rapid prototyping needed (MVP)"
+    modular_monolith_if:
+      - "team size 5-10 members"
+      - "clear domain boundaries but single deployment artifact preferred"
+      - "moderate performance scalability needed"
+    microservices_if:
+      - "team size > 10 members"
+      - "highly independent domains and scaling requirements"
+      - "polyglot technology needs"

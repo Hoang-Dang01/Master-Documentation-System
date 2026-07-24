@@ -1,0 +1,13 @@
+knowledge_index:
+  architecture_patterns:
+    file: knowledge/architecture_patterns.md
+    tags: [monolith, microservices, modular_monolith, event_driven, saga, cqrs]
+  scaling_patterns:
+    file: knowledge/scaling_patterns.md
+    tags: [caching, queues, replication, partitioning, load_balancing, livekit]
+  security_patterns:
+    file: knowledge/security_patterns.md
+    tags: [encryption, jwt, authentication, argon2, rates, tls]
+  anti_patterns:
+    file: knowledge/anti_patterns.md
+    tags: [coupling, sync_chains, database_spof, unmonitored_queues]

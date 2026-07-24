@@ -1,0 +1,20 @@
+%% C4 Context Diagram Template
+flowchart TB
+    subgraph Context Boundary [Context Boundary]
+        App[Client Application]
+        Api[API Service Gateway]
+        Db[(Primary Database)]
+        Cache[(Session Cache)]
+    end
+    External[External Payment Gateway]
+    
+    App -->|HTTPS / WSS| Api
+    Api -->|SQL Read/Write| Db
+    Api -->|In-memory Read/Write| Cache
+    Api -.->|REST Integration| External
+    
+    style App fill:#dbeafe,stroke:#3b82f6,stroke-width:2px;
+    style Api fill:#d1fae5,stroke:#10b981,stroke-width:2px;
+    style Db fill:#ddd6fe,stroke:#8b5cf6,stroke-width:2px;
+    style Cache fill:#ddd6fe,stroke:#8b5cf6,stroke-width:2px;
+    style External fill:#ffedd5,stroke:#f59e0b,stroke-width:2px;

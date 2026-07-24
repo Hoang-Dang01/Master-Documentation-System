@@ -1,0 +1,22 @@
+complexity_scoring:
+  task_weights:
+    low: 1
+    medium: 3
+    high: 5
+  criteria:
+    database:
+      single_db: low
+      multi_db_replica: medium
+      sharded_distributed: high
+    realtime:
+      none: low
+      polling: medium
+      websockets_livekit: high
+    integrations:
+      none_internal: low
+      standard_rest_apis: medium
+      complex_third_party_payment_hardware: high
+    deployment:
+      static_hosting: low
+      standard_vm_docker: medium
+      multi_region_kubernetes_autoscaling: high

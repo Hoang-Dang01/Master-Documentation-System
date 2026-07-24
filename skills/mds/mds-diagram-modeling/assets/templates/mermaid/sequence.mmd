@@ -1,0 +1,18 @@
+%% diagram-id: SA-DGM-SYSTEM-SEQUENCE-001
+%% derived-from: BA-UC-SYSTEM-001
+%%{init: {"theme":"base","themeVariables":{"fontFamily":"Arial","lineColor":"#424242","actorBkg":"#F5F5F5","actorBorder":"#616161"}}}%%
+sequenceDiagram
+    actor Staff
+    participant Client as Web Client
+    participant API as API Service
+    participant DB as Database
+    Staff->>Client: Submit action
+    Client->>API: POST /resource
+    API->>DB: Save data
+    DB-->>API: Saved record
+    alt Valid request
+        API-->>Client: 201 Created
+    else Invalid request
+        API-->>Client: 400 Validation error
+    end
+    Client-->>Staff: Show result

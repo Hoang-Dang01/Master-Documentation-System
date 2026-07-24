@@ -1,0 +1,19 @@
+risk_assessment:
+  categories:
+    - code: SEC
+      name: Security
+      risks: [unauthorized_access, data_leakage, broken_auth, sql_injection]
+    - code: SCL
+      name: Scalability
+      risks: [db_bottleneck, network_latency, concurrency_limit, memory_leak]
+    - code: OPS
+      name: Operations
+      risks: [single_point_of_failure, deployment_downtime, backup_loss, alert_fatigue]
+  scoring_matrix:
+    likelihood: [1, 2, 3, 4, 5]
+    impact: [1, 2, 3, 4, 5]
+    formula: "likelihood * impact"
+    thresholds:
+      low: 1-5
+      medium: 6-12
+      high: 13-25

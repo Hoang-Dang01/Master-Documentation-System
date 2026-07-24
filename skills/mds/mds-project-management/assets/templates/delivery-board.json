@@ -1,0 +1,36 @@
+{
+  "schema_version": "1.0.0",
+  "project_id": "MDS",
+  "board_version": "0.1.0",
+  "updated_at": "2026-07-24",
+  "milestones": [
+    {
+      "id": "M1",
+      "name": "First verifiable vertical slice",
+      "target_date": null,
+      "task_ids": ["PM-TSK-MDS-CORE-001"]
+    }
+  ],
+  "tasks": [
+    {
+      "id": "PM-TSK-MDS-CORE-001",
+      "title": "Deliver one verifiable vertical slice",
+      "lifecycle_state": "DRAFT",
+      "execution_state": "NOT_STARTED",
+      "owner_role": "BE",
+      "effort": 1,
+      "blocked_by": [],
+      "linked_requirements": ["BA-REQ-MDS-CORE-001"],
+      "linked_designs": [],
+      "acceptance_criteria": [
+        "The user-observable behavior is demonstrated.",
+        "The relevant automated checks pass."
+      ],
+      "verification": {
+        "commands": [],
+        "evidence": []
+      },
+      "risks": []
+    }
+  ]
+}

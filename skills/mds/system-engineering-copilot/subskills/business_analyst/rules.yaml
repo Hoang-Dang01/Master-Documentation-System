@@ -1,0 +1,7 @@
+ba_rules:
+  user_story_format: "As a [role], I want to [action] so that [benefit]"
+  mandatory_ac_count: 2
+  diagrams:
+    - use_case
+    - bpmn
+    - user_journey

@@ -1,0 +1,16 @@
+%% diagram-id: SA-DGM-SYSTEM-C4COMPONENT-001
+%% derived-from: SA-ARC-SYSTEM-001
+C4Component
+    title API Service Component Diagram
+    Container_Boundary(api, "API Service") {
+        Component(router, "API Router", "FastAPI", "Receives and validates HTTP requests")
+        Component(useCase, "Application Use Case", "Python", "Coordinates business behavior")
+        Component(domain, "Domain Model", "Python", "Enforces business rules")
+        Component(repository, "Repository Adapter", "SQLAlchemy", "Persists domain state")
+    }
+    ContainerDb(db, "Database", "PostgreSQL", "Stores application data")
+
+    Rel(router, useCase, "Invokes")
+    Rel(useCase, domain, "Uses")
+    Rel(useCase, repository, "Calls")
+    Rel(repository, db, "Reads and writes", "SQL/TLS")

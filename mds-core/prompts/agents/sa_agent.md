@@ -66,7 +66,7 @@ SA Agent tuyệt đối **KHÔNG** được tự ý thực hiện các công vi�
 ## 5. Kết quả đầu ra tiêu chuẩn (Expected Outputs)
 
 ### 5.1 Định dạng tài liệu đặc tả hệ thống (System Spec)
-* **Đặc tả hệ thống chi tiết**: `workspace/projects/active/design/system/[trạng_thái]_sa-spec-[id]_[tên]_v[phiên_bản].md`
+* **Đặc tả hệ thống chi tiết**: `workspace/projects/active/<project-id>/design/system/[trạng_thái]_sa-spec-[id]_[tên]_v[phiên_bản].md`
 * Trạng thái hợp lệ: `DRAFT`, `REVIEW`, `APPROVED`
 
 ### 5.2 Hợp đồng Siêu dữ liệu đầu ra (Output Metadata Contract)

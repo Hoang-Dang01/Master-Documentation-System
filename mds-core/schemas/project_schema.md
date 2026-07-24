@@ -1,7 +1,7 @@
 # Đặc tả MDS Core — Lược đồ Ngữ cảnh Dự án (project_schema)
 
 > **Vai trò:** Project Context Schema Spec (Lược đồ Ngữ cảnh Dự án)
-> **Sứ mệnh:** Định nghĩa quy chuẩn bắt buộc cho bộ hồ sơ ngữ cảnh nền tảng (Project Profiles) tại thư mục `workspace/projects/active/` nhằm thiết lập ranh giới nghiệp vụ, mục tiêu kinh doanh, ràng buộc tối cao và cấu hình chế độ vận hành cho dự án trước khi vận hành.
+> **Sứ mệnh:** Định nghĩa quy chuẩn bắt buộc cho bộ hồ sơ ngữ cảnh nền tảng (Project Profiles) tại thư mục `workspace/projects/active/<project-id>/` nhằm thiết lập ranh giới nghiệp vụ, mục tiêu kinh doanh, ràng buộc tối cao và cấu hình chế độ vận hành cho dự án trước khi vận hành.
 
 > **Liên kết hệ thống:**
 > - Xem phân loại thực thể đầy đủ: [`entity_schema.md`](entity_schema.md)
@@ -12,13 +12,13 @@
 
 ## 1. Bản đồ Hồ sơ Ngữ cảnh Dự án (Project Profiles Matrix)
 
-Mọi dự án vận hành trên hệ điều hành MDS bắt buộc phải định nghĩa và duy trì bộ hồ sơ sau ở trạng thái phê duyệt (`APPROVED`) tại thư mục `workspace/projects/active/`:
+Mọi dự án vận hành trên hệ điều hành MDS bắt buộc phải định nghĩa và duy trì bộ hồ sơ sau ở trạng thái phê duyệt (`APPROVED`) tại thư mục `workspace/projects/active/<project-id>/`:
 
 ```text
                            ┌── intake_brief.md      (Yêu cầu thô + Go/No-Go) ──── Phase 00
                            │
                            ├── feasibility.md        (FSB — Đánh giá khả thi) ──── Phase 00
-workspace/projects/active/ ──────────┤
+workspace/projects/active/<project-id>/ ──────────┤
                            ├── project_brief.md      (Mục tiêu, Phạm vi & Nhân sự) Phase 01
                            ├── business_context.md   (Bối cảnh kinh doanh & ROI) ── Phase 01
                            └── constraints.md        (Ràng buộc tối cao kỹ thuật) ── Phase 01

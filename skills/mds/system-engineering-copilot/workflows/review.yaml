@@ -1,0 +1,13 @@
+workflow_name: review_playbook
+description: Playbook for auditing existing requirements, codebase, or systems.
+steps:
+  - action: load_target_files
+    details: "Read provided specs, schemas, diagrams, or code templates."
+  - action: detect_architecture_smells
+    details: "Analyze system boundaries, coupling, database selections, queue needs, single points of failure."
+  - action: run_validators
+    details: "Verify diagram alignments, naming conventions, and constraints in existing system documents."
+  - action: catalog_gaps_risks
+    details: "Formulate risk matrices, highlighting security loopholes, performance limits, and scaling bottlenecks."
+  - action: output_remediations
+    details: "Provide refactoring recommendations, design corrections, and mitigation checklists."

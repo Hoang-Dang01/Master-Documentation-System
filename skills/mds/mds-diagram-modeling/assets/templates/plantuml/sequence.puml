@@ -1,0 +1,24 @@
+' diagram-id: SA-DGM-SYSTEM-SEQUENCE-001
+' derived-from: BA-UC-SYSTEM-001
+@startuml
+skinparam defaultFontName Arial
+skinparam shadowing false
+skinparam sequenceArrowColor #424242
+skinparam participantBorderColor #616161
+
+actor "Staff\n(Nhân viên)" as Staff #FF9800
+participant "Web Client" as Client #FFCCBC
+participant "API Service" as API #B1DDF0
+database "Database" as DB #D5E8D4
+
+Staff -> Client: Submit action
+Client -> API: POST /resource
+API -> DB: Save data
+DB --> API: Saved record
+alt Valid request
+  API --> Client: 201 Created
+else Invalid request
+  API --> Client: 400 Validation error
+end
+Client --> Staff: Show result
+@enduml

@@ -1,0 +1,33 @@
+# Artifact Registry - Active outputs tracker
+artifacts:
+  P1_business_analysis:
+    generated: false
+    files: []
+  P2_domain_modeling:
+    generated: false
+    files: []
+  P3_solution_architecture:
+    generated: false
+    files: []
+  P4_technical_design:
+    generated: false
+    files: []
+  P5_implementation_planning:
+    generated: false
+    files: []
+  P6_testing_qa:
+    generated: false
+    files: []
+  P7_deployment_release:
+    generated: false
+    files: []
+  P8_operations_sre:
+    generated: false
+    files: []
+diagrams:
+  business: []
+  data: []
+  architecture: []
+  engineering: []
+  qa: []
+  ops: []

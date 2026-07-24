@@ -1,0 +1,9 @@
+sre_rules:
+  required_metrics:
+    - latency
+    - error_rate
+    - saturation
+    - traffic
+  diagrams:
+    - monitoring
+    - alert_flow

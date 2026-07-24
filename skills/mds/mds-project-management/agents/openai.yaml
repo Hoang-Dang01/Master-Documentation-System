@@ -1,0 +1,4 @@
+interface:
+  display_name: "MDS Project Management"
+  short_description: "Plan, track, verify, and hand off MDS delivery"
+  default_prompt: "Use $mds-project-management to turn approved requirements into a prioritized, traceable delivery plan."

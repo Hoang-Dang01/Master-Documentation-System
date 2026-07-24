@@ -1,0 +1,8 @@
+tl_rules:
+  api_standard: REST
+  include_http_status_codes: true
+  schema_format: SQL_DDL
+  diagrams:
+    - sequence
+    - class
+    - state_machine

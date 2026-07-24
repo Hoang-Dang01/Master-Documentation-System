@@ -1,0 +1,26 @@
+%% diagram-id: SA-DGM-SYSTEM-ERD-001
+%% derived-from: SA-DATA-SYSTEM-001
+erDiagram
+    USER ||--o{ REQUEST : creates
+    USER ||--o{ NOTIFICATION : receives
+
+    USER {
+        uuid id PK
+        string email UK
+        string password_hash
+        datetime created_at
+    }
+
+    REQUEST {
+        uuid id PK
+        uuid user_id FK
+        string status
+        datetime created_at
+    }
+
+    NOTIFICATION {
+        uuid id PK
+        uuid user_id FK
+        string title
+        boolean is_read
+    }

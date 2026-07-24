@@ -45,11 +45,11 @@
   - `mds-core/standards/relationship_rules.md` (Đồ thị và liên kết DAG)
   - `mds-core/standards/versioning_rules.md` (Nâng phiên bản SemVer)
 * **Ngữ cảnh dự án active**: 
-  - `workspace/projects/active/intake_brief.md`
-  - `workspace/projects/active/feasibility.md`
-  - `workspace/projects/active/project_brief.md`
-  - `workspace/projects/active/business_context.md`
-  - `workspace/projects/active/constraints.md`
+  - `workspace/projects/active/<project-id>/intake_brief.md`
+  - `workspace/projects/active/<project-id>/feasibility.md`
+  - `workspace/projects/active/<project-id>/project_brief.md`
+  - `workspace/projects/active/<project-id>/business_context.md`
+  - `workspace/projects/active/<project-id>/constraints.md`
 * **Tài liệu đặc thù của Agent**:
   - [Tài liệu đầu vào đặc thù 1]
   - [Tài liệu đầu vào đặc thù 2]
@@ -61,7 +61,7 @@
 ### 5.1 Định dạng tài liệu & Tên File
 Mọi tài liệu đầu ra bắt buộc phải được đặt tên chính xác theo cú pháp của **Naming Convention**:
 
-* **[Tên loại tài liệu 1]**: `workspace/projects/active/[thư_mục]/[LIFECYCLE_STATE]_[ROLE]-[TYPE]-[PROJECT]-[COMPONENT]-[NUMBER]_[NAME]_v[VERSION].md`
+* **[Tên loại tài liệu 1]**: `workspace/projects/active/<project-id>/[thư_mục]/[LIFECYCLE_STATE]_[ROLE]-[TYPE]-[PROJECT]-[COMPONENT]-[NUMBER]_[NAME]_v[VERSION].md`
   - *Ví dụ*: `[APPROVED]_BE-API-EDU-AUTH-001_LOGIN_ENDPOINT_v1.0.0.md`
 
 ### 5.2 Hợp đồng Siêu dữ liệu đầu ra (Output Metadata Contract)

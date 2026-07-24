@@ -1,0 +1,14 @@
+validator_name: architecture_validator
+scope: design_viability_linting
+rules:
+  - id: VAL_ARC_01
+    check: "Circular dependencies: ensure service communication path contains no logical cycles (A -> B -> A)."
+  - id: VAL_ARC_02
+    check: "Single Points of Failure (SPOF): alert if a critical enterprise service lacks redundancy, replication, or load balancing."
+  - id: VAL_ARC_03
+    check: "Scaling limitations: alert if real-time features (websockets, streams) are designed without scaling brokers (Redis adapters, Kafka)."
+  - id: VAL_ARC_04
+    check: "Sync chain length: flag synchronous service calling paths exceeding a depth of 3 hops (Client -> A -> B -> C)."
+  - id: VAL_ARC_05
+    check: "Data access mismatch: check that non-relational database selection is justified by non-ACID or unstructured requirements."
+action_on_failure: "Flag architecture validation warnings in Section 9 (Risks & Tradeoffs) of the output contract."

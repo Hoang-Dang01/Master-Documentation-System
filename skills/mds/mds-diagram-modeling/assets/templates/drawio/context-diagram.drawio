@@ -1,0 +1,52 @@
+<mxfile host="app.diagrams.net" agent="mds-diagram-modeling" version="24.7.17">
+  <diagram id="teacher-context" name="Context Diagram">
+    <mxGraphModel dx="1169" dy="827" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="827" math="0" shadow="0">
+      <root>
+        <mxCell id="0"/>
+        <mxCell id="1" parent="0"/>
+        <mxCell id="grid-bg" value="" style="shape=image;verticalLabelPosition=bottom;verticalAlign=top;imageAspect=0;aspect=fixed;image=data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMDAiIGhlaWdodD0iMTAwIj48ZGVmcz48cGF0dGVybiBpZD0iZyIgd2lkdGg9IjEwIiBoZWlnaHQ9IjEwIiBwYXR0ZXJuVW5pdHM9InVzZXJTcGFjZU9uVXNlIj48cGF0aCBkPSJNIDEwIDAgTCAwIDAgMCAxMCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjZThlOGU4IiBzdHJva2Utd2lkdGg9IjEiLz48L3BhdHRlcm4+PC9kZWZzPjxyZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9InVybCgjZykiLz48L3N2Zz4=;movable=0;resizable=0;rotatable=0;deletable=0;editable=0;connectable=0;" vertex="1" parent="1">
+          <mxGeometry x="20" y="20" width="920" height="500" as="geometry"/>
+        </mxCell>
+        <mxCell id="system" value="SYSTEM&#xa;NAME" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;fillColor=#4CAF50;strokeColor=#2E7D32;strokeWidth=2;fontColor=#FFFFFF;fontStyle=1;fontFamily=Arial;fontSize=15;align=center;verticalAlign=middle;" vertex="1" parent="1">
+          <mxGeometry x="390" y="180" width="180" height="180" as="geometry"/>
+        </mxCell>
+        <mxCell id="third-party" value="Third-party" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#2196F3;strokeColor=#1565C0;strokeWidth=2;fontColor=#000000;fontStyle=1;fontFamily=Arial;fontSize=13;align=center;verticalAlign=middle;" vertex="1" parent="1">
+          <mxGeometry x="55" y="105" width="165" height="68" as="geometry"/>
+        </mxCell>
+        <mxCell id="staff" value="Staff&#xa;(Nhân viên)" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FF9800;strokeColor=#EF6C00;strokeWidth=2;fontColor=#FFFFFF;fontStyle=1;fontFamily=Arial;fontSize=13;align=center;verticalAlign=middle;" vertex="1" parent="1">
+          <mxGeometry x="740" y="75" width="165" height="68" as="geometry"/>
+        </mxCell>
+        <mxCell id="manager" value="Manager&#xa;(Quản lý)" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#F44336;strokeColor=#C62828;strokeWidth=2;fontColor=#FFFFFF;fontStyle=1;fontFamily=Arial;fontSize=13;align=center;verticalAlign=middle;" vertex="1" parent="1">
+          <mxGeometry x="690" y="350" width="165" height="68" as="geometry"/>
+        </mxCell>
+        <mxCell id="admin" value="Admin&#xa;(Quản trị viên)" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#9E9E9E;strokeColor=#616161;strokeWidth=2;fontColor=#FFFFFF;fontStyle=1;fontFamily=Arial;fontSize=13;align=center;verticalAlign=middle;" vertex="1" parent="1">
+          <mxGeometry x="75" y="395" width="165" height="68" as="geometry"/>
+        </mxCell>
+        <mxCell id="e1" value="Webhook / customer data" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=classic;endFill=1;strokeColor=#000000;strokeWidth=1;fontFamily=Arial;fontSize=10;labelBackgroundColor=#FFFFFF;" edge="1" parent="1" source="third-party" target="system">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="e2" value="Response" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=classic;endFill=1;strokeColor=#000000;strokeWidth=1;fontFamily=Arial;fontSize=10;labelBackgroundColor=#FFFFFF;" edge="1" parent="1" source="system" target="third-party">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="e3" value="Consultation request" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=classic;endFill=1;strokeColor=#000000;strokeWidth=1;fontFamily=Arial;fontSize=10;labelBackgroundColor=#FFFFFF;" edge="1" parent="1" source="system" target="staff">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="e4" value="Response / customer info" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=classic;endFill=1;strokeColor=#000000;strokeWidth=1;fontFamily=Arial;fontSize=10;labelBackgroundColor=#FFFFFF;" edge="1" parent="1" source="staff" target="system">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="e5" value="Manage staff" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=classic;endFill=1;strokeColor=#000000;strokeWidth=1;fontFamily=Arial;fontSize=10;labelBackgroundColor=#FFFFFF;" edge="1" parent="1" source="manager" target="system">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="e6" value="KPIs / keywords" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=classic;endFill=1;strokeColor=#000000;strokeWidth=1;fontFamily=Arial;fontSize=10;labelBackgroundColor=#FFFFFF;" edge="1" parent="1" source="system" target="manager">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="e7" value="Accounts / permissions" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=classic;endFill=1;strokeColor=#000000;strokeWidth=1;fontFamily=Arial;fontSize=10;labelBackgroundColor=#FFFFFF;" edge="1" parent="1" source="admin" target="system">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="e8" value="Reports" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=classic;endFill=1;strokeColor=#000000;strokeWidth=1;fontFamily=Arial;fontSize=10;labelBackgroundColor=#FFFFFF;" edge="1" parent="1" source="system" target="admin">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

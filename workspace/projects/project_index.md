@@ -1,5 +1,8 @@
 # Project Index (Danh Sách Dự Án)
 
+> Human-readable compatibility view. Canonical data lives in
+> [`index.yaml`](index.yaml).
+
 Bảng theo dõi trạng thái, thời gian bắt đầu và người chịu trách nhiệm chính cho các dự án trong hệ thống MDS.
 
 | Project Name | Status | Started | Owner | Description |

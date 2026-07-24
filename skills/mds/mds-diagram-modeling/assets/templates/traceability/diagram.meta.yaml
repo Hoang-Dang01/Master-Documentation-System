@@ -1,0 +1,11 @@
+diagram:
+  id: SA-DGM-SYSTEM-CONTEXT-001
+  type: context
+  engine: drawio
+  style_profile: teacher-approved
+  status: draft
+  source_file: ../drawio/context-diagram.drawio
+  derived_from:
+    - BA-REQ-SYSTEM-001
+  related_artifacts:
+    - SA-ARC-SYSTEM-001

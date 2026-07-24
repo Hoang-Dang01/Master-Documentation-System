@@ -78,8 +78,8 @@ QA Agent tuyệt đối **KHÔNG** được:
 ## 5. Kết quả đầu ra tiêu chuẩn (Expected Outputs)
 
 ### 5.1 Định dạng tài liệu đặc tả kiểm thử (QA Spec)
-* **Kế hoạch kiểm thử (Test Plan)**: `workspace/projects/active/design/qa/[trạng_thái]_qa-spec-[id]_test_plan_v[phiên_bản].md`
-* **Báo cáo kết quả kiểm thử (Test Report)**: `workspace/projects/active/design/qa/[trạng_thái]_qa-report-[id]_test_summary_v[phiên_bản].md`
+* **Kế hoạch kiểm thử (Test Plan)**: `workspace/projects/active/<project-id>/design/qa/[trạng_thái]_qa-spec-[id]_test_plan_v[phiên_bản].md`
+* **Báo cáo kết quả kiểm thử (Test Report)**: `workspace/projects/active/<project-id>/design/qa/[trạng_thái]_qa-report-[id]_test_summary_v[phiên_bản].md`
 * Trạng thái hợp lệ: `DRAFT`, `REVIEW`, `APPROVED`
 
 ### 5.2 Hợp đồng Siêu dữ liệu đầu ra (Output Metadata Contract)

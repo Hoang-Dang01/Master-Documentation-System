@@ -1,0 +1,37 @@
+dependency_graph:
+  P0:
+    name: intake
+    produces: [intake_metadata]
+    requires: []
+  P1:
+    name: business_analysis
+    produces: [functional_requirements, non_functional_requirements, user_stories]
+    requires: [intake_metadata]
+  P2:
+    name: domain_modeling
+    produces: [domain_model, erd, data_dictionary, crud_matrix]
+    requires: [functional_requirements]
+  P3:
+    name: solution_architecture
+    produces: [architecture_style, system_topology, storage_strategy]
+    requires: [domain_model, non_functional_requirements]
+  P4:
+    name: technical_design
+    produces: [api_contracts, schemas, sequence_flows]
+    requires: [system_topology, domain_model]
+  P5:
+    name: implementation_planning
+    produces: [wbs, milestones, effort_estimation, raci]
+    requires: [api_contracts]
+  P6:
+    name: testing_qa
+    produces: [test_plans, test_cases, chaos_testing_specs]
+    requires: [api_contracts, system_topology]
+  P7:
+    name: deployment_release
+    produces: [cicd_pipelines, environment_matrix, rollback_plans]
+    requires: [system_topology]
+  P8:
+    name: operations_sre
+    produces: [runbooks, monitoring_alerts, incident_response]
+    requires: [cicd_pipelines]

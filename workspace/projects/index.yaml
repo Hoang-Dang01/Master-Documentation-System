@@ -1,0 +1,26 @@
+schema_version: "1.0.0"
+current_project: edumeet
+projects:
+  - id: edumeet
+    name: EduMeet
+    status: ACTIVE
+    started: "2026-06"
+    owner: Human-Chief-Architect
+    path: active/edumeet
+    description: Quản lý phòng họp và lớp học trực tuyến
+  - id: medstand
+    name: MedStand
+    status: ARCHIVED
+    started: "2025-10"
+    owner: BA-Agent
+    path: null
+    artifact_state: NOT_IMPORTED
+    description: Hệ thống quản lý hồ sơ y tế phòng khám
+  - id: lms
+    name: LMS
+    status: ARCHIVED
+    started: "2025-03"
+    owner: Human-Chief-Architect
+    path: null
+    artifact_state: NOT_IMPORTED
+    description: Hệ thống quản lý học tập tích hợp

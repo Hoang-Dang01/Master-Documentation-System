@@ -1,0 +1,22 @@
+rules:
+  confidence_threshold: 0.75
+  mandatory_fields:
+    - field: business_goal
+      weight: 0.30
+      description: "Primary problem statement and expected business value."
+    - field: actors
+      weight: 0.35
+      description: "System actors, roles, and authorization limits."
+    - field: scope
+      weight: 0.35
+      description: "Boundaries of the system; what is inside and what is outside."
+  optional_fields:
+    - field: target_concurrency
+      description: "Expected active/peak user traffic."
+    - field: SLA_SLO
+      description: "Target uptime, latency limits, and failover expectations."
+    - field: tech_stack_constraints
+      description: "Mandated database, framework, languages, or hosting platform."
+  clarification_triggers:
+    ask_if_missing: true
+    prevent_downstream_generation: true

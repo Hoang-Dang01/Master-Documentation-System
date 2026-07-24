@@ -1,0 +1,17 @@
+# Runtime Session Project Context - Placeholder
+project_metadata:
+  project_name: "TBD"
+  version: "1.0.0"
+  domain: "TBD"
+  scale_tier: "TBD"
+core_stack:
+  language: "TBD"
+  backend_framework: "TBD"
+  database: "TBD"
+  caching: "TBD"
+  realtime: "TBD"
+architectural_decisions:
+  style: "TBD"
+  communication: "TBD"
+  deployment: "TBD"
+active_constraints: []

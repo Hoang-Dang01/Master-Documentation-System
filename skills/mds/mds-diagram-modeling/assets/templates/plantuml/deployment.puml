@@ -1,0 +1,22 @@
+' diagram-id: DEV-DGM-SYSTEM-DEPLOYMENT-001
+' derived-from: DEV-ARC-SYSTEM-001
+@startuml
+skinparam defaultFontName Arial
+skinparam shadowing false
+skinparam nodeBackgroundColor #F5F5F5
+skinparam nodeBorderColor #616161
+
+node "User Device" {
+  artifact "Web Client" as Web
+}
+
+node "Cloud Environment" {
+  node "Application Runtime" {
+    artifact "API Service" as API
+  }
+  database "PostgreSQL" as DB
+}
+
+Web --> API : HTTPS
+API --> DB : TLS/SQL
+@enduml

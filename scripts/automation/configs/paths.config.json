@@ -4,6 +4,7 @@
     "apps": "apps",
     "packages": "packages",
     "core": "mds-core",
+    "skills": "skills",
     "workflows": "workflows",
     "workspace": "workspace",
     "scripts": "scripts",
@@ -12,13 +13,18 @@
   },
   "paths": {
     "core": "mds-core",
-    "roles": "mds-core/guides/roles",
+    "roles": "mds-core/roles",
     "lifecycle": "mds-core/guides/lifecycle",
-    "projects": "workspace/projects/active"
+    "projects": "workspace/projects/active",
+    "current_project": "workspace/projects/active/edumeet",
+    "project_index": "workspace/projects/index.yaml"
   },
   "required_files": [
     "README.md",
     "docs/STRUCTURE.md",
+    "docs/STRUCTURE.generated.md",
+    "docs/MIGRATION_MAP.md",
+    "docs/CANONICAL_SOURCES.md",
     "docs/QUICK_START.md"
   ]
 }

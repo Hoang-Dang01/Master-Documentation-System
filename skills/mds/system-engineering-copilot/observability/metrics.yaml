@@ -1,0 +1,6 @@
+observability_metrics:
+  runs_count: 1
+  avg_clarification_rounds: 1
+  artifact_generation_time_sec: 12.0
+  validation_failure_count: 0
+  failure_rate: 0.0

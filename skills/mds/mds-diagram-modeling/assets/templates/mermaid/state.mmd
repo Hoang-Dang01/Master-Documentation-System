@@ -1,0 +1,9 @@
+%% diagram-id: SA-DGM-SYSTEM-STATE-001
+%% derived-from: BA-RULE-SYSTEM-001
+stateDiagram-v2
+    [*] --> Draft
+    Draft --> Submitted: submit
+    Submitted --> Approved: approve
+    Submitted --> Rejected: reject
+    Rejected --> Draft: revise
+    Approved --> [*]

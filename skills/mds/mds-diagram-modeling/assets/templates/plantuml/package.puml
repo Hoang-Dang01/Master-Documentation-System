@@ -1,0 +1,29 @@
+' diagram-id: SA-DGM-SYSTEM-PACKAGE-001
+' derived-from: SA-ARC-SYSTEM-001
+@startuml
+left to right direction
+skinparam defaultFontName Arial
+skinparam shadowing false
+skinparam packageBackgroundColor #FFFFFF
+skinparam packageBorderColor #616161
+
+package "Presentation" {
+  [Web Client]
+}
+
+package "Application" {
+  [Use Cases]
+}
+
+package "Domain" {
+  [Domain Model]
+}
+
+package "Infrastructure" {
+  [Persistence Adapter]
+}
+
+[Web Client] --> [Use Cases]
+[Use Cases] --> [Domain Model]
+[Persistence Adapter] --> [Domain Model]
+@enduml

@@ -1,0 +1,14 @@
+%% Entity Relationship Diagram (ERD) Template
+erDiagram
+    USER ||--o{ POST : writes
+    USER {
+        int id PK
+        string email UK
+        string password
+    }
+    POST {
+        int id PK
+        string title
+        string content
+        int user_id FK
+    }

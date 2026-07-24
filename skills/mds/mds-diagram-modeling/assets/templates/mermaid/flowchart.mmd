@@ -1,0 +1,10 @@
+%% diagram-id: BA-DGM-SYSTEM-FLOW-001
+%% derived-from: BA-BPM-SYSTEM-001
+%%{init: {"theme":"base","themeVariables":{"fontFamily":"Arial","lineColor":"#424242","primaryColor":"#FFF9C4","primaryBorderColor":"#616161"}}}%%
+flowchart TD
+    Start([Start]) --> Submit[Submit request]
+    Submit --> Valid{Valid?}
+    Valid -->|Yes| Store[Store request]
+    Valid -->|No| Error[Return validation error]
+    Store --> Finish([Finish])
+    Error --> Finish

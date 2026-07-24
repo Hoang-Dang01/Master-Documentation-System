@@ -1,0 +1,25 @@
+activation_triggers:
+  implicit:
+    - pattern: "design.*system"
+      intent: system_design
+    - pattern: "draw.*diagram"
+      intent: diagram_generation
+    - pattern: "create.*architecture"
+      intent: architectural_design
+    - pattern: "review.*architecture"
+      intent: technical_audit
+    - pattern: "api.*design"
+      intent: interface_contract
+    - pattern: "database.*schema"
+      intent: data_modeling
+    - pattern: "write.*test case"
+      intent: qa_planning
+    - pattern: "setup.*ci/cd"
+      intent: devops_planning
+  explicit:
+    - keywords:
+        - "system_engineering_copilot"
+        - "AI-EOS"
+        - "/system-design"
+        - "/architecture"
+        - "/sdlc"

@@ -49,7 +49,8 @@ Ví dụ, khi khách hàng nhắn một câu:
 > *“Tôi muốn xây dựng một hệ thống học trực tuyến (LMS) giống như Zoom.”*
 
 MDS sẽ hướng dẫn bạn và AI biến câu nói mơ hồ đó thành chuỗi tài liệu kỹ nghệ chuẩn xác:
-*   **Requirements (BA/PM)**: Phân rã thành các tài liệu tính năng phòng học, quản lý học viên.
+*   **Requirements (BA)**: Phân rã thành các tài liệu tính năng phòng học, quản lý học viên.
+*   **Delivery Planning (PM)**: Chốt phạm vi, ưu tiên, roadmap, dependency, milestone và bằng chứng hoàn thành.
 *   **Architecture Decisions (ARCH)**: Ghi nhận quyết định dùng công nghệ gì (ADR), ví dụ: WebRTC hay LiveKit.
 *   **Database Schema (BE/DBA)**: Thiết kế chi tiết các bảng dữ liệu bằng mã nguồn SQL DDL.
 *   **API Contracts (BE/FE)**: Thiết kế hợp đồng API để Backend và Frontend tích hợp không bị lệch pha.
@@ -61,7 +62,7 @@ Mọi tài liệu trên đều được liên kết chặt chẽ với nhau. N�
 
 ## 📍 Trạng thái dự án hiện tại (Current State)
 
-*   **Active Project**: [workspace/projects/active](workspace/projects/active/)
+*   **Active Project**: [EduMeet](workspace/projects/active/edumeet/)
 *   **Current Phase**: `Phase 03: Design` ➔ [mds-core/guides/lifecycle/03_design](mds-core/guides/lifecycle/03_design/)
 *   **Current Focus**: Thiết kế kiến trúc tổng thể, cơ sở dữ liệu, API Contracts và các quyết định ADR.
 
@@ -72,10 +73,15 @@ Mọi tài liệu trên đều được liên kết chặt chẽ với nhau. N�
 *   [`apps/desktop`](apps/desktop/) — Electron shell, preload bridge và React UI.
 *   [`packages`](packages/) — Domain, application workflows và các adapter.
 *   [`mds-core`](mds-core/) — Toàn bộ tiêu chuẩn, schema, template, glossary và hướng dẫn cũ đã được bảo toàn.
+*   [`skills`](skills/) — Skill AI‑EOS của MDS và thư viện vendor đã gộp vào cùng repo.
+*   [`skills/mds/PM_WORKFLOW.md`](skills/mds/PM_WORKFLOW.md) — Luồng Project/Delivery Management từ scope đến release và handoff.
 *   [`workflows`](workflows/) — Automation definitions có version và approval gate.
 *   [`workspace/projects`](workspace/projects/) — Dữ liệu runtime của từng dự án.
 *   [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) — Ranh giới kiến trúc và vertical slice đầu tiên.
 *   [`docs/STRUCTURE.md`](docs/STRUCTURE.md) — Cây thư mục hiện tại.
+*   [`docs/STRUCTURE.generated.md`](docs/STRUCTURE.generated.md) — Cây vật lý tự sinh bằng `npm run docs:structure`.
+*   [`docs/MIGRATION_MAP.md`](docs/MIGRATION_MAP.md) — Bản ghi di chuyển, ownership và trạng thái consolidation.
+*   [`docs/CANONICAL_SOURCES.md`](docs/CANONICAL_SOURCES.md) — Source of truth cho từng loại nội dung.
 *   [`docs/ROADMAP.md`](docs/ROADMAP.md) — Lộ trình từ 0.1 đến Personal Engineering OS.
 
 ---
@@ -84,14 +90,14 @@ Mọi tài liệu trên đều được liên kết chặt chẽ với nhau. N�
 
 ### 1. Tôi Là Ai? (Who Am I?)
 *Xem chi tiết trách nhiệm, tài liệu đầu vào/đầu ra của từng vai trò:*
-*   [PM (Project Manager)](mds-core/guides/roles/pm) — Lộ trình, milestones, phạm vi và tiến độ.
-*   [BA (Business Analyst)](mds-core/guides/roles/ba) — Quy tắc nghiệp vụ, quy trình và yêu cầu.
-*   [SA (System Analyst)](mds-core/guides/roles/sa) — Đặc tả hệ thống (SRS) và thiết kế logic.
-*   [ARCH (Architect)](mds-core/guides/roles/arch) — Quyết định kiến trúc (ADR) và tiêu chuẩn bảo mật.
-*   [BE (Backend Dev)](mds-core/guides/roles/be) — Cơ sở dữ liệu (DDL), API Contracts và logic backend.
-*   [FE (Frontend Dev)](mds-core/guides/roles/fe) — Giao diện (UI Specs), components và trạng thái client.
-*   [QA (Quality Assurance)](mds-core/guides/roles/qa) — Kịch bản kiểm thử (Test Cases) và báo cáo lỗi.
-*   [DEVOPS (Platform Ops)](mds-core/guides/roles/devops) — Triển khai (IaC), CI/CD và giám sát SRE.
+*   [PM (Project/Delivery Manager)](mds-core/roles/pm) — Phạm vi, ưu tiên, roadmap, dependency, tiến độ, risk và release gate.
+*   [BA (Business Analyst)](mds-core/roles/ba) — Quy tắc nghiệp vụ, quy trình và yêu cầu.
+*   [SA (System Analyst)](mds-core/roles/sa) — Đặc tả hệ thống (SRS) và thiết kế logic.
+*   [ARCH (Architect)](mds-core/roles/arch) — Quyết định kiến trúc (ADR) và tiêu chuẩn bảo mật.
+*   [BE (Backend Dev)](mds-core/roles/be) — Cơ sở dữ liệu (DDL), API Contracts và logic backend.
+*   [FE (Frontend Dev)](mds-core/roles/fe) — Giao diện (UI Specs), components và trạng thái client.
+*   [QA (Quality Assurance)](mds-core/roles/qa) — Kịch bản kiểm thử (Test Cases) và báo cáo lỗi.
+*   [DEVOPS (Platform Ops)](mds-core/roles/devops) — Triển khai (IaC), CI/CD và giám sát SRE.
 
 ### 2. Tôi Đang Ở Phase Nào? (What Phase Am I In?)
 *Theo dõi tài liệu cần bàn giao theo tiến độ dự án:*

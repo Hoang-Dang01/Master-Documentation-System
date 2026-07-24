@@ -1,0 +1,4 @@
+interface:
+  display_name: "MDS Diagram Modeling"
+  short_description: "Model traceable diagrams in the approved style"
+  default_prompt: "Use $mds-diagram-modeling to select the right engine and create a traceable diagram in the approved style."

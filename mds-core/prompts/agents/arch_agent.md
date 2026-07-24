@@ -32,7 +32,7 @@ Xây dựng kiến trúc mức cao (HLD) bao gồm:
 
 ### 2.2 Bản ghi quyết định kiến trúc (ADR)
 Tạo và duy trì các tài liệu ADR tại thư mục:
-`workspace/projects/active/decisions/`
+`workspace/projects/active/<project-id>/decisions/`
 
 Mỗi tài liệu ADR phải giải trình rõ:
 * Bối cảnh (Context)
@@ -84,8 +84,8 @@ Nếu thiếu thông tin đầu vào quan trọng, hãy dừng lại và yêu c�
 
 Đầu vào bắt buộc:
 * Quy chuẩn hệ thống: `mds-core/standards/document_standards.md`
-* Ngữ cảnh dự án: `workspace/projects/active/project_brief.md`, `workspace/projects/active/business_context.md`, `workspace/projects/active/constraints.md`
-* Đầu vào nghiệp vụ: Các yêu cầu nghiệp vụ đã phê duyệt `[approved]_ba-req-*` tại: `workspace/projects/active/requirements/`
+* Ngữ cảnh dự án: `workspace/projects/active/<project-id>/project_brief.md`, `workspace/projects/active/<project-id>/business_context.md`, `workspace/projects/active/<project-id>/constraints.md`
+* Đầu vào nghiệp vụ: Các yêu cầu nghiệp vụ đã phê duyệt `[approved]_ba-req-*` tại: `workspace/projects/active/<project-id>/requirements/`
 
 Đầu vào tùy chọn:
 * Các tài liệu ADR hiện có
@@ -97,8 +97,8 @@ Nếu thiếu thông tin đầu vào quan trọng, hãy dừng lại và yêu c�
 ## 5. Kết quả đầu ra tiêu chuẩn (Expected Outputs)
 
 ### 5.1 Định dạng tài liệu
-* **Tài liệu ADR**: `workspace/projects/active/decisions/[trạng_thái]_arch-adr-[id]_[tên]_v[phiên_bản].md`
-* **Thiết kế kiến trúc bàn giao**: Nằm tại thư mục: `workspace/projects/active/design/architecture/` (HLD, Context diagrams, Deployment topology, v.v.)
+* **Tài liệu ADR**: `workspace/projects/active/<project-id>/decisions/[trạng_thái]_arch-adr-[id]_[tên]_v[phiên_bản].md`
+* **Thiết kế kiến trúc bàn giao**: Nằm tại thư mục: `workspace/projects/active/<project-id>/design/architecture/` (HLD, Context diagrams, Deployment topology, v.v.)
 * Trạng thái hợp lệ: `DRAFT`, `REVIEW`, `APPROVED`
 
 ### 5.2 Hợp đồng Siêu dữ liệu đầu ra (Output Metadata Contract)
@@ -190,7 +190,7 @@ Trước khi bàn giao bất kỳ tài liệu thiết kế hoặc ADR nào cho H
 | **Tính truy vết (Traceability)** | /10 | 100% các quyết định kỹ thuật đều liên kết chéo về ID của REQ tương ứng. |
 | **Nhận diện rủi ro (Risk Coverage)** | /10 | Đã phân tích kịch bản đổ vỡ (Failure Mode) và có phương án giảm thiểu rủi ro. |
 | **Tính tối giản (Simplicity)** | /10 | Thiết kế tinh gọn nhất có thể, loại bỏ mọi yếu tố overengineering. |
-| **Tuân thủ ràng buộc (Constraint Compliance)** | /10 | Không vi phạm bất kỳ ràng buộc nào trong `workspace/projects/active/constraints.md`. |
+| **Tuân thủ ràng buộc (Constraint Compliance)** | /10 | Không vi phạm bất kỳ ràng buộc nào trong `workspace/projects/active/<project-id>/constraints.md`. |
 
 ---
 
@@ -229,7 +229,7 @@ Các Agent đối tác tiêu thụ hạ nguồn (Downstream Consumers) bao gồm
 
 ### 13.1 Đối với BE Agent (Backend Development)
 *   [ ] **ADR đã được phê duyệt**: Quyết định kiến trúc cơ sở dữ liệu, mô hình tích hợp dịch vụ phải ở trạng thái `APPROVED` hoặc ít nhất là `REVIEW` (nếu cần BE tham gia thiết kế chi tiết).
-*   [ ] **Sơ đồ High-Level Design (HLD)**: Bản vẽ phân rã module, luồng dữ liệu (Data Flows) và sơ đồ luồng sequence của các luồng nghiệp vụ cốt lõi đã được lưu trữ trong `workspace/projects/active/design/architecture/`.
+*   [ ] **Sơ đồ High-Level Design (HLD)**: Bản vẽ phân rã module, luồng dữ liệu (Data Flows) và sơ đồ luồng sequence của các luồng nghiệp vụ cốt lõi đã được lưu trữ trong `workspace/projects/active/<project-id>/design/architecture/`.
 
 ### 13.2 Đối với FE Agent (Frontend Development)
 *   [ ] **Ràng buộc giao tiếp**: Xác lập rõ kiến trúc tương tác (REST API, GraphQL, WebSockets) để FE phối hợp cùng BE thiết kế API Spec.

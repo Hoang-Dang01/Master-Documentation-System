@@ -1,3 +1,10 @@
+---
+ownership: mds
+status: canonical
+source: internal
+safe_to_modify: true
+---
+
 # Desktop application
 
 Electron is the delivery shell for MDS. This app owns windows, menus, file pickers, IPC, the preload bridge, and the React user interface. It must not contain requirement extraction, impact analysis, workflow policy, or other domain logic.

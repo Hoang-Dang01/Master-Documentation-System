@@ -43,7 +43,7 @@ Hợp đồng kiểm định áp dụng cho hai nhóm sản phẩm chính:
 Mỗi phiên kiểm định phải được nạp đầy đủ các thông tin bối cảnh sau:
 1.  **Mã nguồn / Tài liệu thay đổi (Diff Block)**: Bản sửa đổi chi tiết của tệp tin.
 2.  **Đặc tả gốc làm căn cứ (Source Specs)**: ID tài liệu yêu cầu nghiệp vụ tương ứng (`BA-REQ`), quyết định kiến trúc (`ARCH-ADR`), đặc tả hệ thống (`SA-SPEC`).
-3.  **Tệp ràng buộc dự án**: `workspace/projects/active/constraints.md`.
+3.  **Tệp ràng buộc dự án**: `workspace/projects/active/<project-id>/constraints.md`.
 4.  **Hợp đồng đầu ra của Agent**: Mã tác vụ (`task_id`) và siêu dữ liệu đi kèm.
 
 ---

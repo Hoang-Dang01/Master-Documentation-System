@@ -1,0 +1,13 @@
+workflow_name: discovery_playbook
+description: Playbook for processing vague/incomplete raw inputs.
+steps:
+  - action: load_metadata
+    details: "Read project name, metadata and initialize transient state."
+  - action: run_clarification_engine
+    details: "Extract mandatory fields. Check confidence threshold against 0.75."
+  - action: compute_completeness
+    details: "Assess missing requirements (business goals, actors, scope, scaling needs)."
+  - action: trigger_gap_analysis
+    details: "Compile a list of missing parameters and formulate targeted, simple clarification questions."
+  - action: stop_and_question
+    details: "Halt downstream artifact generation and output the intake summary along with the questionnaire."

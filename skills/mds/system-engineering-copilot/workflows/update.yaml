@@ -1,0 +1,15 @@
+workflow_name: update_playbook
+description: Playbook for processing modification requests on an established system.
+steps:
+  - action: load_state
+    details: "Read state/project_context.yaml, state/artifact_registry.yaml, and state/decision_log.md."
+  - action: map_impact
+    details: "Trace the requested change through the config/dependency_graph.yaml to identify affected deliverables."
+  - action: compute_deltas
+    details: "Isolate elements that require rewrite, modification, or validation."
+  - action: dispatch_updates
+    details: "Regenerate only affected phases and update templates dynamically."
+  - action: run_validators
+    details: "Lints updated schemas, API flows, and diagrams."
+  - action: save_state
+    details: "Log the changes in state/decision_log.md and update context registries."

@@ -1,0 +1,24 @@
+' diagram-id: BA-DGM-SYSTEM-USECASE-001
+' derived-from: BA-REQ-SYSTEM-001
+@startuml
+left to right direction
+skinparam defaultFontName Arial
+skinparam shadowing false
+skinparam ArrowColor #424242
+skinparam usecase {
+  BackgroundColor #FFF9C4
+  BorderColor #616161
+  FontColor #212121
+}
+
+actor "Primary Actor\n(Vai trò chính)" as Primary
+actor "Admin\n(Quản trị viên)" as Admin #FFCCBC
+
+rectangle "SYSTEM NAME" #F5F5F5 {
+  usecase "Perform primary goal" as UC1
+  usecase "Manage configuration" as UC2
+}
+
+Primary --> UC1
+Admin --> UC2
+@enduml

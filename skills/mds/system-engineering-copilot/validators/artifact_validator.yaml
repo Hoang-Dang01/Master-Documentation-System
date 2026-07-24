@@ -1,0 +1,14 @@
+validator_name: artifact_validator
+scope: markdown_document_validation
+rules:
+  - id: VAL_MD_01
+    check: "Header hierarchy completeness (H1 down to H4) matches config/output_contract.yaml."
+  - id: VAL_MD_02
+    check: "Ensure no placeholder blocks like '[TBD]', '[Insert here]', or 'TODO' exist in final documents."
+  - id: VAL_MD_03
+    check: "Verify all user stories contain explicit, testable Acceptance Criteria (AC)."
+  - id: VAL_MD_04
+    check: "Verify all database fields in the data dictionary have specified types, keys, and descriptions."
+  - id: VAL_MD_05
+    check: "Ensure risks are mapped to their likelihood, impact, and a corresponding mitigation plan."
+action_on_failure: "Flag failing rule and request self-correction before output presentation."

@@ -1,0 +1,13 @@
+name: system_engineering_copilot
+version: 1.2.0
+author: Antigravity & Legion Team
+platform: AI-EOS (AI Engineering Operating System)
+description: Enterprise full-lifecycle SDLC system design framework
+tags:
+  - system_design
+  - business_analysis
+  - software_architecture
+  - devops
+  - sre
+  - qa
+  - mermaid_diagrams

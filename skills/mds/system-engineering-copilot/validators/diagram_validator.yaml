@@ -1,0 +1,14 @@
+validator_name: diagram_validator
+scope: mermaid_diagram_linting
+rules:
+  - id: VAL_MMD_01
+    check: "Syntax compilation check: ensure no unclosed brackets, missing arrows, or keywords issues."
+  - id: VAL_MMD_02
+    check: "Node density: max 12 nodes per row to prevent layout sprawl. If > 12 nodes, force subgraphs."
+  - id: VAL_MMD_03
+    check: "Taxonomy compliance: actors are rounded `([Label])`, services are rectangles `[Label]`, databases are cylinders `[(Label)]`, queues are hexagons `{{Label}}`."
+  - id: VAL_MMD_04
+    check: "Semantic colors: clients are blue, backend services are green, databases/caches are purple, external integrations are orange, security blocks are red."
+  - id: VAL_MMD_05
+    check: "No dangling nodes or isolated workflows without directional links."
+action_on_failure: "Repair Mermaid diagram structure and apply formatting rules."

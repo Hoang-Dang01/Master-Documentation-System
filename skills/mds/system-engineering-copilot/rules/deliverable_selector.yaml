@@ -1,0 +1,30 @@
+deliverable_selector:
+  project_size_tiers:
+    small:
+      max_complexity_score: 5
+      phases: [P0, P1, P2, P3, P4, P5]
+      diagrams:
+        business: [use_case]
+        data: [erd]
+        architecture: [c4_context]
+        engineering: [sequence]
+    medium:
+      max_complexity_score: 15
+      phases: [P0, P1, P2, P3, P4, P5, P6, P7]
+      diagrams:
+        business: [use_case, user_journey]
+        data: [erd, crud_matrix]
+        architecture: [c4_context, component]
+        engineering: [sequence, api_flow]
+        qa: [decision_table]
+        ops: [cicd]
+    enterprise:
+      max_complexity_score: 99
+      phases: [P0, P1, P2, P3, P4, P5, P6, P7, P8]
+      diagrams:
+        business: [use_case, bpmn, activity, user_journey]
+        data: [erd, dfd, crud_matrix, domain_model]
+        architecture: [c4_context, component, deployment, infrastructure]
+        engineering: [sequence, class, state_machine, api_flow]
+        qa: [coverage_matrix, decision_table, state_transition]
+        ops: [cicd, monitoring, network, alert_flow]

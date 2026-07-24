@@ -1,0 +1,7 @@
+qa_rules:
+  require_security_plan: true
+  min_coverage_pct: 80
+  diagrams:
+    - coverage_matrix
+    - decision_table
+    - state_transition

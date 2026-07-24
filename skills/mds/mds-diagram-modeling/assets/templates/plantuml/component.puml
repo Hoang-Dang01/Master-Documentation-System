@@ -1,0 +1,18 @@
+' diagram-id: SA-DGM-SYSTEM-COMPONENT-001
+' derived-from: SA-ARC-SYSTEM-001
+@startuml
+left to right direction
+skinparam defaultFontName Arial
+skinparam shadowing false
+skinparam componentBackgroundColor #D5E8D4
+skinparam componentBorderColor #616161
+
+component "Web Client" as Web #FFCCBC
+component "API Service" as API #B1DDF0
+component "Domain Service" as Domain #D5E8D4
+database "PostgreSQL" as DB
+
+Web --> API : HTTPS/JSON
+API --> Domain : invokes
+Domain --> DB : SQL
+@enduml

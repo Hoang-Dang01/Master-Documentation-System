@@ -1,0 +1,21 @@
+workflow_name: generation_playbook
+description: Playbook for generating sequential SDLC deliverables.
+steps:
+  - action: verify_intake
+    details: "Confirm confidence score is >= 0.75."
+  - action: determine_deliverables
+    details: "Select target phases and diagrams based on project size (Small, Medium, Enterprise)."
+  - action: run_ba_analysis
+    details: "Run P1: Generate user stories, ACs, use case, journey map templates."
+  - action: run_domain_modeling
+    details: "Run P2: Build logical domains, ERD, CRUD matrix."
+  - action: run_architecture_design
+    details: "Run P3 & P4: Design container structures, API endpoints, schema files, sequence diagrams."
+  - action: run_implementation_planning
+    details: "Run P5: Extract milestone, timelines, sprint allocation."
+  - action: run_qa_and_ops
+    details: "Run P6, P7 & P8 (if Medium/Enterprise): Formulate load, security, chaos testing, CI/CD pipelines, runbooks, monitoring alert rules."
+  - action: validate_output
+    details: "Pass outputs through markdown, architecture, and Mermaid validators."
+  - action: commit_state
+    details: "Write current metadata and design details to state/project_context.yaml and state/artifact_registry.yaml."

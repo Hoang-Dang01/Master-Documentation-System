@@ -1,0 +1,21 @@
+' diagram-id: SA-DGM-SYSTEM-CLASS-001
+' derived-from: SA-DOM-SYSTEM-001
+@startuml
+skinparam defaultFontName Arial
+skinparam shadowing false
+skinparam classBackgroundColor #FFFFFF
+skinparam classBorderColor #616161
+skinparam ArrowColor #424242
+
+class AggregateRoot {
+  +id: UUID
+  +performAction()
+}
+
+class ChildEntity {
+  +id: UUID
+  +status: Status
+}
+
+AggregateRoot "1" *-- "0..*" ChildEntity : contains
+@enduml

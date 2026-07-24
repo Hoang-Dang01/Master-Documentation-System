@@ -1,0 +1,28 @@
+execution_modes:
+  discovery:
+    description: "Intake of incomplete or vague business requests to ask clarification questions."
+    start_phase: P0
+    required_inputs: []
+    output_target: "clarification_questionnaire"
+  generate:
+    description: "Full sequential generation of deliverables when requirement state is sufficient."
+    start_phase: P0
+    required_inputs:
+      - business_goals
+      - actors
+      - scope
+    output_target: "sdlc_deliverables"
+  review:
+    description: "Auditing existing designs, specifications, code, or setups."
+    allowed_entry_phases:
+      - P1
+      - P2
+      - P3
+      - P4
+      - P7
+    output_target: "gap_risk_audit"
+  update:
+    description: "Selective regeneration of downstream deliverables based on change metrics."
+    dynamic_phase_selection: true
+    dependency_traversal: true
+    output_target: "delta_specification"

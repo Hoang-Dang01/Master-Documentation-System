@@ -1,0 +1,8 @@
+sa_rules:
+  redundancy_checks:
+    active: true
+    min_replicas: 2
+  diagram_standards:
+    - c4_context
+    - component
+    - service_communication

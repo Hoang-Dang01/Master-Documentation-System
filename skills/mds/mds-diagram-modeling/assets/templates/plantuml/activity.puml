@@ -1,0 +1,26 @@
+' diagram-id: BA-DGM-SYSTEM-ACTIVITY-001
+' derived-from: BA-BPM-SYSTEM-001
+@startuml
+skinparam defaultFontName Arial
+skinparam shadowing false
+skinparam activityBackgroundColor #FFF9C4
+skinparam activityBorderColor #616161
+
+start
+partition "Staff\n(Nhân viên)" #FFF9C4 {
+  :Submit request;
+}
+partition "System" #E1BEE7 {
+  :Validate request;
+  if (Valid?) then (yes)
+    :Store request;
+  else (no)
+    :Return validation error;
+    stop
+  endif
+}
+partition "Manager\n(Quản lý)" #C8E6C9 {
+  :Review request;
+}
+stop
+@enduml
