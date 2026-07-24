@@ -57,6 +57,7 @@ Master-Documentation-System/
 │   ├── README.md
 │   ├── ROADMAP.md
 │   ├── STRUCTURE.md
+│   ├── SYSTEM_OVERVIEW.md
 │   └── TO_BE_STRUCTURE.md
 ├── mds-core/
 │   ├── examples/

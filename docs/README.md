@@ -9,6 +9,10 @@ safe_to_modify: true
 
 Human-readable architecture, migration, roadmap, views, and onboarding.
 
+- `SYSTEM_OVERVIEW.md`: product purpose, current state, logical architecture,
+  runtime/data boundaries, and next priorities.
+- `ARCHITECTURE.md`: dependency boundaries and runtime architecture.
+- `DATA_LAYOUT.md`: source repository versus user-owned local data.
 - `STRUCTURE.md`: boundaries and explanations.
 - `STRUCTURE.generated.md`: generated physical tree; do not edit.
 - `MIGRATION_MAP.md`: AS-IS to TO-BE decisions and state.

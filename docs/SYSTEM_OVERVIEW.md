@@ -1,0 +1,360 @@
+---
+ownership: mds
+status: canonical
+source: internal
+safe_to_modify: true
+---
+
+# Tổng quan hệ thống MDS
+
+## 1. MDS là gì?
+
+MDS — Master Documentation System — là ứng dụng desktop local-first hỗ trợ
+chuyển tài liệu, ý tưởng và yêu cầu thay đổi thành các artifact kỹ nghệ có cấu
+trúc, có truy vết và có bước duyệt của con người.
+
+Luồng giá trị chính:
+
+```text
+Tài liệu hoặc ý tưởng đầu vào
+        ↓
+Requirement DRAFT có nguồn tham chiếu
+        ↓
+Con người chỉnh sửa và phê duyệt
+        ↓
+Phân tích tác động
+        ↓
+Thiết kế DRAFT
+        ↓
+Kế hoạch, task và context cho coding agent
+```
+
+MDS không nhằm thay con người tự quyết định requirement, kiến trúc hoặc phạm
+vi dự án. Automation xử lý những bước deterministic; AI chỉ tạo đề xuất hoặc
+bản nháp; các quyết định quan trọng phải đi qua approval gate.
+
+## 2. Nguyên tắc sản phẩm
+
+### Local-first
+
+MDS chạy trên máy người dùng. Source code, ứng dụng và dữ liệu có thể hoạt động
+mà không cần server trung tâm, tài khoản MDS hoặc cloud database bắt buộc.
+
+### User-owned data
+
+Dữ liệu runtime nằm ngoài source repository. Người dùng có thể cập nhật, xóa
+hoặc clone lại ứng dụng mà không làm mất workspace.
+
+### Provider-neutral
+
+Kiến trúc hướng tới việc người dùng tự chọn OpenAI, Anthropic, Gemini, Ollama
+hoặc endpoint tương thích OpenAI. Adapter AI chưa phải phần hoàn thiện ở phiên
+bản hiện tại.
+
+### Human approval
+
+Output sinh tự động bắt đầu ở trạng thái `DRAFT`. Requirement, impact report,
+thiết kế và thay đổi đã approved không được tự động trở thành quyết định cuối.
+
+### Traceability
+
+Artifact phải biết nó được tạo từ nguồn nào, liên quan đến requirement nào và
+đang ở lifecycle state nào.
+
+## 3. Trạng thái hiện tại
+
+Vertical slice đầu tiên đã chạy được:
+
+```text
+DOCX / Markdown / TXT
+        ↓
+Bảo toàn file nguồn + SHA-256
+        ↓
+Trích xuất và chuẩn hóa nội dung
+        ↓
+Sinh Requirement DRAFT
+        ↓
+Hiển thị và mở artifact từ desktop app
+```
+
+Đã có:
+
+- Electron shell, preload bridge và React renderer.
+- Import DOCX bằng Mammoth; Markdown và TXT được đọc trực tiếp.
+- Bảo toàn source, checksum và quan hệ source → requirement.
+- Tên artifact human-first và metadata dành cho hệ thống.
+- Data root bên ngoài repository qua `MDS_DATA_DIR`.
+- Standard, schema, template, role contract, prompt và glossary.
+- Workflow definition có version cho Customer Change Analysis.
+- Skill do MDS sở hữu và skill vendor có registry.
+- Build, typecheck, document validation, structure validation và ingestion test.
+
+Chưa hoàn thiện:
+
+- Màn hình chỉnh sửa và approve/reject requirement.
+- Approval history và audit trail chạy thật.
+- Impact analysis.
+- Workflow executor có persistence, retry và resume.
+- AI provider adapter.
+- SQLite runtime.
+- Secure API-key storage.
+- Installer và portable executable.
+
+## 4. Kiến trúc logic
+
+MDS được nhìn qua sáu vùng trách nhiệm:
+
+```text
+┌──────────────────────────────────────────────────────────────┐
+│ Desktop application                                         │
+│ apps/desktop — Electron main, preload bridge, React UI       │
+└──────────────────────────────┬───────────────────────────────┘
+                               ↓
+┌──────────────────────────────────────────────────────────────┐
+│ Application use cases                                       │
+│ packages/application — import, requirement, impact, design   │
+└──────────────────────────────┬───────────────────────────────┘
+                               ↓
+┌──────────────────────────────────────────────────────────────┐
+│ Runtime kernel                                               │
+│ packages/core — domain, validation, approval, audit          │
+└──────────────────────────────────────────────────────────────┘
+
+Workflow definitions                  Workflow execution
+workflows/definitions                 packages/workflow-engine
+
+Knowledge and governance              Agent capabilities
+mds-core                              skills/mds + skills/vendor
+
+Provider and storage adapters
+packages/infrastructure
+```
+
+Đây là dependency direction mục tiêu. Hiện tại code chạy thật tập trung ở
+`packages/application/ingestion`; phần lớn `packages/core`,
+`packages/workflow-engine` và `packages/infrastructure` vẫn là boundary/scaffold,
+không được mô tả như runtime hoàn chỉnh.
+
+## 5. Luồng runtime hiện tại
+
+```text
+React renderer
+    ↓ gọi API có kiểu
+Electron preload
+    ↓ IPC allowlist
+Electron main process
+    ↓
+Document ingestion application
+    ├── đọc DOCX / MD / TXT
+    ├── tính checksum
+    ├── ghi source
+    ├── ghi normalized artifact
+    └── ghi Requirement DRAFT
+            ↓
+MDS_DATA_DIR/projects/active/<project-id>/
+```
+
+Renderer không đọc filesystem trực tiếp. Electron main sở hữu dialog, path,
+filesystem và IPC. Preload chỉ expose API nhỏ cần thiết cho UI.
+
+## 6. Runtime core và knowledge core
+
+MDS có hai khái niệm dễ bị gọi chung là “core”:
+
+| Khái niệm | Vị trí | Trách nhiệm |
+|---|---|---|
+| Runtime kernel | `packages/core/` | Entity, invariant, approval, validation và audit contract chạy bằng code |
+| Application use cases | `packages/application/` | Những việc MDS thực hiện cho người dùng |
+| Workflow runtime | `packages/workflow-engine/` | Điều phối nhiều use case theo workflow |
+| Knowledge core | `mds-core/` | Standard, schema, template, guide, prompt, role và glossary |
+| Agent capability | `skills/mds/` | Cách agent tìm rule, chọn template và thực hiện công việc |
+
+`mds-core` chỉ chứa nội dung tĩnh, có version và được người/AI đọc. Nó không
+chứa project runtime, AI response, log, API key, user setting hoặc database.
+
+Skill không được tạo một business rule cạnh tranh với `mds-core` hoặc runtime
+kernel. Skill phải tham chiếu canonical source.
+
+## 7. Khái niệm domain trung tâm
+
+Các khái niệm MDS hướng tới:
+
+```text
+Project
+├── SourceDocument
+├── Artifact
+├── Requirement
+├── Decision
+└── WorkflowRun
+
+SourceDocument
+└── có thể được chia thành DocumentChunk
+
+Requirement
+├── derived_from → SourceDocument / DocumentChunk
+├── impacts → Artifact
+└── được quyết định bởi → Approval
+
+Design
+├── addresses → Requirement
+├── supersedes → Design cũ
+└── creates → Task
+```
+
+Trong vertical slice hiện tại, chỉ `SourceDocument`, artifact metadata và
+Requirement DRAFT đã được thể hiện bằng file. Domain model TypeScript hoàn
+chỉnh cho các entity trên vẫn là công việc tiếp theo.
+
+## 8. Source of truth
+
+| Loại thông tin | Nguồn chuẩn |
+|---|---|
+| Entity và invariant chạy bằng code | `packages/core/domain/` |
+| Approval contract | `packages/core/approval/` |
+| Validation chạy bằng code | `packages/core/validation/` |
+| Use case | `packages/application/` |
+| Workflow definition | `workflows/definitions/` |
+| Workflow execution | `packages/workflow-engine/` |
+| Chuẩn tài liệu | `mds-core/standards/` |
+| Artifact template | `mds-core/templates/` |
+| Role contract | `mds-core/roles/` |
+| Prompt agent | `mds-core/prompts/` |
+| Skill do MDS sở hữu | `skills/mds/` |
+| Skill bên ngoài | `skills/vendor/` |
+| Runtime project data | `MDS_DATA_DIR/projects/` |
+| Development seed | `workspace/projects/` |
+
+Chi tiết và quy tắc giải quyết xung đột nằm tại
+[`CANONICAL_SOURCES.md`](CANONICAL_SOURCES.md).
+
+## 9. Cây source repository
+
+```text
+Master-Documentation-System/
+├── apps/                   # Ứng dụng phân phối tới người dùng
+├── packages/               # Runtime code và boundary theo trách nhiệm
+├── mds-core/               # Knowledge, governance và artifact contract
+├── skills/                 # Skill MDS và vendor
+├── workflows/              # Workflow definition có version
+├── workspace/              # Seed/fixture development, không phải runtime data
+├── scripts/                # Build, validation, generation và migration
+├── tests/                  # Fixture, integration và end-to-end test
+├── docs/                   # Kiến trúc, vận hành và migration
+├── package.json
+└── README.md
+```
+
+Cây vật lý đầy đủ được sinh tự động tại
+[`STRUCTURE.generated.md`](STRUCTURE.generated.md). Boundary và trách nhiệm
+được giải thích tại [`STRUCTURE.md`](STRUCTURE.md).
+
+## 10. Cây dữ liệu người dùng
+
+```text
+MDS_DATA_DIR/
+├── projects/
+│   ├── index.yaml
+│   ├── active/
+│   │   └── <project-id>/
+│   │       ├── project_brief.md
+│   │       ├── business_context.md
+│   │       ├── constraints.md
+│   │       ├── status.md
+│   │       ├── decisions/
+│   │       ├── sources/
+│   │       ├── imports/
+│   │       ├── requirements/
+│   │       ├── analysis/
+│   │       ├── design/
+│   │       ├── testing/
+│   │       └── operations/
+│   └── archived/
+├── imports/
+├── exports/
+├── backups/
+└── mds.sqlite              # Reserved; chưa triển khai persistence thật
+```
+
+Data root mặc định:
+
+```text
+%USERPROFILE%\Documents\MDS-Workspace
+```
+
+Có thể đổi bằng:
+
+```powershell
+$env:MDS_DATA_DIR = "D:\MDS-Workspace"
+```
+
+Chi tiết nằm tại [`DATA_LAYOUT.md`](DATA_LAYOUT.md).
+
+## 11. Bảo mật và dữ liệu
+
+Electron sử dụng:
+
+```text
+contextIsolation: true
+nodeIntegration: false
+sandbox: true
+```
+
+Các đường dẫn project được kiểm tra để chỉ thao tác trong active projects root.
+Artifact path được resolve và kiểm tra trước khi mở. Source được giữ cùng
+checksum để hỗ trợ truy vết.
+
+API-key storage chưa được triển khai. Cho đến khi có secure storage, không lưu
+API key trong repository, project artifact hoặc file YAML của workspace.
+
+## 12. Cách chạy
+
+Development:
+
+```powershell
+npm.cmd install
+npm.cmd run dev
+```
+
+Chọn data root khác:
+
+```powershell
+$env:MDS_DATA_DIR = "D:\MDS-Workspace"
+npm.cmd run dev
+```
+
+Kiểm tra hệ thống:
+
+```powershell
+npm.cmd run build
+npm.cmd run typecheck
+npm.cmd run validate:docs
+npm.cmd run validate:structure
+npm.cmd run validate:skills
+npm.cmd run test:ingestion
+npm.cmd run smoke
+```
+
+## 13. Ưu tiên phát triển tiếp theo
+
+Không cần tái cấu trúc lớn hoặc rename thêm thư mục. Thứ tự ưu tiên:
+
+1. Chuẩn hóa domain model tối thiểu cho Project, SourceDocument, Artifact,
+   Requirement và WorkflowRun.
+2. Thêm màn hình chỉnh sửa và approve/reject Requirement DRAFT.
+3. Lưu approval history và audit event.
+4. Chạy impact analysis từ requirement đã approved.
+5. Thêm workflow executor có trạng thái, retry và resume.
+6. Chỉ thêm AI adapter sau khi input/output contract đã ổn định.
+7. Chỉ thêm SQLite khi file-based workflow đã chứng minh dữ liệu cần truy vấn.
+
+Mốc chứng minh “core thật” đầu tiên:
+
+```text
+Import DOCX
+→ ParsedDocument
+→ Requirement DRAFT
+→ Human approval
+→ Persisted artifact
+→ Impact report
+```
+

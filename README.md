@@ -94,6 +94,7 @@ Mọi tài liệu trên đều được liên kết chặt chẽ với nhau. N�
 *   [`skills/mds/PM_WORKFLOW.md`](skills/mds/PM_WORKFLOW.md) — Luồng Project/Delivery Management từ scope đến release và handoff.
 *   [`workflows`](workflows/) — Automation definitions có version và approval gate.
 *   [`docs/DATA_LAYOUT.md`](docs/DATA_LAYOUT.md) — Ranh giới giữa source repo và dữ liệu runtime local.
+*   [`docs/SYSTEM_OVERVIEW.md`](docs/SYSTEM_OVERVIEW.md) — Tổng quan mục tiêu, kiến trúc logic, trạng thái hiện tại và hướng phát triển.
 *   [`workspace/projects`](workspace/projects/) — Seed/fixture EduMeet cho development; dữ liệu thật nằm trong `MDS_DATA_DIR`.
 *   [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) — Ranh giới kiến trúc và vertical slice đầu tiên.
 *   [`docs/STRUCTURE.md`](docs/STRUCTURE.md) — Cây thư mục hiện tại.
