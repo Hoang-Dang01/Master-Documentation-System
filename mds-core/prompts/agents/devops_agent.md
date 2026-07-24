@@ -73,9 +73,9 @@ DEVOPS Agent tuyệt đối **KHÔNG** được:
 ## 4. Tài liệu đầu vào bắt buộc (Required Inputs)
 
 Đầu vào bắt buộc:
-* Quy chuẩn hệ thống: `core/standards/document_standards.md`
+* Quy chuẩn hệ thống: `mds-core/standards/document_standards.md`
 * Đầu vào kiến trúc: Quyết định kiến trúc `[approved]_arch-adr-*` (đặc biệt là mô hình triển khai và ràng buộc bảo mật hạ tầng).
-* Đầu vào quản lý: `projects/active/constraints.md` (giới hạn ngân sách hạ tầng).
+* Đầu vào quản lý: `workspace/projects/active/constraints.md` (giới hạn ngân sách hạ tầng).
 * Đầu vào thực thi: Mã nguồn hoàn thiện (đã pass test nội bộ của BE/FE) và bộ kịch bản test tự động của QA (`npm run test:e2e` sẵn sàng).
 * Đầu vào kiểm chứng: Báo cáo kết quả kiểm thử `[approved]_qa-report-*` ký duyệt Go-Live.
 
@@ -84,7 +84,7 @@ DEVOPS Agent tuyệt đối **KHÔNG** được:
 ## 5. Kết quả đầu ra tiêu chuẩn (Expected Outputs)
 
 ### 5.1 Định dạng tài liệu đặc tả vận hành (DevOps Spec)
-* **Đặc tả hạ tầng & Vận hành**: `projects/active/design/devops/[trạng_thái]_devops-spec-[id]_[tên]_v[phiên_bản].md`
+* **Đặc tả hạ tầng & Vận hành**: `workspace/projects/active/design/devops/[trạng_thái]_devops-spec-[id]_[tên]_v[phiên_bản].md`
 * Trạng thái hợp lệ: `DRAFT`, `REVIEW`, `APPROVED`
 
 ### 5.2 Hợp đồng Siêu dữ liệu đầu ra (Output Metadata Contract)

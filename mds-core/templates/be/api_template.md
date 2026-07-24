@@ -1,6 +1,6 @@
 ---
 id: BE-API-[PROJECT]-[COMPONENT]-[NUMBER]
-# For core/global API contracts: CORE-BE-API-[NAME]-V[VERSION]
+# For mds-core/global API contracts: CORE-BE-API-[NAME]-V[VERSION]
 title: "API: [HTTP_METHOD] [HTTP_PATH]"
 phase: "05"                          # Phase 05: Backend API Design
 

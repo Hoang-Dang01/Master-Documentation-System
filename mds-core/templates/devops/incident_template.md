@@ -1,6 +1,6 @@
 ---
 id: DEVOPS-INC-[PROJECT]-[COMPONENT]-[NUMBER]
-# For core/global incidents: CORE-DEVOPS-INC-[NAME]-V[VERSION]
+# For mds-core/global incidents: CORE-DEVOPS-INC-[NAME]-V[VERSION]
 title: "INC: [Tên Sự Cố Vận Hành]"
 phase: "08"                          # Phase 08: Operations & Maintenance
 

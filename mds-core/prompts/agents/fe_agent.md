@@ -63,20 +63,20 @@ FE Agent tuyệt đối **KHÔNG** được:
 ## 4. Tài liệu đầu vào bắt buộc (Required Inputs)
 
 Đầu vào bắt buộc:
-* Quy chuẩn hệ thống: `core/standards/document_standards.md`, `core/standards/naming_convention.md`
+* Quy chuẩn hệ thống: `mds-core/standards/document_standards.md`, `mds-core/standards/naming_convention.md`
 * **Hợp đồng Design System (Design Tokens)**:
-    * `core/design_system/design_tokens.json` hoặc tài liệu mô tả bộ tokens hệ thống (colors, spacing, typography, breakpoints, z-index layers, motion tokens).
+    * `mds-core/design_system/design_tokens.json` hoặc tài liệu mô tả bộ tokens hệ thống (colors, spacing, typography, breakpoints, z-index layers, motion tokens).
 * **Ràng buộc tương thích trình duyệt (Browser Compatibility Constraints)**:
-    * Bảng đặc tả các trình duyệt hỗ trợ và phiên bản tối thiểu (Chrome, Safari, Firefox, Edge, Mobile Browsers) nằm tại `projects/active/constraints.md`.
-* Đầu vào nghiệp vụ: Các yêu cầu nghiệp vụ đã được phê duyệt `[approved]_ba-req-*` và ca sử dụng `[approved]_ba-uc-*` tại `projects/active/requirements/`.
-* Đầu vào kỹ thuật: Quyết định kiến trúc `[approved]_arch-adr-*` và đặc tả API của backend `[approved]_be-spec-*` tại `projects/active/design/backend/`.
+    * Bảng đặc tả các trình duyệt hỗ trợ và phiên bản tối thiểu (Chrome, Safari, Firefox, Edge, Mobile Browsers) nằm tại `workspace/projects/active/constraints.md`.
+* Đầu vào nghiệp vụ: Các yêu cầu nghiệp vụ đã được phê duyệt `[approved]_ba-req-*` và ca sử dụng `[approved]_ba-uc-*` tại `workspace/projects/active/requirements/`.
+* Đầu vào kỹ thuật: Quyết định kiến trúc `[approved]_arch-adr-*` và đặc tả API của backend `[approved]_be-spec-*` tại `workspace/projects/active/design/backend/`.
 
 ---
 
 ## 5. Kết quả đầu ra tiêu chuẩn (Expected Outputs)
 
 ### 5.1 Định dạng tài liệu đặc tả giao diện (FE Spec)
-* **Đặc tả kỹ thuật Frontend**: `projects/active/design/frontend/[trạng_thái]_fe-spec-[id]_[tên]_v[phiên_bản].md`
+* **Đặc tả kỹ thuật Frontend**: `workspace/projects/active/design/frontend/[trạng_thái]_fe-spec-[id]_[tên]_v[phiên_bản].md`
 * Trạng thái hợp lệ: `DRAFT`, `REVIEW`, `APPROVED`
 
 ### 5.2 Hợp đồng Siêu dữ liệu đầu ra (Output Metadata Contract)

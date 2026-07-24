@@ -6,12 +6,12 @@ const { renderMarkdown } = require('./render_markdown');
 const { generateIndex } = require('./generate_index');
 
 const scriptDir = __dirname;
-const workspaceRoot = path.resolve(scriptDir, "..", "..", "..");
+const workspaceRoot = path.resolve(scriptDir, "..", "..", "..", "..");
 
 function main() {
     console.log("[GLOSSARY BUILDER] Loading glossary data...");
-    const dataDir = path.join(workspaceRoot, "core", "glossary", "data");
-    const manifestPath = path.join(workspaceRoot, "core", "glossary", "MANIFEST.yaml");
+    const dataDir = path.join(workspaceRoot, "mds-core", "glossary", "data");
+    const manifestPath = path.join(workspaceRoot, "mds-core", "glossary", "manifest.yaml");
 
     if (!fs.existsSync(manifestPath)) {
         console.error(`[FATAL] Manifest file not found at: ${manifestPath}`);

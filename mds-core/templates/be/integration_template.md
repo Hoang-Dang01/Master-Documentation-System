@@ -1,6 +1,6 @@
 ---
 id: BE-INT-[PROJECT]-[COMPONENT]-[NUMBER]
-# For core/global integrations: CORE-BE-INT-[NAME]-V[VERSION]
+# For mds-core/global integrations: CORE-BE-INT-[NAME]-V[VERSION]
 title: "INT: [Tên Hệ Thống Thứ Ba] Integration"
 phase: "05"                          # Phase 05: Integration & API Design
 

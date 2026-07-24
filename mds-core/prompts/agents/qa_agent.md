@@ -67,7 +67,7 @@ QA Agent tuyệt đối **KHÔNG** được:
 ## 4. Tài liệu đầu vào bắt buộc (Required Inputs)
 
 Đầu vào bắt buộc:
-* Quy chuẩn hệ thống: `core/standards/document_standards.md`
+* Quy chuẩn hệ thống: `mds-core/standards/document_standards.md`
 * Đầu vào nghiệp vụ: Các yêu cầu nghiệp vụ `[approved]_ba-req-*` và ca sử dụng `[approved]_ba-uc-*` chứa tiêu chí AC cụ thể.
 * Đầu vào kỹ thuật: Quyết định kiến trúc `[approved]_arch-adr-*` (đặc biệt là chỉ số NFR và Trust Boundaries).
 * Đầu vào thực thi: Đặc tả BE/FE Spec (`[approved]_be-spec-*`, `[approved]_fe-spec-*` chứa cấu trúc API và UI `data-testid` selectors).
@@ -78,8 +78,8 @@ QA Agent tuyệt đối **KHÔNG** được:
 ## 5. Kết quả đầu ra tiêu chuẩn (Expected Outputs)
 
 ### 5.1 Định dạng tài liệu đặc tả kiểm thử (QA Spec)
-* **Kế hoạch kiểm thử (Test Plan)**: `projects/active/design/qa/[trạng_thái]_qa-spec-[id]_test_plan_v[phiên_bản].md`
-* **Báo cáo kết quả kiểm thử (Test Report)**: `projects/active/design/qa/[trạng_thái]_qa-report-[id]_test_summary_v[phiên_bản].md`
+* **Kế hoạch kiểm thử (Test Plan)**: `workspace/projects/active/design/qa/[trạng_thái]_qa-spec-[id]_test_plan_v[phiên_bản].md`
+* **Báo cáo kết quả kiểm thử (Test Report)**: `workspace/projects/active/design/qa/[trạng_thái]_qa-report-[id]_test_summary_v[phiên_bản].md`
 * Trạng thái hợp lệ: `DRAFT`, `REVIEW`, `APPROVED`
 
 ### 5.2 Hợp đồng Siêu dữ liệu đầu ra (Output Metadata Contract)

@@ -50,9 +50,9 @@ Tài liệu này đóng vai trò là **Hiến pháp Đặc tả (Constitutional 
 Khi xảy ra xung đột hoặc mâu thuẫn về quy chuẩn thiết kế, quy tắc nghiệp vụ hoặc quan hệ đồ thị giữa các tài liệu, hệ thống tự động áp dụng quy tắc **Cấp trên ghi đè Cấp dưới (Higher authority overrides lower authority)** theo thứ bậc sau:
 
 1.  [`DOCUMENT_STANDARDS.md`](file:///d:/HoangDang/IT/MDS%20(Master%20Documentation%20System)/CORE/standards/DOCUMENT_STANDARDS.md) (Thẩm quyền tối cao về format & syntax).
-2.  [`entity_schema.md`](file:///d:/HoangDang/IT/MDS%20(Master%20Documentation%20System)/core/schemas/entity_schema.md) (Thẩm quyền về định nghĩa thực thể).
-3.  [`relationship_rules.md`](file:///d:/HoangDang/IT/MDS%20(Master%20Documentation%20System)/core/standards/relationship_rules.md) (Thẩm quyền về các cạnh đồ thị được phép).
-4.  [`base_template_guide.md` (Tài liệu hiện tại)](file:///d:/HoangDang/IT/MDS%20(Master%20Documentation%20System)/core/standards/base_template_guide.md) (Thẩm quyền về Markdown & YAML blocks).
+2.  [`entity_schema.md`](file:///d:/HoangDang/IT/MDS%20(Master%20Documentation%20System)/mds-core/schemas/entity_schema.md) (Thẩm quyền về định nghĩa thực thể).
+3.  [`relationship_rules.md`](file:///d:/HoangDang/IT/MDS%20(Master%20Documentation%20System)/mds-core/standards/relationship_rules.md) (Thẩm quyền về các cạnh đồ thị được phép).
+4.  [`base_template_guide.md` (Tài liệu hiện tại)](file:///d:/HoangDang/IT/MDS%20(Master%20Documentation%20System)/mds-core/standards/base_template_guide.md) (Thẩm quyền về Markdown & YAML blocks).
 5.  Các tài liệu biểu mẫu con (Child Templates).
 6.  Các tài liệu dự án cụ thể (Project Documents).
 

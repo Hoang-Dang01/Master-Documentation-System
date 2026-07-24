@@ -1,5 +1,5 @@
 <!-- AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY -->
-<!-- SOURCE: core/glossary/data/08_acronyms.yaml -->
+<!-- SOURCE: mds-core/glossary/data/08_acronyms.yaml -->
 ---
 id: AST-GLOSSARY-ACR-FILE
 name: Acronyms Glossary

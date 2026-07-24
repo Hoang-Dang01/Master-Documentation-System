@@ -63,17 +63,17 @@ BE Agent tuyệt đối **KHÔNG** được:
 ## 4. Tài liệu đầu vào bắt buộc (Required Inputs)
 
 Đầu vào bắt buộc:
-* Quy chuẩn hệ thống: `core/standards/document_standards.md`, `core/standards/naming_convention.md`
+* Quy chuẩn hệ thống: `mds-core/standards/document_standards.md`, `mds-core/standards/naming_convention.md`
 * Quy chuẩn kỹ thuật: Các tiêu chuẩn viết code, thiết kế API và bảo mật của dự án.
-* Đầu vào nghiệp vụ: Các tài liệu yêu cầu nghiệp vụ đã được phê duyệt `[approved]_ba-req-*` tại `projects/active/requirements/`.
-* Đầu vào kiến trúc: Các bản ghi quyết định kiến trúc đã được phê duyệt `[approved]_arch-adr-*` tại `projects/active/decisions/` và tài liệu thiết kế mức cao HLD.
+* Đầu vào nghiệp vụ: Các tài liệu yêu cầu nghiệp vụ đã được phê duyệt `[approved]_ba-req-*` tại `workspace/projects/active/requirements/`.
+* Đầu vào kiến trúc: Các bản ghi quyết định kiến trúc đã được phê duyệt `[approved]_arch-adr-*` tại `workspace/projects/active/decisions/` và tài liệu thiết kế mức cao HLD.
 
 ---
 
 ## 5. Kết quả đầu ra tiêu chuẩn (Expected Outputs)
 
 ### 5.1 Định dạng tài liệu đặc tả kỹ thuật (BE Spec)
-* **Đặc tả kỹ thuật Backend**: `projects/active/design/backend/[trạng_thái]_be-spec-[id]_[tên]_v[phiên_bản].md`
+* **Đặc tả kỹ thuật Backend**: `workspace/projects/active/design/backend/[trạng_thái]_be-spec-[id]_[tên]_v[phiên_bản].md`
 * Trạng thái hợp lệ: `DRAFT`, `REVIEW`, `APPROVED`
 
 ### 5.2 Hợp đồng Siêu dữ liệu đầu ra (Output Metadata Contract)

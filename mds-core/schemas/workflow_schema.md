@@ -51,7 +51,7 @@ workflow_mode: strict_waterfall | hybrid_agile | fast_iteration
 
 | Trường | Chi tiết |
 | :--- | :--- |
-| **Thư mục** | `lifecycle/00_intake/` |
+| **Thư mục** | `mds-core/guides/lifecycle/00_intake/` |
 | **Actor chính** | PM, BA |
 | **Mục tiêu** | Ghi nhận yêu cầu thô từ khách hàng, đánh giá khả thi sơ bộ (feasibility), phân loại và quyết định Go / No-Go cho dự án. |
 | **Inputs** | Email/chat thô từ khách hàng, cuộc họp kick-off, RFP (Request for Proposal). |
@@ -65,7 +65,7 @@ workflow_mode: strict_waterfall | hybrid_agile | fast_iteration
 
 | Trường | Chi tiết |
 | :--- | :--- |
-| **Thư mục** | `lifecycle/01_discovery/` |
+| **Thư mục** | `mds-core/guides/lifecycle/01_discovery/` |
 | **Actor chính** | PM, BA, Human |
 | **Mục tiêu** | Làm rõ Customer Intent, biên bản họp và xây dựng bộ ba hồ sơ ngữ cảnh nền tảng. |
 | **Inputs** | `intake_brief.md`, `FSB-XXX.md`, biên bản họp, phỏng vấn stakeholders. |
@@ -79,7 +79,7 @@ workflow_mode: strict_waterfall | hybrid_agile | fast_iteration
 
 | Trường | Chi tiết |
 | :--- | :--- |
-| **Thư mục** | `lifecycle/02_analysis/` |
+| **Thư mục** | `mds-core/guides/lifecycle/02_analysis/` |
 | **Actor chính** | BA, SA |
 | **Mục tiêu** | Đặc tả đầy đủ Business Flows, Business Rules, yêu cầu chức năng và **phi chức năng (NFR)** và đánh giá rủi ro ban đầu. |
 | **Inputs** | Bộ ba CTX đã `APPROVED`. |
@@ -93,7 +93,7 @@ workflow_mode: strict_waterfall | hybrid_agile | fast_iteration
 
 | Trường | Chi tiết |
 | :--- | :--- |
-| **Thư mục** | `lifecycle/03_design/` |
+| **Thư mục** | `mds-core/guides/lifecycle/03_design/` |
 | **Actor chính** | ARCH, SA, BE, FE |
 | **Mục tiêu** | Thiết kế kiến trúc tổng thể, cơ sở dữ liệu (DDL), Hợp đồng API, các quyết định ADR, giao diện UI và ghi nhận các quyết định nhỏ vào Decision Log. |
 | **Inputs** | `REQ-XXX.md`, `BR-XXX.md`, `NFR-XXX.md`, `RSK-XXX.md`, `constraints.md`. |
@@ -107,7 +107,7 @@ workflow_mode: strict_waterfall | hybrid_agile | fast_iteration
 
 | Trường | Chi tiết |
 | :--- | :--- |
-| **Thư mục** | `lifecycle/04_execution_planning/` |
+| **Thư mục** | `mds-core/guides/lifecycle/04_execution_planning/` |
 | **Actor chính** | PM |
 | **Mục tiêu** | Phân rã công việc thành các Task (`TSK`) cụ thể, ước tính thời gian, phân công Actor và lập Sprint Backlog sẵn sàng để thực thi. Đây là **execution planning** (lập kế hoạch thực thi), không phải strategic planning (đã làm từ Phase 01). |
 | **Inputs** | `API-XXX.md`, `DB-XXX.md`, `REQ-XXX.md`, `RSK-XXX.md` đã `APPROVED`. |
@@ -123,7 +123,7 @@ workflow_mode: strict_waterfall | hybrid_agile | fast_iteration
 
 | Trường | Chi tiết |
 | :--- | :--- |
-| **Thư mục** | `lifecycle/05_implementation/` |
+| **Thư mục** | `mds-core/guides/lifecycle/05_implementation/` |
 | **Actor chính** | BE Agent, FE Agent |
 | **Mục tiêu** | Backend và Frontend Agent song song sinh code từ `API` Contract và `DB` Schema đã được phê duyệt. Mỗi commit code **phải** liên kết tới `TSK` tương ứng để đảm bảo truy vết. |
 | **Inputs** | `API-XXX.md` (`APPROVED`), `DB-XXX.md` (`APPROVED`), `TSK-XXX.md`. |
@@ -139,7 +139,7 @@ workflow_mode: strict_waterfall | hybrid_agile | fast_iteration
 
 | Trường | Chi tiết |
 | :--- | :--- |
-| **Thư mục** | `lifecycle/06_testing/` |
+| **Thư mục** | `mds-core/guides/lifecycle/06_testing/` |
 | **Actor chính** | QA Agent |
 | **Mục tiêu** | Viết và thực thi các kịch bản kiểm thử để phát hiện lỗi, đảm bảo tính năng đúng với `REQ` và `NFR`. |
 | **Inputs** | `REQ-XXX.md`, `NFR-XXX.md`, `API-XXX.md`, build artifact từ Phase 05. |
@@ -153,7 +153,7 @@ workflow_mode: strict_waterfall | hybrid_agile | fast_iteration
 
 | Trường | Chi tiết |
 | :--- | :--- |
-| **Thư mục** | `lifecycle/07_deployment/` |
+| **Thư mục** | `mds-core/guides/lifecycle/07_deployment/` |
 | **Actor chính** | DevOps Agent, PM |
 | **Mục tiêu** | Deploy code lên môi trường Production, cấu hình hạ tầng giám sát (Monitoring), Alert Rules và SLOs. |
 | **Inputs** | Build artifact đã pass Gate 06, `REL-XXX.md` (Release Plan), `RUN-XXX.md` (Deployment Runbook). |
@@ -167,7 +167,7 @@ workflow_mode: strict_waterfall | hybrid_agile | fast_iteration
 
 | Trường | Chi tiết |
 | :--- | :--- |
-| **Thư mục** | `lifecycle/08_operations/` |
+| **Thư mục** | `mds-core/guides/lifecycle/08_operations/` |
 | **Actor chính** | DevOps Agent |
 | **Mục tiêu** | Giám sát hệ thống liên tục, xử lý sự cố (`INC`), theo dõi SLOs và tối ưu chi phí hạ tầng (`FIN`). |
 | **Inputs** | Hệ thống Production, Alert Rules, SLO Dashboard. |
@@ -181,7 +181,7 @@ workflow_mode: strict_waterfall | hybrid_agile | fast_iteration
 
 | Trường | Chi tiết |
 | :--- | :--- |
-| **Thư mục** | `lifecycle/09_evolution/` |
+| **Thư mục** | `mds-core/guides/lifecycle/09_evolution/` |
 | **Actor chính** | PM, BA, ARCH |
 | **Mục tiêu** | Tiếp nhận phản hồi người dùng và vận hành, phân tích để lên kế hoạch cho phiên bản tiếp theo. Vòng lặp mới bắt đầu từ Phase 02 hoặc Phase 03 tùy mức độ thay đổi. |
 | **Inputs** | `INC-XXX.md`, User Feedback, Telemetry Data, `FIN-INFRA-XXX.md`, `RSK-XXX.md`. |

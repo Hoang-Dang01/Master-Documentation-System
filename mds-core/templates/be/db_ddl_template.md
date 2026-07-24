@@ -1,6 +1,6 @@
 ---
 id: BE-DB-[PROJECT]-[COMPONENT]-[NUMBER]
-# For core/global DB schemas: CORE-BE-DB-[NAME]-V[VERSION]
+# For mds-core/global DB schemas: CORE-BE-DB-[NAME]-V[VERSION]
 title: "DB: [Tên Bảng Vật Lý]"
 phase: "04"                          # Phase 04: Database & Schema Design
 

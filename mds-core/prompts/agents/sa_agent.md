@@ -57,7 +57,7 @@ SA Agent tuyệt đối **KHÔNG** được tự ý thực hiện các công vi�
 ## 4. Tài liệu đầu vào bắt buộc (Required Inputs)
 
 Đầu vào bắt buộc:
-* Quy chuẩn hệ thống: `core/standards/document_standards.md`
+* Quy chuẩn hệ thống: `mds-core/standards/document_standards.md`
 * Đầu vào nghiệp vụ: Các tài liệu yêu cầu nghiệp vụ đã phê duyệt `[approved]_ba-req-*` và ca sử dụng `[approved]_ba-uc-*` từ BA.
 * Đầu vào kiến trúc: Các bản ghi quyết định kiến trúc đã phê duyệt `[approved]_arch-adr-*` và HLD từ ARCH.
 
@@ -66,7 +66,7 @@ SA Agent tuyệt đối **KHÔNG** được tự ý thực hiện các công vi�
 ## 5. Kết quả đầu ra tiêu chuẩn (Expected Outputs)
 
 ### 5.1 Định dạng tài liệu đặc tả hệ thống (System Spec)
-* **Đặc tả hệ thống chi tiết**: `projects/active/design/system/[trạng_thái]_sa-spec-[id]_[tên]_v[phiên_bản].md`
+* **Đặc tả hệ thống chi tiết**: `workspace/projects/active/design/system/[trạng_thái]_sa-spec-[id]_[tên]_v[phiên_bản].md`
 * Trạng thái hợp lệ: `DRAFT`, `REVIEW`, `APPROVED`
 
 ### 5.2 Hợp đồng Siêu dữ liệu đầu ra (Output Metadata Contract)

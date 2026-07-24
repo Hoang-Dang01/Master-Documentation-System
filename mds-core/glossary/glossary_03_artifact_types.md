@@ -1,5 +1,5 @@
 <!-- AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY -->
-<!-- SOURCE: core/glossary/data/03_artifact_types.yaml -->
+<!-- SOURCE: mds-core/glossary/data/03_artifact_types.yaml -->
 ---
 id: AST-GLOSSARY-TYPES-FILE
 name: Artifact Types Glossary

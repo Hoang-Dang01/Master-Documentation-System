@@ -1,6 +1,6 @@
 ---
 id: BE-SRV-[PROJECT]-[COMPONENT]-[NUMBER]
-# For core/global services: CORE-BE-SRV-[NAME]-V[VERSION]
+# For mds-core/global services: CORE-BE-SRV-[NAME]-V[VERSION]
 title: "SRV: [Tên Dịch Vụ / Component]"
 phase: "05"                          # Phase 05: Backend API & Service Design
 

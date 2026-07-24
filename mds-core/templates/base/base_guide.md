@@ -105,7 +105,7 @@ links:
 
 > [!IMPORTANT]
 > Toàn bộ quy tắc cốt lõi về Đồ thị tri thức (Graph Semantics), quy chuẩn Markdown chống mơ hồ (Zero Ambiguity), và Đường ống thẩm định tự động (Validation Pipeline) đã được hợp nhất và đóng băng chính thức tại:
-> 👉 [`core/standards/base_template_guide.md`](core/standards/base_template_guide.md) (Hiến Pháp MDS).
+> 👉 [`mds-core/standards/base_template_guide.md`](../../standards/base_template_guide.md) (Hiến Pháp MDS).
 
 ---
 
@@ -123,7 +123,7 @@ Dưới đây là cẩm nang sửa lỗi nhanh khi Validation Pipeline phát hi�
 
 ### 3.3 Khai báo Liên kết tuần hoàn (Cyclic Loop Dependency)
 *   ❌ **Sai**: `A` trỏ `implements` ➔ `B`, `B` trỏ `elaborates` ➔ `A` (Tạo chu kỳ vô tận).
-*   ✅ **Đúng**: Chỉ trỏ theo chiều **Outbound** được quy định chính thức tại [`core/standards/relationship_rules.md`](core/standards/relationship_rules.md) để đảm bảo đồ thị là DAG.
+*   ✅ **Đúng**: Chỉ trỏ theo chiều **Outbound** được quy định chính thức tại [`mds-core/standards/relationship_rules.md`](../../standards/relationship_rules.md) để đảm bảo đồ thị là DAG.
 
 ### 3.4 Quy tắc rò rỉ công nghệ (Tech Leakage in BA Layer)
 *   ❌ **Sai**: Mô tả nghiệp vụ thanh toán ghi nhận: "Sử dụng API Stripe SDK v3 và DB Postgres bảng `orders`".

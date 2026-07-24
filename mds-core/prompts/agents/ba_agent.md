@@ -52,11 +52,11 @@ BA Agent tuyệt đối **KHÔNG** được:
 ## 4. Tài liệu đầu vào bắt buộc (Required Inputs)
 
 Đầu vào bắt buộc:
-* Quy chuẩn hệ thống: `core/standards/document_standards.md`
-* Ngữ cảnh dự án: `projects/active/project_brief.md`, `projects/active/business_context.md`, `projects/active/constraints.md`
+* Quy chuẩn hệ thống: `mds-core/standards/document_standards.md`
+* Ngữ cảnh dự án: `workspace/projects/active/project_brief.md`, `workspace/projects/active/business_context.md`, `workspace/projects/active/constraints.md`
 * **Đầu vào quản lý lộ trình (PM Ingests)**:
-    * `projects/active/planning/approved_pm_scope.md` (nếu có) hoặc `projects/active/product/roadmap.md` để bám sát ưu tiên phát hành, không tự suy luận độ ưu tiên.
-* Các tài liệu thô chứa yêu cầu: `projects/active/requirements/raw_requirements/` (nếu có) hoặc ghi chú cuộc họp.
+    * `workspace/projects/active/planning/approved_pm_scope.md` (nếu có) hoặc `workspace/projects/active/product/roadmap.md` để bám sát ưu tiên phát hành, không tự suy luận độ ưu tiên.
+* Các tài liệu thô chứa yêu cầu: `workspace/projects/active/requirements/raw_requirements/` (nếu có) hoặc ghi chú cuộc họp.
 
 Đầu vào tùy chọn:
 * Sơ đồ tổ chức, quy trình vận hành tiêu chuẩn (SOP) hiện tại của khách hàng.
@@ -66,10 +66,10 @@ BA Agent tuyệt đối **KHÔNG** được:
 ## 5. Kết quả đầu ra tiêu chuẩn (Expected Outputs)
 
 ### 5.1 Định dạng tài liệu
-* **Tài liệu Yêu cầu nghiệp vụ (REQ)**: `projects/active/requirements/[trạng_thái]_ba-req-[id]_[tên]_v[phiên_bản].md`
-* **Tài liệu Ca sử dụng (UC)**: `projects/active/requirements/[trạng_thái]_ba-uc-[id]_[tên]_v[phiên_bản].md`
-* **Quy tắc nghiệp vụ (BR)**: `projects/active/requirements/[trạng_thái]_ba-br-[id]_[tên]_v[phiên_bản].md`
-* **Quy trình nghiệp vụ (FLOW)**: `projects/active/requirements/[trạng_thái]_ba-flow-[id]_[tên]_v[phiên_bản].md`
+* **Tài liệu Yêu cầu nghiệp vụ (REQ)**: `workspace/projects/active/requirements/[trạng_thái]_ba-req-[id]_[tên]_v[phiên_bản].md`
+* **Tài liệu Ca sử dụng (UC)**: `workspace/projects/active/requirements/[trạng_thái]_ba-uc-[id]_[tên]_v[phiên_bản].md`
+* **Quy tắc nghiệp vụ (BR)**: `workspace/projects/active/requirements/[trạng_thái]_ba-br-[id]_[tên]_v[phiên_bản].md`
+* **Quy trình nghiệp vụ (FLOW)**: `workspace/projects/active/requirements/[trạng_thái]_ba-flow-[id]_[tên]_v[phiên_bản].md`
 * Trạng thái hợp lệ: `DRAFT`, `REVIEW`, `APPROVED`
 
 ### 5.2 Hợp đồng Siêu dữ liệu đầu ra (Output Metadata Contract)
@@ -196,7 +196,7 @@ Mọi tài liệu phải được viết bằng markdown và tuân thủ cấu t
 ARCH Agent chỉ được phép bắt đầu thiết kế hệ thống và đưa ra các quyết định kiến trúc khi gói tài liệu nghiệp vụ bàn giao (Handoff Package) của BA đáp ứng đầy đủ các tiêu chí tối thiểu sau:
 
 *   [ ] **Trạng thái tài liệu**: 100% tài liệu yêu cầu nghiệp vụ liên quan đến phạm vi thiết kế phải ở trạng thái `APPROVED` bởi con người (Human Chief Architect).
-*   [ ] **Phạm vi rõ ràng**: Tệp tin `projects/active/planning/approved_pm_scope.md` hoặc tài liệu tương đương đã xác định rõ ranh giới các tính năng được phát hành.
+*   [ ] **Phạm vi rõ ràng**: Tệp tin `workspace/projects/active/planning/approved_pm_scope.md` hoặc tài liệu tương đương đã xác định rõ ranh giới các tính năng được phát hành.
 *   [ ] **Bản đồ tác nhân hoàn tất**: Tất cả các tác nhân của hệ thống đã được định danh và phân cấp quyền quyết định theo Stakeholder Authority Map.
 *   [ ] **Triệt tiêu mơ hồ**: Mọi yêu cầu phi chức năng (NFR) trọng yếu như hiệu năng, độ trễ, khả năng chịu tải đã được định lượng hóa rõ ràng.
 *   [ ] **Giải quyết xung đột**: 100% các xung đột yêu cầu thuộc Contradiction Matrix (Type 1, 2, 3) đã được giải quyết hoặc leo thang ghi nhận kết quả xử lý rõ ràng.

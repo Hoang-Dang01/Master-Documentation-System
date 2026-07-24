@@ -1,5 +1,5 @@
 <!-- AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY -->
-<!-- SOURCE: core/glossary/data/ -->
+<!-- SOURCE: mds-core/glossary/data/ -->
 ---
 id: AST-GLOSSARY-INDEX-FILE
 name: Glossary Cross-Reference Index

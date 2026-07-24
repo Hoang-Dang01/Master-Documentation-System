@@ -212,12 +212,12 @@ Tách biệt tri thức để tối ưu hóa hiệu năng làm việc của cả
 
 *   **Template (Structure)**: Biểu mẫu sạch, chỉ chứa tiêu đề đề mục chuẩn và YAML Frontmatter để điền dữ liệu. Agent nhận Template không cần đọc Guide.
 *   **Guide (Knowledge)**: Sách hướng dẫn chi tiết cách viết, triết lý và tiêu chuẩn kỹ nghệ. Dùng để onboard người mới và train AI.
-*   **Example (Gold Standard)**: Dự án mẫu thực tế hoàn chỉnh (lưu tại `projects/archived/`) để AI học few-shot. Đây là nguồn dữ liệu huấn luyện quan trọng nhất.
+*   **Example (Gold Standard)**: Dự án mẫu thực tế hoàn chỉnh (lưu tại `workspace/projects/archived/`) để AI học few-shot. Đây là nguồn dữ liệu huấn luyện quan trọng nhất.
 
 **Nguyên tắc tách**:
 
 | Loại | Nằm ở | Độ dài tối đa | Cập nhật khi nào |
 | :--- | :--- | :--- | :--- |
-| Template | `core/templates/` | < 50 dòng | Khi thay đổi cấu trúc |
-| Guide | `core/guides/` | Không giới hạn | Khi có best practice mới |
-| Example | `projects/archived/` | Toàn bộ project | Sau mỗi dự án hoàn thành |
+| Template | `mds-core/templates/` | < 50 dòng | Khi thay đổi cấu trúc |
+| Guide | `mds-core/guides/` | Không giới hạn | Khi có best practice mới |
+| Example | `workspace/projects/archived/` | Toàn bộ project | Sau mỗi dự án hoàn thành |

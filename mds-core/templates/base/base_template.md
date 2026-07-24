@@ -1,6 +1,6 @@
 ---
 id: ROLE-TYPE-[PROJECT]-[COMPONENT]-[NUMBER]
-# For core/global docs use: CORE-[NAME]-V[VERSION] (e.g. CORE-BASE-TEMPLATE-GUIDE-V1.1)
+# For mds-core/global docs use: CORE-[NAME]-V[VERSION] (e.g. CORE-BASE-TEMPLATE-GUIDE-V1.1)
 # COMPONENT conventions: SYS (System-wide) | AUTH | MEDIA | DATA | BILL | API | ...
 title: "[Tên Tài Liệu Đặc Tả]"
 phase: "01"                          # Allowed values: "00".."10" (dưới dạng chuỗi 2 chữ số)
@@ -48,7 +48,7 @@ links:
 
 > [!NOTE]
 > Xem hướng dẫn chi tiết về siêu dữ liệu Frontmatter, quy tắc định dạng Markdown và quan hệ đồ thị tri thức tại:
-> 👉 [`base_template_guide.md`](core/standards/base_template_guide.md) (Hiến Pháp MDS)
+> 👉 [`base_template_guide.md`](../../standards/base_template_guide.md) (Hiến Pháp MDS)
 
 ---
 

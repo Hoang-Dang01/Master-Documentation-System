@@ -1,5 +1,5 @@
 <!-- AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY -->
-<!-- SOURCE: core/glossary/data/01_core_terms.yaml -->
+<!-- SOURCE: mds-core/glossary/data/01_core_terms.yaml -->
 ---
 id: AST-GLOSSARY-CORE-FILE
 name: Core Terms Glossary

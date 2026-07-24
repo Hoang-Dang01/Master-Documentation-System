@@ -1,6 +1,6 @@
 ---
 id: DEVOPS-DEP-[PROJECT]-[COMPONENT]-[NUMBER]
-# For core/global deployments: CORE-DEVOPS-DEP-[NAME]-V[VERSION]
+# For mds-core/global deployments: CORE-DEVOPS-DEP-[NAME]-V[VERSION]
 title: "DEP: [Tên Đặc Tả Triển Khai]"
 phase: "07"                          # Phase 07: Deployment & Operations
 

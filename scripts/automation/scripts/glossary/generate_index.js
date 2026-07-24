@@ -6,7 +6,7 @@ function generateIndex(allTerms, renderedFilesMap, targetBase) {
     const sortedTerms = [...allTerms].sort((a, b) => a.term.localeCompare(b.term));
 
     let content = `<!-- AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY -->
-<!-- SOURCE: core/glossary/data/ -->
+<!-- SOURCE: mds-core/glossary/data/ -->
 ---
 id: AST-GLOSSARY-INDEX-FILE
 name: Glossary Cross-Reference Index
@@ -40,7 +40,7 @@ Alphabetical index of all terms in the Master Documentation System (MDS).
         content += `| [${term.term}](${link}) | ${term.canonical_name} | \`${term.category}\` | [${term._file}](./data/${term._file}) |\n`;
     }
 
-    const indexPath = path.join(targetBase, 'core', 'glossary', 'glossary_index.md');
+    const indexPath = path.join(targetBase, 'mds-core', 'glossary', 'glossary_index.md');
     fs.writeFileSync(indexPath, content.trim() + '\n', 'utf8');
     console.log(`Generated index: glossary_index.md`);
 }

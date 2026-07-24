@@ -17,7 +17,7 @@ function renderMarkdown(fileName, terms, targetBase) {
     const categoryTitle = fileName.replace('.yaml', '').split('_').slice(1).map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
     
     let content = `<!-- AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY -->
-<!-- SOURCE: core/glossary/data/${fileName} -->
+<!-- SOURCE: mds-core/glossary/data/${fileName} -->
 ---
 id: ${fileArtifactId}
 name: ${categoryTitle} Glossary
@@ -87,7 +87,7 @@ links:
     }
 
     const outName = 'glossary_' + fileName.replace('.yaml', '').toLowerCase() + '.md';
-    const outPath = path.join(targetBase, 'core', 'glossary', outName);
+    const outPath = path.join(targetBase, 'mds-core', 'glossary', outName);
     fs.writeFileSync(outPath, content.trim() + '\n', 'utf8');
     console.log(`Rendered markdown: ${outName}`);
     return outName;

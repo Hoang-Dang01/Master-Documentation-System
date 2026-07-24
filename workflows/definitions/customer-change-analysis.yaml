@@ -1,0 +1,64 @@
+id: customer-change-analysis
+name: Customer Change Analysis
+version: 0.1.0
+
+trigger:
+  type: manual
+
+inputs:
+  - source_documents
+  - target_project
+
+steps:
+  - id: parse-documents
+    executor: document-parser
+
+  - id: extract-requirements
+    executor: ai
+    skill: requirement-extraction
+    depends_on:
+      - parse-documents
+
+  - id: review-requirements
+    executor: human-approval
+    depends_on:
+      - extract-requirements
+
+  - id: analyze-impact
+    executor: ai
+    skill: impact-analysis
+    depends_on:
+      - review-requirements
+
+  - id: generate-design
+    executor: ai
+    skill: system-design
+    depends_on:
+      - analyze-impact
+
+  - id: plan-implementation
+    executor: ai
+    skill: implementation-planning
+    depends_on:
+      - generate-design
+
+  - id: build-agent-context
+    executor: deterministic
+    action: agent-context-package
+    depends_on:
+      - plan-implementation
+
+outputs:
+  - extracted_requirements
+  - clarification_questions
+  - impact_report
+  - design_proposal
+  - implementation_plan
+  - agent_context_package
+
+audit:
+  record_inputs: true
+  record_outputs: true
+  record_model_usage: true
+  measure_time_saved: true
+

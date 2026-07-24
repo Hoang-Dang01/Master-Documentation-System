@@ -9,8 +9,8 @@ const path = require('path');
 
 // Load config
 const scriptDir = __dirname;
-const workspaceRoot = path.resolve(scriptDir, "..", "..");
-const configPath = path.join(workspaceRoot, "automation", "configs", "paths.config.json");
+const workspaceRoot = path.resolve(scriptDir, "..", "..", "..");
+const configPath = path.join(workspaceRoot, "scripts", "automation", "configs", "paths.config.json");
 
 if (!fs.existsSync(configPath)) {
     console.error(`[FATAL] Configuration file not found at: ${configPath}`);
@@ -26,7 +26,7 @@ try {
 }
 
 const requiredFiles = config.required_files || [];
-const targetProjectsDir = config.paths.projects || "projects/active";
+const targetProjectsDir = config.paths.projects || "workspace/projects/active";
 
 // Regular expressions
 const FILENAME_REGEX = /^\[(DRAFT|REVIEW|APPROVED|IN_PROGRESS|DEPRECATED|ARCHIVED|BLOCKED|NOT_APPLICABLE)\]_(PM|BA|SA|ARCH|BE|FE|QA|DEVOPS|AI)-([A-Z]{2,4})-(\d{3})_([A-Z0-9_]+)_v(\d+\.\d+\.\d+)\.(md|sql|yaml|json|tf|drawio|fig|png|jpg)$/;
@@ -284,7 +284,7 @@ class MDSLinter {
     }
 
     validateGlossaryReverseBuild() {
-        const glossaryScriptsDir = path.join(this.rootPath, "automation", "scripts", "glossary");
+        const glossaryScriptsDir = path.join(this.rootPath, "scripts", "automation", "scripts", "glossary");
         if (!fs.existsSync(glossaryScriptsDir)) return;
 
         const { parseYamlFile } = require('./glossary/load_terms');
@@ -301,10 +301,10 @@ class MDSLinter {
             '08_acronyms.yaml': 'AST-GLOSSARY-ACR-FILE'
         };
 
-        const dataDir = path.join(this.rootPath, "core", "glossary", "data");
+        const dataDir = path.join(this.rootPath, "mds-core", "glossary", "data");
         if (!fs.existsSync(dataDir)) return;
 
-        const manifestPath = path.join(this.rootPath, "core", "glossary", "MANIFEST.yaml");
+        const manifestPath = path.join(this.rootPath, "mds-core", "glossary", "manifest.yaml");
         const files = [];
         if (fs.existsSync(manifestPath)) {
             const manifestContent = fs.readFileSync(manifestPath, 'utf8');
@@ -344,7 +344,7 @@ class MDSLinter {
         if (validationErrors.length > 0) {
             validationErrors.forEach(err => {
                 this.errors.push({
-                    file: "core/glossary/",
+                    file: "mds-core/glossary/",
                     vi: `Lỗi đối soát YAML Glossary: ${err}`,
                     en: `Glossary YAML validation error: ${err}`
                 });
@@ -358,7 +358,7 @@ class MDSLinter {
             const categoryTitle = file.replace('.yaml', '').split('_').slice(1).map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
 
             let expectedContent = `<!-- AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY -->
-<!-- SOURCE: core/glossary/data/${file} -->
+<!-- SOURCE: mds-core/glossary/data/${file} -->
 ---
 id: ${fileArtifactId}
 name: ${categoryTitle} Glossary
@@ -429,13 +429,13 @@ links:
 
             expectedContent = expectedContent.trim() + '\n';
             const outName = 'glossary_' + file.replace('.yaml', '').toLowerCase() + '.md';
-            const outPath = path.join(this.rootPath, 'core', 'glossary', outName);
+            const outPath = path.join(this.rootPath, 'mds-core', 'glossary', outName);
 
             if (!fs.existsSync(outPath)) {
                 this.errors.push({
-                    file: `core/glossary/${outName}`,
-                    vi: `Không tìm thấy file generated: ${outName}. Hãy chạy: node automation/scripts/glossary/build_glossary.js`,
-                    en: `Missing generated file: ${outName}. Please run: node automation/scripts/glossary/build_glossary.js`
+                    file: `mds-core/glossary/${outName}`,
+                    vi: `Không tìm thấy file generated: ${outName}. Hãy chạy: node scripts/automation/scripts/glossary/build_glossary.js`,
+                    en: `Missing generated file: ${outName}. Please run: node scripts/automation/scripts/glossary/build_glossary.js`
                 });
                 continue;
             }
@@ -443,9 +443,9 @@ links:
             const actualContent = fs.readFileSync(outPath, 'utf8');
             if (actualContent !== expectedContent) {
                 this.errors.push({
-                    file: `core/glossary/${outName}`,
-                    vi: `Phát hiện sửa đổi thủ công trái phép trên file generated '${outName}'! Hãy sửa file nguồn tại 'core/glossary/data/${file}' và chạy: node automation/scripts/glossary/build_glossary.js`,
-                    en: `Unauthorized manual modification detected on generated file '${outName}'! Please edit the source file at 'core/glossary/data/${file}' and run: node automation/scripts/glossary/build_glossary.js`
+                    file: `mds-core/glossary/${outName}`,
+                    vi: `Phát hiện sửa đổi thủ công trái phép trên file generated '${outName}'! Hãy sửa file nguồn tại 'mds-core/glossary/data/${file}' và chạy: node scripts/automation/scripts/glossary/build_glossary.js`,
+                    en: `Unauthorized manual modification detected on generated file '${outName}'! Please edit the source file at 'mds-core/glossary/data/${file}' and run: node scripts/automation/scripts/glossary/build_glossary.js`
                 });
             }
         }

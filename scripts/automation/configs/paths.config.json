@@ -1,25 +1,24 @@
 {
   "schema_version": "1.2.0",
   "root_modules": {
-    "core": "core",
-    "roles": "roles",
-    "lifecycle": "lifecycle",
-    "projects": "projects",
-    "patterns": "pattern_library",
-    "skills": "ai_skills",
-    "automation": "automation",
-    "views": "views",
-    "archive": "archive"
+    "apps": "apps",
+    "packages": "packages",
+    "core": "mds-core",
+    "workflows": "workflows",
+    "workspace": "workspace",
+    "scripts": "scripts",
+    "tests": "tests",
+    "docs": "docs"
   },
   "paths": {
-    "core": "core",
-    "roles": "roles",
-    "lifecycle": "lifecycle",
-    "projects": "projects/active"
+    "core": "mds-core",
+    "roles": "mds-core/guides/roles",
+    "lifecycle": "mds-core/guides/lifecycle",
+    "projects": "workspace/projects/active"
   },
   "required_files": [
-    "readme.md",
-    "structure.md",
-    "quick_start.md"
+    "README.md",
+    "docs/STRUCTURE.md",
+    "docs/QUICK_START.md"
   ]
 }

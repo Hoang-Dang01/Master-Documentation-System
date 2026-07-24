@@ -53,9 +53,9 @@ Xây dựng "context bundle" tối thiểu nhưng đầy đủ.
 
 Nguồn context:
 
-* `projects/active/project_brief.md`
-* `projects/active/business_context.md`
-* `projects/active/constraints.md`
+* `workspace/projects/active/project_brief.md`
+* `workspace/projects/active/business_context.md`
+* `workspace/projects/active/constraints.md`
 * BA requirements
 * ARCH ADRs
 * system design artifacts
@@ -126,7 +126,7 @@ status:
 
 Orchestrator chỉ được đọc:
 
-* `/projects/active/*`
+* `/workspace/projects/active/*`
 * agent specifications
 * system templates
 * runtime conversation context

@@ -1,5 +1,5 @@
 <!-- AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY -->
-<!-- SOURCE: core/glossary/data/05_database_terms.yaml -->
+<!-- SOURCE: mds-core/glossary/data/05_database_terms.yaml -->
 ---
 id: AST-GLOSSARY-DB-FILE
 name: Database Terms Glossary

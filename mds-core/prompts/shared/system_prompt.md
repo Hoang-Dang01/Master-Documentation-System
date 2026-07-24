@@ -47,7 +47,7 @@ $$\text{System Prompt (Hiến pháp)} > \text{Agent Spec (Luật vai trò)} > \t
 
 *   **Rule 1 — Quy tắc Liên kếtclickable (Clickable File Links)**: 
     *   Mọi tệp tin, thư mục hoặc ký hiệu lập trình (như class, function, struct) được nhắc đến trong câu trả lời bắt buộc phải được viết dưới dạng liên kết có thể nhấp được (clickable links) sử dụng giao thức `file://` với đường dẫn tuyệt đối viết thường (lowercase).
-    *   Ví dụ đúng: `[ba_agent.md](file:///d:/hoangdang/it/mds/ai_skills/agents/ba_agent.md)`.
+    *   Ví dụ đúng: `[ba_agent.md](file:///d:/hoangdang/it/mds/mds-core/prompts/agents/ba_agent.md)`.
     *   Không bao quanh liên kết bằng dấu backticks (ví dụ sai: `[`ba_agent.md`](file://...)`).
 *   **Rule 2 — Quy tắc Viết thường Thư mục (Lowercase Convention)**:
     *   Tất cả tên tệp tin, thư mục được tạo mới hoặc tham chiếu phải viết thường hoàn toàn theo Unix-style để bảo đảm tính tương thích trên các hệ điều hành phân biệt chữ hoa/chữ thường (Linux, Docker, CI/CD).

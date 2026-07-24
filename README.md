@@ -1,8 +1,34 @@
-# MDS — Master Documentation System
+# MDS — Personal Engineering Operating System
 
-MDS là một hệ thống giúp bạn quản lý toàn bộ quá trình phát triển phần mềm cùng với AI, từ lúc khách hàng đưa yêu cầu ban đầu cho đến khi hệ thống chạy ổn định trên production.
+MDS là ứng dụng desktop local-first giúp bạn biến tài liệu, ý tưởng, ticket và lỗi thành requirement có cấu trúc, phân tích tác động, thiết kế nháp, kế hoạch triển khai và context package cho coding agent.
 
-Nó biến toàn bộ tri thức của dự án thành một **bản đồ tri thức (Knowledge Graph)** mà cả con người và AI đều có thể hiểu, truy vấn và tự động kiểm tra chéo lẫn nhau.
+Mục tiêu không phải để AI tự quyết định mọi thứ. Hệ thống tự động phần có quy tắc rõ, dùng AI để đề xuất bản nháp và giữ các quyết định quan trọng sau approval gate của con người.
+
+Luồng ưu tiên đầu tiên:
+
+```text
+Tài liệu hoặc ý tưởng khách hàng
+→ Requirement được duyệt
+→ Impact analysis
+→ Design DRAFT
+→ Implementation plan
+→ Agent context package
+```
+
+## Chạy desktop app
+
+```powershell
+npm.cmd install
+npm.cmd run dev
+```
+
+Kiểm tra và chạy bản production:
+
+```powershell
+npm.cmd run build
+npm.cmd run smoke
+npm.cmd start
+```
 
 ---
 
@@ -35,9 +61,22 @@ Mọi tài liệu trên đều được liên kết chặt chẽ với nhau. N�
 
 ## 📍 Trạng thái dự án hiện tại (Current State)
 
-*   **Active Project**: [projects/active](projects/active/)
-*   **Current Phase**: `Phase 03: Design` ➔ [lifecycle/03_design](lifecycle/03_design/)
+*   **Active Project**: [workspace/projects/active](workspace/projects/active/)
+*   **Current Phase**: `Phase 03: Design` ➔ [mds-core/guides/lifecycle/03_design](mds-core/guides/lifecycle/03_design/)
 *   **Current Focus**: Thiết kế kiến trúc tổng thể, cơ sở dữ liệu, API Contracts và các quyết định ADR.
+
+---
+
+## 🧭 Bản đồ kiến trúc mới
+
+*   [`apps/desktop`](apps/desktop/) — Electron shell, preload bridge và React UI.
+*   [`packages`](packages/) — Domain, application workflows và các adapter.
+*   [`mds-core`](mds-core/) — Toàn bộ tiêu chuẩn, schema, template, glossary và hướng dẫn cũ đã được bảo toàn.
+*   [`workflows`](workflows/) — Automation definitions có version và approval gate.
+*   [`workspace/projects`](workspace/projects/) — Dữ liệu runtime của từng dự án.
+*   [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) — Ranh giới kiến trúc và vertical slice đầu tiên.
+*   [`docs/STRUCTURE.md`](docs/STRUCTURE.md) — Cây thư mục hiện tại.
+*   [`docs/ROADMAP.md`](docs/ROADMAP.md) — Lộ trình từ 0.1 đến Personal Engineering OS.
 
 ---
 
@@ -45,26 +84,26 @@ Mọi tài liệu trên đều được liên kết chặt chẽ với nhau. N�
 
 ### 1. Tôi Là Ai? (Who Am I?)
 *Xem chi tiết trách nhiệm, tài liệu đầu vào/đầu ra của từng vai trò:*
-*   [PM (Project Manager)](roles/pm) — Lộ trình, milestones, phạm vi và tiến độ.
-*   [BA (Business Analyst)](roles/ba) — Quy tắc nghiệp vụ, quy trình và yêu cầu.
-*   [SA (System Analyst)](roles/sa) — Đặc tả hệ thống (SRS) và thiết kế logic.
-*   [ARCH (Architect)](roles/arch) — Quyết định kiến trúc (ADR) và tiêu chuẩn bảo mật.
-*   [BE (Backend Dev)](roles/be) — Cơ sở dữ liệu (DDL), API Contracts và logic backend.
-*   [FE (Frontend Dev)](roles/fe) — Giao diện (UI Specs), components và trạng thái client.
-*   [QA (Quality Assurance)](roles/qa) — Kịch bản kiểm thử (Test Cases) và báo cáo lỗi.
-*   [DEVOPS (Platform Ops)](roles/devops) — Triển khai (IaC), CI/CD và giám sát SRE.
+*   [PM (Project Manager)](mds-core/guides/roles/pm) — Lộ trình, milestones, phạm vi và tiến độ.
+*   [BA (Business Analyst)](mds-core/guides/roles/ba) — Quy tắc nghiệp vụ, quy trình và yêu cầu.
+*   [SA (System Analyst)](mds-core/guides/roles/sa) — Đặc tả hệ thống (SRS) và thiết kế logic.
+*   [ARCH (Architect)](mds-core/guides/roles/arch) — Quyết định kiến trúc (ADR) và tiêu chuẩn bảo mật.
+*   [BE (Backend Dev)](mds-core/guides/roles/be) — Cơ sở dữ liệu (DDL), API Contracts và logic backend.
+*   [FE (Frontend Dev)](mds-core/guides/roles/fe) — Giao diện (UI Specs), components và trạng thái client.
+*   [QA (Quality Assurance)](mds-core/guides/roles/qa) — Kịch bản kiểm thử (Test Cases) và báo cáo lỗi.
+*   [DEVOPS (Platform Ops)](mds-core/guides/roles/devops) — Triển khai (IaC), CI/CD và giám sát SRE.
 
 ### 2. Tôi Đang Ở Phase Nào? (What Phase Am I In?)
 *Theo dõi tài liệu cần bàn giao theo tiến độ dự án:*
-*   [Phase 0: Intake](lifecycle/00_intake) ➔ [Phase 1: Discovery](lifecycle/01_discovery) ➔ [Phase 2: Analysis](lifecycle/02_analysis)
-*   [Phase 3: Design](lifecycle/03_design) ➔ [Phase 4: Planning](lifecycle/04_planning) ➔ [Phase 5: Implementation](lifecycle/05_implementation)
-*   [Phase 6: Testing](lifecycle/06_testing) ➔ [Phase 7: Deployment](lifecycle/07_deployment) ➔ [Phase 8: Operations](lifecycle/08_operations)
-*   [Phase 9: Evolution](lifecycle/09_evolution)
+*   [Phase 0: Intake](mds-core/guides/lifecycle/00_intake) ➔ [Phase 1: Discovery](mds-core/guides/lifecycle/01_discovery) ➔ [Phase 2: Analysis](mds-core/guides/lifecycle/02_analysis)
+*   [Phase 3: Design](mds-core/guides/lifecycle/03_design) ➔ [Phase 4: Planning](mds-core/guides/lifecycle/04_planning) ➔ [Phase 5: Implementation](mds-core/guides/lifecycle/05_implementation)
+*   [Phase 6: Testing](mds-core/guides/lifecycle/06_testing) ➔ [Phase 7: Deployment](mds-core/guides/lifecycle/07_deployment) ➔ [Phase 8: Operations](mds-core/guides/lifecycle/08_operations)
+*   [Phase 9: Evolution](mds-core/guides/lifecycle/09_evolution)
 
 ### 3. Tôi Nên Vào Đâu? (Virtual Views)
 *Góc nhìn ảo tối ưu hóa luồng công việc:*
-*   👉 **[Góc Nhìn Solo (Solo View)](views/solo_view.md) [Khuyên dùng]**: Bàn làm việc tinh gọn hàng ngày của bạn.
-*   👉 **[Góc Nhìn Dự Án Active (Project View)](views/project_view.md)**: Không gian làm việc của dự án hiện tại.
+*   👉 **[Góc Nhìn Solo (Solo View)](docs/views/solo_view.md) [Khuyên dùng]**: Bàn làm việc tinh gọn hàng ngày của bạn.
+*   👉 **[Góc Nhìn Dự Án Active (Project View)](docs/views/project_view.md)**: Không gian làm việc của dự án hiện tại.
 
 ---
 
@@ -72,9 +111,9 @@ Mọi tài liệu trên đều được liên kết chặt chẽ với nhau. N�
 
 ### Cho người mới bắt đầu (Onboarding)
 1.  **[README.md](README.md)**: Bản đồ tổng quan này.
-2.  **[QUICK_START.md](QUICK_START.md)**: Hướng dẫn setup nhanh dự án mới và AI trong 5 phút.
-3.  **[DOCUMENT_STANDARDS.md](core/standards/document_standards.md)**: 5 Quy tắc chuẩn tắc bắt buộc của hệ thống.
+2.  **[QUICK_START.md](docs/QUICK_START.md)**: Hướng dẫn setup nhanh dự án mới và AI trong 5 phút.
+3.  **[DOCUMENT_STANDARDS.md](mds-core/standards/document_standards.md)**: 5 Quy tắc chuẩn tắc bắt buộc của hệ thống.
 
 ### Cho vận hành hàng ngày (Daily Operations)
-1.  **[SOLO_VIEW.md](views/solo_view.md)**: Nhận nhiệm vụ và bắt đầu làm việc.
-2.  **[PROJECT_VIEW.md](views/project_view.md)**: Xem toàn bộ hồ sơ thiết kế của dự án active.
+1.  **[SOLO_VIEW.md](docs/views/solo_view.md)**: Nhận nhiệm vụ và bắt đầu làm việc.
+2.  **[PROJECT_VIEW.md](docs/views/project_view.md)**: Xem toàn bộ hồ sơ thiết kế của dự án active.

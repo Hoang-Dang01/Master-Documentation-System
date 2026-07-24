@@ -1,5 +1,5 @@
 <!-- AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY -->
-<!-- SOURCE: core/glossary/data/02_relations.yaml -->
+<!-- SOURCE: mds-core/glossary/data/02_relations.yaml -->
 ---
 id: AST-GLOSSARY-REL-FILE
 name: Relations Glossary

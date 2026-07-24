@@ -1,5 +1,5 @@
 <!-- AUTO-GENERATED FILE - DO NOT EDIT DIRECTLY -->
-<!-- SOURCE: core/glossary/data/07_devops_terms.yaml -->
+<!-- SOURCE: mds-core/glossary/data/07_devops_terms.yaml -->
 ---
 id: AST-GLOSSARY-DEVOPS-FILE
 name: Devops Terms Glossary

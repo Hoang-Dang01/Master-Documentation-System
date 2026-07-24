@@ -91,11 +91,11 @@ Mô tả các tính năng con và kịch bản sử dụng dưới góc nhìn ng
 Yêu cầu chức năng này chịu sự chi phối và được làm rõ bởi các thực thể nghiệp vụ khác:
 
 *   **Quy tắc nghiệp vụ tuân thủ (Outbound Adheres-to Relation)**:
-    - `adheres_to` ➔ [BA-BR-[PROJECT]-BILL-005](file:///d:/HoangDang/IT/MDS%20(Master%20Documentation%20System)/core/templates/ba/business_rule_template.md) (Luật chiết khấu tự động).
+    - `adheres_to` ➔ [BA-BR-[PROJECT]-BILL-005](file:///d:/HoangDang/IT/MDS%20(Master%20Documentation%20System)/mds-core/templates/ba/business_rule_template.md) (Luật chiết khấu tự động).
 *   **Được làm rõ bởi quy trình nghiệp vụ (Inbound Elaborate Relation - Phản ánh từ FLOW)**:
-    - Từng bước thực hiện của tính năng này được định nghĩa tại [BA-FLOW-[PROJECT]-BILL-001](file:///d:/HoangDang/IT/MDS%20(Master%20Documentation%20System)/core/templates/ba/process_flow_template.md) (Luồng thanh toán học phí).
+    - Từng bước thực hiện của tính năng này được định nghĩa tại [BA-FLOW-[PROJECT]-BILL-001](file:///d:/HoangDang/IT/MDS%20(Master%20Documentation%20System)/mds-core/templates/ba/process_flow_template.md) (Luồng thanh toán học phí).
 *   **Được làm rõ bởi kịch bản tương tác (Inbound Elaborate Relation - Phản ánh từ UC)**:
-    - Luồng tương tác người dùng - hệ thống chi tiết tại [BA-UC-[PROJECT]-BILL-001](file:///d:/HoangDang/IT/MDS%20(Master%20Documentation%20System)/core/templates/ba/use_case_template.md) (Use Case đặt mua gói dịch vụ).
+    - Luồng tương tác người dùng - hệ thống chi tiết tại [BA-UC-[PROJECT]-BILL-001](file:///d:/HoangDang/IT/MDS%20(Master%20Documentation%20System)/mds-core/templates/ba/use_case_template.md) (Use Case đặt mua gói dịch vụ).
 
 ---
 
