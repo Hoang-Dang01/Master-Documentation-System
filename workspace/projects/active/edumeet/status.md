@@ -1,10 +1,11 @@
 ---
-id: CTX-STATUS-001
-name: Active Project Status
+id: PM-CTX-EDU-STATUS
+title: Trạng thái dự án EduMeet
+project: edumeet
 artifact_type: REG
 domain: META
 owner: PM
-status: APPROVED
+lifecycle_state: APPROVED
 version: 1.0.0
 tags:
   - status

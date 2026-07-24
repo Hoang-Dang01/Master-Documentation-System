@@ -5,6 +5,8 @@
 - Treat `mds-core/` as the canonical knowledge and governance layer.
 - Treat `skills/mds/` as MDS-owned and `skills/vendor/` as attributed imported material.
 - Do not bulk-edit vendor skills unless the user explicitly requests an upstream import or adaptation.
+- For Matt Pocock vendor content, use only entries enabled in `skills/vendor/registry.yaml`; ignore deprecated, in-progress, personal, and misc roots.
+- Treat `mds-core/templates/` as canonical. Copilot-local templates may specialize rendering but must not redefine artifact policy.
 - Put business rules in `packages/core/domain/`, use cases in `packages/application/`, and provider-specific code behind adapters.
 - Keep Electron and React concerns inside `apps/desktop/`.
 - Define automations as versioned YAML workflows in `workflows/definitions/`; do not hard-code one button per automation.
@@ -15,7 +17,12 @@
 - Consult `docs/CANONICAL_SOURCES.md` before adding or duplicating role rules, templates, standards, prompts, skills, workflows, or project data.
 - Record consolidation decisions and evidence in `docs/MIGRATION_MAP.md`.
 - Migrate one working vertical workflow at a time. The first target is `docs/migrations/CUSTOMER_CHANGE_ANALYSIS.md`.
-- New project artifacts belong under `workspace/projects/active/<project-id>/`.
+- New runtime project artifacts belong under
+  `MDS_DATA_DIR/projects/active/<project-id>/`. The repository's
+  `workspace/` directory is a development seed/fixture only.
+- Never assume the repository contains the user's canonical runtime data.
+  Resolve the data root through the Electron main process or an explicit
+  `MDS_DATA_DIR` configuration.
 - Do not recreate the retired paths recorded in `docs/MIGRATION_MAP.md`.
 - Treat folder ownership metadata in boundary `README.md` files as modification policy.
 - Regenerate `docs/STRUCTURE.generated.md` with `npm run docs:structure`; do not hand-edit it.

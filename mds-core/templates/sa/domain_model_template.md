@@ -1,10 +1,11 @@
 ---
 id: SA-DOM-[NUM]
-name: [Tên Mô Hình Miền]
+title: [Tên Mô Hình Miền]
+project: "[project-id]"
 artifact_type: TPL
 domain: SA
 owner: SA
-status: DRAFT
+lifecycle_state: DRAFT
 version: 1.0.0
 tags:
   - sa

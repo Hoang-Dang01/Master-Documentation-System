@@ -344,7 +344,8 @@ Mọi tài liệu được tạo ra trong từng Phase bắt buộc phải chứ
 ```yaml
 ---
 id: [ROLE]-[TYPE]-[PROJECT]-[COMPONENT]-[NUMBER]    # Ví dụ: BA-REQ-EDU-AUTH-001, ARCH-ADR-MDS-INFRA-003
-title: Tiêu đề mô tả ngắn gọn
+title: Tiêu đề tự nhiên dành cho người đọc, không thêm mã kỹ thuật
+project: [project-id]                       # Lowercase kebab-case trong workspace/projects/index.yaml
 phase: 0X                                  # Số thứ tự Phase (00 → 09)
 
 # Layer 1 — Lifecycle State (độ trưởng thành nội dung)

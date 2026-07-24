@@ -35,7 +35,7 @@ AI/
     ├── scripts/                           # Công cụ deterministic và automation
     ├── tests/                             # Fixture, integration và end-to-end test
     ├── workflows/                         # Định nghĩa automation bằng YAML
-    ├── workspace/                         # Dữ liệu làm việc của các dự án
+    ├── workspace/                         # Seed/fixture development, không phải runtime data
     │
     ├── .gitignore                         # Danh sách file/thư mục Git bỏ qua
     ├── AGENTS.md                          # Guardrail chung dành cho AI agent
@@ -199,9 +199,7 @@ mds-core/guides/
 │   ├── 04_planning/
 │   │   └── workflow.md
 │   ├── 05_implementation/
-│   │   ├── workflow.md
-│   │   └── [APPROVED]_BE-SRV-EDU-AI-001_URL_DETECTION_MODEL_TRAINING_v1.0.0.md
-│   │                                      # Artifact implementation đã được duyệt
+│   │   └── workflow.md
 │   ├── 06_testing/
 │   │   └── workflow.md
 │   ├── 07_deployment/
@@ -862,24 +860,42 @@ Nguyên tắc: mỗi automation nghiệp vụ phải là một YAML có version 
 
 ## 10. Project workspace
 
+`workspace/` trong repository chỉ là seed/fixture để development và first-run
+bootstrap. Runtime data canonical nằm ngoài repository tại `MDS_DATA_DIR`.
+
 ```text
-workspace/
-└── projects/
-    ├── index.yaml                         # Registry dự án canonical
-    ├── project_index.md                   # Compatibility view cho người đọc
-    │
-    ├── active/                            # Context dự án đang hoạt động
-    │   └── edumeet/                       # Project id hiện hành
-    │       ├── project_brief.md           # Tóm tắt dự án
-    │       ├── business_context.md        # Bối cảnh nghiệp vụ
-    │       ├── constraints.md             # Ràng buộc
-    │       ├── status.md                  # Trạng thái hiện tại
-    │       ├── decisions/                 # Decision/ADR của dự án
-    │       └── requirements/              # Requirement artifact của dự án
-    │
-    └── archived/
-        └── .gitkeep                       # Dự án đã đóng/lưu trữ
+MDS_DATA_DIR/                              # Mặc định: Documents/MDS-Workspace
+├── projects/
+│   ├── index.yaml                         # Registry dự án canonical
+│   ├── active/<project-id>/               # Context và artifact của project
+│   └── archived/<project-id>/             # Project đã đóng
+├── imports/                                # Intake inbox dùng chung (tuỳ chọn)
+├── exports/                                # Gói export/report
+├── backups/                                # Backup do người dùng quản lý
+└── mds.sqlite                             # Persistence local (reserved)
 ```
+
+Mỗi project có thể tạo thư mục theo workflow khi cần:
+
+```text
+<project-id>/
+├── project_brief.md
+├── business_context.md
+├── constraints.md
+├── status.md
+├── decisions/
+├── sources/
+├── imports/
+├── requirements/
+├── analysis/
+├── design/
+├── testing/
+└── operations/
+```
+
+Seed development tương ứng vẫn nằm tại
+`workspace/projects/active/edumeet/`; app sẽ copy seed này sang data root chỉ
+khi project external chưa tồn tại.
 
 ## 11. Vai trò của các file cấp root
 

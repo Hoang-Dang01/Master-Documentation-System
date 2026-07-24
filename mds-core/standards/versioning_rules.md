@@ -5,7 +5,7 @@
 
 > ⚠️ **Source of Truth (Canonical Authority)**: Tài liệu này chỉ là tóm tắt nhanh để hỗ trợ tra cứu nhanh và onboarding.
 > Nguồn gốc duy nhất và chuẩn xác nhất cho quy ước phiên bản và tương tác trạng thái vòng đời nằm tại:
-> 👉 **[`DOCUMENT_STANDARDS.md — RULE 1 (SemVer) & RULE 3 (Lifecycle)`](DOCUMENT_STANDARDS.md#rule-1-naming-convention-quy-uoc-dat-ten-file)**
+> 👉 **[`document_standards.md — RULE 1 (Metadata) & RULE 3 (Lifecycle)`](document_standards.md)**
 
 ---
 

@@ -41,11 +41,18 @@ Master-Documentation-System/
 │   └── vendor/
 │
 ├── workflows/
-├── workspace/
-│   └── projects/
-│       ├── index.yaml
-│       ├── active/<project-id>/
-│       └── archived/<project-id>/
+├── workspace/                         # Development seed/fixture only
+│   └── projects/active/edumeet/
+│
+├── MDS_DATA_DIR/                      # External runtime root (not in Git)
+│   ├── projects/
+│   │   ├── index.yaml
+│   │   ├── active/<project-id>/
+│   │   └── archived/<project-id>/
+│   ├── imports/
+│   ├── exports/
+│   ├── backups/
+│   └── mds.sqlite
 ├── scripts/
 ├── tests/
 └── docs/
@@ -58,8 +65,10 @@ Master-Documentation-System/
   `skills/vendor/`.
 - Package scaffolds are grouped by `core`, `application`, `infrastructure`,
   `workflow-engine`, and `shared`.
-- Every active project has its own `active/<project-id>/` directory.
-- `workspace/projects/index.yaml` is the canonical project registry.
+- Every active project has its own `MDS_DATA_DIR/projects/active/<project-id>/`
+  directory.
+- `MDS_DATA_DIR/projects/index.yaml` is the canonical project registry.
+- `workspace/` is only a seed for development and first-run bootstrapping.
 
 ## Next implementation slice
 

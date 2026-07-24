@@ -1,7 +1,8 @@
 ---
 id: DEVOPS-DEP-[PROJECT]-[COMPONENT]-[NUMBER]
 # For mds-core/global deployments: CORE-DEVOPS-DEP-[NAME]-V[VERSION]
-title: "DEP: [Tên Đặc Tả Triển Khai]"
+title: "[Tên Đặc Tả Triển Khai]"
+project: "[project-id]"
 phase: "07"                          # Phase 07: Deployment & Operations
 
 # Layer 1 — Lifecycle State (Độ chín muồi của tài liệu - Documentation Maturity)

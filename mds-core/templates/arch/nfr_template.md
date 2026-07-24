@@ -1,7 +1,8 @@
 ---
 id: SA-NFR-[PROJECT]-[COMPONENT]-[NUMBER]
 # COMPONENT conventions: SYS (System-wide) | AUTH | MEDIA | DATA | BILL | API | CACHE | STORAGE | INFRA | OBS | ...
-title: "NFR: [Tên Yêu Cầu Phi Chức Năng]"
+title: "[Tên Yêu Cầu Phi Chức Năng]"
+project: "[project-id]"
 phase: "02"
 
 # Layer 1 — Lifecycle State (độ trưởng thành nội dung)

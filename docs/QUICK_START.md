@@ -9,14 +9,23 @@ Hướng dẫn này giúp bạn thiết lập dự án mới và tích hợp AI 
 
 ## Bước 1: Khởi Tạo Dự Án Mới (Define Project Context)
 
-Tạo project id trong `workspace/projects/index.yaml`, rồi mở thư mục tương ứng
-trong `workspace/projects/active/<project-id>/`. Ví dụ hiện tại:
-[`workspace/projects/active/edumeet/`](../workspace/projects/active/edumeet/).
+Chạy app một lần để tạo data root mặc định tại
+`%USERPROFILE%\Documents\MDS-Workspace`, hoặc đặt thư mục riêng trước khi chạy:
+
+```powershell
+$env:MDS_DATA_DIR = "D:\MDS-Workspace"
+npm.cmd run dev
+```
+
+Tạo project id trong `MDS_DATA_DIR/projects/index.yaml`, rồi mở thư mục
+`MDS_DATA_DIR/projects/active/<project-id>`. Thư mục
+[`workspace/projects/`](../workspace/projects/) trong repository chỉ là seed
+EduMeet cho phát triển/lần chạy đầu, không phải dữ liệu runtime canonical.
 Soạn thảo 4 file ngữ cảnh nền tảng:
-1.  **`PROJECT_BRIEF.md`**: Ghi nhận mô tả tổng quan nhất về dự án, mục tiêu, khách hàng.
-2.  **`BUSINESS_CONTEXT.md`**: Bối cảnh kinh doanh, các đối thủ cạnh tranh và giá trị mang lại.
-3.  **`CONSTRAINTS.md`**: Các giới hạn về công nghệ, ngân sách, thời gian bàn giao và tiêu chuẩn bảo mật.
-4.  **`STATUS.md`**: Báo cáo hiện trạng dự án.
+1.  **`project_brief.md`**: Ghi nhận mô tả tổng quan nhất về dự án, mục tiêu, khách hàng.
+2.  **`business_context.md`**: Bối cảnh kinh doanh, các đối thủ cạnh tranh và giá trị mang lại.
+3.  **`constraints.md`**: Các giới hạn về công nghệ, ngân sách, thời gian bàn giao và tiêu chuẩn bảo mật.
+4.  **`status.md`**: Báo cáo hiện trạng dự án.
 
 ---
 
@@ -33,7 +42,7 @@ Soạn thảo 4 file ngữ cảnh nền tảng:
 Khi làm việc với các AI chuyên biệt (ví dụ: BE Agent, QA Agent):
 1.  Mở thư mục **[mds-core/prompts/agents/](../mds-core/prompts/agents/)** và tìm System Prompt tương ứng cho Agent đó.
 2.  Cung cấp file System Prompt này cho AI Agent của bạn. Nó sẽ tự động hiểu cách đọc/ghi các tài liệu theo đúng chuẩn tắc của MDS vNext.
-3.  Nạp các file yêu cầu tương ứng tại **`workspace/projects/active/<project-id>/requirements/`** làm ngữ cảnh đầu vào cho Agent.
+3.  Nạp các file yêu cầu tương ứng tại **`MDS_DATA_DIR/projects/active/<project-id>/requirements/`** làm ngữ cảnh đầu vào cho Agent.
 
 ---
 

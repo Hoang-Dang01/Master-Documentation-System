@@ -1,7 +1,8 @@
 ---
 id: BA-FLOW-[PROJECT]-[COMPONENT]-[NUMBER]
 # COMPONENT conventions: SYS (System-wide) | AUTH | MEDIA | DATA | BILL | API | ...
-title: "FLOW: [Tên Quy Trình Nghiệp Vụ]"
+title: "[Tên Quy Trình Nghiệp Vụ]"
+project: "[project-id]"
 phase: "02"
 
 # Layer 1 — Lifecycle State (Độ chín muồi của tài liệu - Documentation Maturity)

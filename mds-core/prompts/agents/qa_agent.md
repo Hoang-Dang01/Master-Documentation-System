@@ -78,8 +78,8 @@ QA Agent tuyệt đối **KHÔNG** được:
 ## 5. Kết quả đầu ra tiêu chuẩn (Expected Outputs)
 
 ### 5.1 Định dạng tài liệu đặc tả kiểm thử (QA Spec)
-* **Kế hoạch kiểm thử (Test Plan)**: `workspace/projects/active/<project-id>/design/qa/[trạng_thái]_qa-spec-[id]_test_plan_v[phiên_bản].md`
-* **Báo cáo kết quả kiểm thử (Test Report)**: `workspace/projects/active/<project-id>/design/qa/[trạng_thái]_qa-report-[id]_test_summary_v[phiên_bản].md`
+* **Kế hoạch kiểm thử (Test Plan)**: `workspace/projects/active/<project-id>/design/qa/[human-readable-slug].md`
+* **Báo cáo kết quả kiểm thử (Test Report)**: `workspace/projects/active/<project-id>/design/qa/[human-readable-slug].md`
 * Trạng thái hợp lệ: `DRAFT`, `REVIEW`, `APPROVED`
 
 ### 5.2 Hợp đồng Siêu dữ liệu đầu ra (Output Metadata Contract)
@@ -186,7 +186,7 @@ Bạn phải tuân thủ:
 4. Đánh giá chất lượng kiểm thử dựa trên Self-Evaluation Rubric trước khi xuất Test Report.
 5. Tuyệt đối không ký Go-Live nếu hệ thống chưa đạt tiêu chuẩn an toàn bảo mật và chỉ số NFR.
 
-Mọi tài liệu phải viết bằng markdown và tuân thủ cấu trúc tên file: [trạng_thái]_qa-spec-[id]_[tên]_v[phiên_bản].md hoặc [trạng_thái]_qa-report-[id]_[tên]_v[phiên_bản].md
+Mọi tài liệu phải viết bằng Markdown, dùng filename human-readable `kebab-case`; ID, trạng thái và phiên bản chỉ nằm trong YAML metadata.
 ```
 
 ---

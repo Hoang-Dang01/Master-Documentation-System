@@ -1,10 +1,11 @@
 ---
 id: FE-UX-[NUM]
-name: [Tên Luồng Trải Nghiệm]
+title: [Tên Luồng Trải Nghiệm]
+project: "[project-id]"
 artifact_type: TPL
 domain: FE
 owner: FE
-status: DRAFT
+lifecycle_state: DRAFT
 version: 1.0.0
 tags:
   - fe

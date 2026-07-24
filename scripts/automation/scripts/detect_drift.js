@@ -29,9 +29,30 @@ const requiredFiles = config.required_files || [];
 const targetProjectsDir = config.paths.projects || "workspace/projects/active";
 
 // Regular expressions
-const FILENAME_REGEX = /^\[(DRAFT|REVIEW|APPROVED|IN_PROGRESS|DEPRECATED|ARCHIVED|BLOCKED|NOT_APPLICABLE)\]_(PM|BA|SA|ARCH|BE|FE|QA|DEVOPS|AI)-([A-Z]{2,4})-(\d{3})_([A-Z0-9_]+)_v(\d+\.\d+\.\d+)\.(md|sql|yaml|json|tf|drawio|fig|png|jpg)$/;
-const ID_REGEX = /^([A-Z]{2,4})-([A-Z]{2,4})-(\d{3})$/;
-const ALLOWED_STATUSES = new Set(["DRAFT", "REVIEW", "APPROVED", "IN_PROGRESS", "DEPRECATED", "ARCHIVED", "BLOCKED", "NOT_APPLICABLE"]);
+const FILENAME_REGEX = /^[a-z0-9]+(?:-[a-z0-9]+)*\.(docx|md|txt|sql|yaml|yml|json|tf|drawio|fig|png|jpg|jpeg)$/;
+const ID_REGEX = /^([A-Z]{2,8})-([A-Z]{2,8})-([A-Z0-9]{2,8})-([A-Z0-9]{2,12})-(\d{3})$/;
+const PROJECT_ID_REGEX = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
+const SEMVER_REGEX = /^\d+\.\d+\.\d+$/;
+const ALLOWED_STATUSES = new Set(["DRAFT", "REVIEW", "APPROVED", "DEPRECATED", "ARCHIVED"]);
+const RESERVED_SYSTEM_FILENAMES = new Set([
+    "project_brief.md",
+    "business_context.md",
+    "constraints.md",
+    "status.md"
+]);
+const FORBIDDEN_FILENAME_TOKENS = new Set([
+    "approved",
+    "archived",
+    "blocked",
+    "deprecated",
+    "draft",
+    "final",
+    "in-progress",
+    "latest",
+    "review",
+    "updated"
+]);
+const TECHNICAL_TITLE_PREFIX = /^(?:ADR|API|BRD|BR|DB|DEP|FLOW|HLD|INC|INT|NFR|REQ|SEC|SRV|UC|[A-Z]{2,8}(?:-[A-Z0-9]{2,12})+)\s*:/;
 
 function parseFrontmatter(content) {
     const match = content.match(/^---\s*\r?\n([\s\S]*?)\r?\n---\s*\r?\n/);
@@ -158,128 +179,141 @@ class MDSLinter {
 
     validateFile(filePath) {
         const filename = path.basename(filePath);
+        const extension = path.extname(filename).toLowerCase();
         const relPath = path.relative(this.rootPath, filePath);
+        const isReservedSystemFile = RESERVED_SYSTEM_FILENAMES.has(filename.toLowerCase());
 
-        const isCoreBriefFile = ["project_brief.md", "business_context.md", "constraints.md", "status.md"].includes(filename.toLowerCase());
-
-        if (!isCoreBriefFile) {
-            // --- RULE 1: Naming Convention ---
+        if (!isReservedSystemFile) {
             const match = filename.match(FILENAME_REGEX);
             if (!match) {
                 this.reportError(
                     filePath,
-                    "Tên file không đúng quy chuẩn Rule 1. Định dạng chuẩn: [STATUS]_ROLE-TYPE-ID_NAME_vVERSION.extension",
-                    "Filename does not match Rule 1 Naming Convention. Expected: [STATUS]_ROLE-TYPE-ID_NAME_vVERSION.extension"
+                    "Tên file phải là slug dễ đọc, viết thường và ngăn cách bằng dấu gạch ngang. Ví dụ: dao-tao-mo-hinh-phat-hien-url.md",
+                    "Filename must be a readable lowercase kebab-case slug, for example: dao-tao-mo-hinh-phat-hien-url.md"
                 );
                 return;
             }
 
-            const [_, fnStatus, fnRole, fnType, fnNum, fnName, fnVer, fnExt] = match;
+            const slug = filename.slice(0, -extension.length);
+            const slugTokens = slug.split("-");
+            const hasForbiddenToken = slugTokens.some((token) =>
+                FORBIDDEN_FILENAME_TOKENS.has(token) || /^v\d+(?:\.\d+){0,2}$/.test(token)
+            ) || slug.includes("in-progress");
 
-            if (!filename.endsWith(".md")) return;
-
-            let content;
-            try {
-                content = fs.readFileSync(filePath, "utf8");
-            } catch (err) {
-                this.reportError(filePath, `Không thể đọc file: ${err.message}`, `Failed to read file: ${err.message}`);
-                return;
-            }
-
-            // Parse YAML Frontmatter
-            const metadata = parseFrontmatter(content);
-            if (!metadata) {
+            if (hasForbiddenToken) {
                 this.reportError(
                     filePath,
-                    "Không tìm thấy hoặc không thể parse YAML Frontmatter. File phải bắt đầu và kết thúc bằng ---",
-                    "Missing or invalid YAML Frontmatter. File must start and end metadata with ---"
+                    "Filename không được chứa trạng thái, phiên bản hoặc nhãn FINAL/LATEST/UPDATED; hãy đặt các giá trị đó trong metadata.",
+                    "Filename must not contain status, version, or FINAL/LATEST/UPDATED labels; store them in metadata."
                 );
-                return;
             }
 
-            // --- RULE 2: ID Convention & Matching ---
-            const yamlId = metadata.id;
-            if (!yamlId) {
-                this.reportError(filePath, "Thiếu trường 'id' trong YAML.", "Missing 'id' field in YAML.");
-            } else {
-                const idMatch = yamlId.match(ID_REGEX);
-                if (!idMatch) {
-                    this.reportError(
-                        filePath,
-                        `ID '${yamlId}' không đúng định dạng. Chuẩn: [TYPE]-[COMPONENT]-[NUMBER] (Ví dụ: REQ-AUTH-001)`,
-                        `ID '${yamlId}' does not match Rule 2 ID Convention. Expected: [TYPE]-[COMPONENT]-[NUMBER] (e.g. REQ-AUTH-001)`
-                    );
-                } else {
-                    const [__, idType, idComp, idNum] = idMatch;
-
-                    if (idType !== fnType) {
-                        this.reportError(
-                            filePath,
-                            `Loại thực thể trong ID YAML (${idType}) không khớp với tên file (${fnType}).`,
-                            `Entity TYPE in YAML ID (${idType}) does not match TYPE in filename (${fnType}).`
-                        );
-                    }
-                    if (idNum !== fnNum) {
-                        this.reportError(
-                            filePath,
-                            `Số thứ tự trong ID YAML (${idNum}) không khớp với tên file (${fnNum}).`,
-                            `Entity NUMBER in YAML ID (${idNum}) does not match NUMBER in filename (${fnNum}).`
-                        );
-                    }
-
-                    if (this.registry[yamlId]) {
-                        this.reportError(
-                            filePath,
-                            `ID trùng lặp! ID '${yamlId}' đã được khai báo tại file: ${this.registry[yamlId]}`,
-                            `Duplicate ID found! ID '${yamlId}' is already declared in: ${this.registry[yamlId]}`
-                        );
-                    } else {
-                        this.registry[yamlId] = relPath;
-                    }
-                }
+            if (slug.length > 80) {
+                this.reportError(
+                    filePath,
+                    `Slug dài ${slug.length} ký tự; giới hạn là 80 ký tự.`,
+                    `Slug is ${slug.length} characters; the limit is 80.`
+                );
             }
+        }
 
-            // --- RULE 3: Status Matching ---
-            const yamlStatus = metadata.status;
-            if (!yamlStatus) {
-                this.reportError(filePath, "Thiếu trường 'status' trong YAML.", "Missing 'status' field in YAML.");
-            } else {
-                if (!ALLOWED_STATUSES.has(yamlStatus)) {
-                    this.reportError(
-                        filePath,
-                        `Trạng thái '${yamlStatus}' không hợp lệ.`,
-                        `Status '${yamlStatus}' is invalid.`
-                    );
-                } else if (yamlStatus !== fnStatus) {
-                    this.reportError(
-                        filePath,
-                        `Trạng thái trong YAML (${yamlStatus}) không khớp với tên file (${fnStatus}).`,
-                        `Status in YAML (${yamlStatus}) does not match status in filename (${fnStatus}).`
-                    );
-                }
-            }
+        if (extension !== ".md") return;
 
-            // --- RULE 1: Version Matching ---
-            const yamlVersion = metadata.version;
-            if (!yamlVersion) {
-                this.reportError(filePath, "Thiếu trường 'version' trong YAML.", "Missing 'version' field in YAML.");
-            } else {
-                if (yamlVersion !== fnVer) {
-                    this.reportError(
-                        filePath,
-                        `Phiên bản trong YAML (${yamlVersion}) không khớp với tên file (${fnVer}).`,
-                        `Version in YAML (${yamlVersion}) does not match version in filename (${fnVer}).`
-                    );
-                }
-            }
+        let content;
+        try {
+            content = fs.readFileSync(filePath, "utf8");
+        } catch (err) {
+            this.reportError(
+                filePath,
+                `Không thể đọc file: ${err.message}`,
+                `Failed to read file: ${err.message}`
+            );
+            return;
+        }
+
+        const metadata = parseFrontmatter(content);
+        if (!metadata) {
+            this.reportError(
+                filePath,
+                "Thiếu hoặc không thể parse YAML Frontmatter.",
+                "Missing or invalid YAML Frontmatter."
+            );
+            return;
+        }
+
+        const yamlId = metadata.id;
+        if (!yamlId) {
+            this.reportError(filePath, "Thiếu trường 'id' trong YAML.", "Missing 'id' field in YAML.");
         } else {
-            // Validate YAML for core brief files
-            if (!filename.endsWith(".md")) return;
-            let content = fs.readFileSync(filePath, "utf8");
-            const metadata = parseFrontmatter(content);
-            if (metadata && metadata.id) {
-                this.registry[metadata.id] = relPath;
+            if (!isReservedSystemFile && !ID_REGEX.test(yamlId)) {
+                this.reportError(
+                    filePath,
+                    `ID '${yamlId}' không đúng định dạng ROLE-TYPE-PROJECT-COMPONENT-NUMBER.`,
+                    `ID '${yamlId}' must use ROLE-TYPE-PROJECT-COMPONENT-NUMBER.`
+                );
             }
+
+            if (this.registry[yamlId]) {
+                this.reportError(
+                    filePath,
+                    `ID trùng lặp '${yamlId}', đã có tại ${this.registry[yamlId]}.`,
+                    `Duplicate ID '${yamlId}', already declared in ${this.registry[yamlId]}.`
+                );
+            } else {
+                this.registry[yamlId] = relPath;
+            }
+        }
+
+        const title = metadata.title;
+        if (!title) {
+            this.reportError(filePath, "Thiếu trường 'title' dành cho người đọc.", "Missing human-readable 'title' field.");
+        } else if (TECHNICAL_TITLE_PREFIX.test(title)) {
+            this.reportError(
+                filePath,
+                `Title '${title}' bắt đầu bằng mã kỹ thuật; hãy dùng tên tự nhiên.`,
+                `Title '${title}' starts with a technical code; use a natural human-readable title.`
+            );
+        }
+
+        const project = metadata.project;
+        if (!project) {
+            this.reportError(filePath, "Thiếu trường 'project' trong YAML.", "Missing 'project' field in YAML.");
+        } else if (!PROJECT_ID_REGEX.test(project)) {
+            this.reportError(
+                filePath,
+                `Project id '${project}' phải dùng lowercase kebab-case.`,
+                `Project id '${project}' must use lowercase kebab-case.`
+            );
+        }
+
+        const lifecycleState = metadata.lifecycle_state;
+        if (!lifecycleState) {
+            this.reportError(
+                filePath,
+                "Thiếu trường 'lifecycle_state' trong YAML.",
+                "Missing 'lifecycle_state' field in YAML."
+            );
+        } else if (!ALLOWED_STATUSES.has(lifecycleState)) {
+            this.reportError(
+                filePath,
+                `Lifecycle state '${lifecycleState}' không hợp lệ.`,
+                `Lifecycle state '${lifecycleState}' is invalid.`
+            );
+        }
+
+        const version = metadata.version;
+        if (!version) {
+            this.reportError(filePath, "Thiếu trường 'version' trong YAML.", "Missing 'version' field in YAML.");
+        } else if (!SEMVER_REGEX.test(version)) {
+            this.reportError(
+                filePath,
+                `Version '${version}' phải theo SemVer X.Y.Z.`,
+                `Version '${version}' must use SemVer X.Y.Z.`
+            );
+        }
+
+        if (!metadata.owner) {
+            this.reportError(filePath, "Thiếu trường 'owner' trong YAML.", "Missing 'owner' field in YAML.");
         }
     }
 

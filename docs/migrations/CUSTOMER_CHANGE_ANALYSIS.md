@@ -8,10 +8,13 @@ MDS workflow on top of the consolidated repository structure.
 
 ## Current state
 
-The workflow definition exists at
-`workflows/definitions/customer-change-analysis.yaml`, while most package
-boundaries remain scaffolds. Executors and persistence contracts are not yet
-implemented end to end.
+The import slice is implemented in `packages/application/ingestion/` and wired
+to Electron through a narrow preload API. DOCX/Markdown/TXT sources are
+preserved with checksums, normalized content is visible in the desktop app, and
+a deterministic requirement `DRAFT` is written into the active project.
+
+Human review, approval history, impact analysis, and downstream design remain
+the next slice.
 
 ## Target slice
 
@@ -35,7 +38,7 @@ Select DOCX
 | BA responsibility | `mds-core/roles/ba/` |
 | Lifecycle/gates | `mds-core/schemas/workflow_schema.md` |
 | Runtime sequence | `workflows/definitions/customer-change-analysis.yaml` |
-| Project context | `workspace/projects/active/<project-id>/` selected through `workspace/projects/index.yaml` |
+| Project context | `MDS_DATA_DIR/projects/active/<project-id>/`; repository `workspace/` is the development seed |
 
 ## Implementation seams
 
@@ -56,10 +59,10 @@ until independent build/dependency boundaries are proven.
 
 ## Delivery order
 
-1. Define domain and application ports with tests.
-2. Implement one deterministic text fixture before DOCX integration.
-3. Add DOCX parsing behind the ingestion port.
-4. Produce draft requirements with exact source references.
+1. [x] Define the ingestion application package and typed desktop API.
+2. [x] Add a deterministic integration fixture.
+3. [x] Parse DOCX through Mammoth.
+4. [x] Produce draft requirements linked to the preserved source artifact.
 5. Add human review and approval history.
 6. Produce an impact report from approved requirements.
 7. Connect the minimal desktop flow.
@@ -67,15 +70,15 @@ until independent build/dependency boundaries are proven.
 
 ## Exit criteria
 
-- [ ] Original source and checksum are preserved.
-- [ ] Every generated requirement links to a source span.
-- [ ] AI output starts as `DRAFT`.
+- [x] Original source and checksum are preserved.
+- [x] Every generated requirement links to its normalized source artifact.
+- [x] Generated output starts as `DRAFT`.
 - [ ] Human approval is required before impact/design work continues.
-- [ ] Workflow state survives restart.
-- [ ] Failed parsing or AI calls are visible and resumable.
-- [ ] Requirement and impact artifacts pass MDS validation.
-- [ ] Desktop typecheck, build, smoke, and the slice test pass.
-- [ ] No API key or secret is stored in project artifacts or committed files.
+- [x] Imported sources and draft artifacts survive restart as project files.
+- [ ] Failed parsing is visible; resumable step execution is still pending.
+- [x] Generated requirement artifacts pass MDS validation.
+- [x] Desktop typecheck, build, smoke, and the ingestion test pass.
+- [x] No API key or secret is stored in project artifacts or committed files.
 - [ ] Migration map rows touched by this slice have evidence before status changes.
 
 ## Explicit non-goals

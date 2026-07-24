@@ -1,0 +1,27 @@
+schema_version: "1.0.0"
+default_policy: deny
+
+enabled_skills:
+  - name: grill-with-docs
+    path: mattpocock/skills/engineering/grill-with-docs/SKILL.md
+  - name: domain-modeling
+    path: mattpocock/skills/engineering/domain-modeling/SKILL.md
+  - name: diagnosing-bugs
+    path: mattpocock/skills/engineering/diagnosing-bugs/SKILL.md
+  - name: to-spec
+    path: mattpocock/skills/engineering/to-spec/SKILL.md
+  - name: to-tickets
+    path: mattpocock/skills/engineering/to-tickets/SKILL.md
+  - name: handoff
+    path: mattpocock/skills/productivity/handoff/SKILL.md
+
+ignored_roots:
+  - mattpocock/skills/deprecated
+  - mattpocock/skills/in-progress
+  - mattpocock/skills/personal
+  - mattpocock/skills/misc
+
+notes:
+  - Upstream files remain preserved in place.
+  - Agents may use only explicitly enabled Matt Pocock skills.
+  - MDS routing skills may enable additional vendor skills after review.

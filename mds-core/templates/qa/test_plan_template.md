@@ -1,10 +1,11 @@
 ---
 id: QA-PLAN-[NUM]
-name: [Tên Kế Hoạch Test]
+title: [Tên Kế Hoạch Test]
+project: "[project-id]"
 artifact_type: TPL
 domain: QA
 owner: QA
-status: DRAFT
+lifecycle_state: DRAFT
 version: 1.0.0
 tags:
   - qa

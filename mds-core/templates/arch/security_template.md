@@ -1,7 +1,8 @@
 ---
 id: ARCH-SEC-[PROJECT]-[COMPONENT]-[NUMBER]
 # COMPONENT conventions: SYS (System-wide) | AUTH | MEDIA | DATA | BILL | API | CACHE | STORAGE | INFRA | ...
-title: "SEC: [Tên Thiết Kế Bảo Mật]"
+title: "[Tên Thiết Kế Bảo Mật]"
+project: "[project-id]"
 phase: "03"
 
 # Layer 1 — Lifecycle State (độ trưởng thành nội dung)

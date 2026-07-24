@@ -3,6 +3,7 @@ id: ROLE-TYPE-[PROJECT]-[COMPONENT]-[NUMBER]
 # For mds-core/global docs use: CORE-[NAME]-V[VERSION] (e.g. CORE-BASE-TEMPLATE-GUIDE-V1.1)
 # COMPONENT conventions: SYS (System-wide) | AUTH | MEDIA | DATA | BILL | API | ...
 title: "[Tên Tài Liệu Đặc Tả]"
+project: "[project-id]"
 phase: "01"                          # Allowed values: "00".."10" (dưới dạng chuỗi 2 chữ số)
 
 # Layer 1 — Lifecycle State (Độ chín muồi của tài liệu - Documentation Maturity)

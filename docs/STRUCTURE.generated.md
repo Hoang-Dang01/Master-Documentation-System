@@ -50,6 +50,7 @@ Master-Documentation-System/
 │   │   └── workflow_view.md
 │   ├── ARCHITECTURE.md
 │   ├── CANONICAL_SOURCES.md
+│   ├── DATA_LAYOUT.md
 │   ├── LEGACY_STRUCTURE.md
 │   ├── MIGRATION_MAP.md
 │   ├── QUICK_START.md
@@ -105,7 +106,6 @@ Master-Documentation-System/
 │   │   │   ├── 04_planning/
 │   │   │   │   └── workflow.md
 │   │   │   ├── 05_implementation/
-│   │   │   │   ├── [APPROVED]_BE-SRV-EDU-AI-001_URL_DETECTION_MODEL_TRAINING_v1.0.0.md
 │   │   │   │   └── workflow.md
 │   │   │   ├── 06_testing/
 │   │   │   │   └── workflow.md
@@ -246,7 +246,13 @@ Master-Documentation-System/
 │   │   ├── impact/
 │   │   │   └── .gitkeep
 │   │   ├── ingestion/
-│   │   │   └── .gitkeep
+│   │   │   ├── dist/  [generated contents omitted]
+│   │   │   ├── src/
+│   │   │   │   └── index.ts
+│   │   │   ├── .gitkeep
+│   │   │   ├── package.json
+│   │   │   ├── README.md
+│   │   │   └── tsconfig.json
 │   │   ├── knowledge-base/
 │   │   │   └── .gitkeep
 │   │   ├── requirements/
@@ -295,9 +301,12 @@ Master-Documentation-System/
 │   │       │   ├── render_markdown.js
 │   │       │   └── validate_terms.js
 │   │       ├── detect_drift.js
-│   │       └── generate_structure.js
+│   │       ├── generate_structure.js
+│   │       └── validate_skill_registry.js
 │   ├── migrations/
-│   │   └── rewrite_target_structure_references.js
+│   │   ├── apply_human_first_template_metadata.js
+│   │   ├── rewrite_target_structure_references.js
+│   │   └── update_human_first_validator.js
 │   └── README.md
 ├── skills/
 │   ├── mds/
@@ -447,18 +456,19 @@ Master-Documentation-System/
 │   │   │   │   │   ├── risk_matrix.md
 │   │   │   │   │   ├── runbook.md
 │   │   │   │   │   └── test_plan.md
-│   │   │   │   └── diagrams/
-│   │   │   │       ├── architecture/
-│   │   │   │       │   └── c4_context.mmd
-│   │   │   │       ├── business/
-│   │   │   │       │   ├── bpmn.mmd
-│   │   │   │       │   └── use_case.mmd
-│   │   │   │       ├── data/
-│   │   │   │       │   └── erd.mmd
-│   │   │   │       ├── engineering/
-│   │   │   │       │   └── sequence.mmd
-│   │   │   │       ├── ops/
-│   │   │   │       └── qa/
+│   │   │   │   ├── diagrams/
+│   │   │   │   │   ├── architecture/
+│   │   │   │   │   │   └── c4_context.mmd
+│   │   │   │   │   ├── business/
+│   │   │   │   │   │   ├── bpmn.mmd
+│   │   │   │   │   │   └── use_case.mmd
+│   │   │   │   │   ├── data/
+│   │   │   │   │   │   └── erd.mmd
+│   │   │   │   │   ├── engineering/
+│   │   │   │   │   │   └── sequence.mmd
+│   │   │   │   │   ├── ops/
+│   │   │   │   │   └── qa/
+│   │   │   │   └── README.md
 │   │   │   ├── validators/
 │   │   │   │   ├── architecture_validator.yaml
 │   │   │   │   ├── artifact_validator.yaml
@@ -909,7 +919,8 @@ Master-Documentation-System/
 │   │   │   ├── web-design-guidelines/
 │   │   │   │   └── SKILL.md
 │   │   │   └── README.md
-│   │   └── README.md
+│   │   ├── README.md
+│   │   └── registry.yaml
 │   └── README.md
 ├── tests/
 │   ├── end-to-end/
@@ -918,7 +929,8 @@ Master-Documentation-System/
 │   │   ├── .gitkeep
 │   │   └── mds-project-management-cycle.json
 │   ├── integration/
-│   │   └── .gitkeep
+│   │   ├── .gitkeep
+│   │   └── document-import.cjs
 │   └── README.md
 ├── workflows/
 │   ├── definitions/
@@ -930,6 +942,9 @@ Master-Documentation-System/
 │   │   │   └── edumeet/
 │   │   │       ├── decisions/
 │   │   │       │   └── .gitkeep
+│   │   │       ├── design/
+│   │   │       │   └── backend/
+│   │   │       │       └── dao-tao-mo-hinh-phat-hien-url.md
 │   │   │       ├── requirements/
 │   │   │       │   └── .gitkeep
 │   │   │       ├── business_context.md

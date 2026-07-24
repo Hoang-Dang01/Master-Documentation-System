@@ -5,7 +5,7 @@ consume or render that source but must not redefine it independently.
 
 Boundary `README.md` metadata uses:
 
-- `ownership`: `mds`, `upstream`, or `project-runtime`;
+- `ownership`: `mds`, `upstream`, `project-runtime`, or `development-fixture`;
 - `status`: `canonical`, `transitional`, or `vendor`;
 - `source`: origin of the content;
 - `safe_to_modify`: `true`, `false`, `limited`, `scoped`, or
@@ -25,7 +25,8 @@ Boundary `README.md` metadata uses:
 | Third-party skills | `skills/vendor/` | MDS-owned routing skills | Vendor content is read-only; adapt in `skills/mds/`, not in vendor folders. |
 | Runtime automation | `workflows/definitions/*.yaml` | Workflow engine and desktop UI | UI does not hard-code workflow policy. |
 | Package boundaries | `packages/README.md` | Package implementations and architecture docs | Split only when dependency/build boundary is real. |
-| Project runtime artifacts | `workspace/projects/` | Application, workflow engine, desktop UI | Project artifacts never become MDS global policy. |
+| Project runtime artifacts | `MDS_DATA_DIR/projects/` | Application, workflow engine, desktop UI | Runtime data stays outside the source repository. |
+| Development project seed | `workspace/projects/` | First-run bootstrap, tests, development | Seed content is not the user's canonical runtime data. |
 | Physical repository tree | `docs/STRUCTURE.generated.md` | Humans and agents | Regenerate; never edit manually. |
 | Architecture intent | `docs/ARCHITECTURE.md` | Contributors and agents | Code changes must preserve or explicitly revise it. |
 | Migration decisions | `docs/MIGRATION_MAP.md` | All consolidation work | Record destinations and exit evidence. |

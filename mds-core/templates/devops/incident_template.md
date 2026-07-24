@@ -1,7 +1,8 @@
 ---
 id: DEVOPS-INC-[PROJECT]-[COMPONENT]-[NUMBER]
 # For mds-core/global incidents: CORE-DEVOPS-INC-[NAME]-V[VERSION]
-title: "INC: [Tên Sự Cố Vận Hành]"
+title: "[Tên Sự Cố Vận Hành]"
+project: "[project-id]"
 phase: "08"                          # Phase 08: Operations & Maintenance
 
 # Layer 1 — Lifecycle State (Độ chín muồi của tài liệu - Documentation Maturity)

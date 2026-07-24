@@ -1,10 +1,11 @@
 ---
 id: SA-LOGIC-[NUM]
-name: [Tên Đặc Tả Logic]
+title: [Tên Đặc Tả Logic]
+project: "[project-id]"
 artifact_type: TPL
 domain: SA
 owner: SA
-status: DRAFT
+lifecycle_state: DRAFT
 version: 1.0.0
 tags:
   - sa

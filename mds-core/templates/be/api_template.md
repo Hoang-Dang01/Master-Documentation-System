@@ -1,7 +1,8 @@
 ---
 id: BE-API-[PROJECT]-[COMPONENT]-[NUMBER]
 # For mds-core/global API contracts: CORE-BE-API-[NAME]-V[VERSION]
-title: "API: [HTTP_METHOD] [HTTP_PATH]"
+title: "[HTTP_METHOD] [HTTP_PATH]"
+project: "[project-id]"
 phase: "05"                          # Phase 05: Backend API Design
 
 # Layer 1 — Lifecycle State (Độ chín muồi của tài liệu - Documentation Maturity)

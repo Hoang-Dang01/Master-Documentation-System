@@ -1,7 +1,8 @@
 ---
 id: ARCH-HLD-[PROJECT]-[COMPONENT]-[NUMBER]
 # COMPONENT conventions: SYS (System-wide) | CORE | INTEGRATION | AUTH | MEDIA | DATA | OBS | INFRA | ...
-title: "HLD: [Tên High-Level Design]"
+title: "[Tên High-Level Design]"
+project: "[project-id]"
 phase: "03"
 
 # Layer 1 — Lifecycle State (độ trưởng thành nội dung)

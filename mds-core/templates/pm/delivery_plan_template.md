@@ -1,10 +1,11 @@
 ---
 id: PM-DELIV-[NUM]
-name: [Tên Kế Hoạch Bàn Giao]
+title: [Tên Kế Hoạch Bàn Giao]
+project: "[project-id]"
 artifact_type: TPL
 domain: PM
 owner: PM
-status: DRAFT
+lifecycle_state: DRAFT
 version: 1.0.0
 tags:
   - pm

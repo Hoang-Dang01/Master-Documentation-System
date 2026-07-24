@@ -1,7 +1,8 @@
 ---
 id: ARCH-ADR-[PROJECT]-[COMPONENT]-[NUMBER]
 # COMPONENT conventions: SYS (System-wide) | AUTH | MEDIA | DATA | INFRA | BILL | ...
-title: "ADR: [Tên Quyết Định Kiến Trúc]"
+title: "[Tên Quyết Định Kiến Trúc]"
+project: "[project-id]"
 phase: "03"
 
 # Layer 1 — Lifecycle State (độ trưởng thành nội dung)

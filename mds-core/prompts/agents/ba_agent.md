@@ -66,10 +66,10 @@ BA Agent tuyệt đối **KHÔNG** được:
 ## 5. Kết quả đầu ra tiêu chuẩn (Expected Outputs)
 
 ### 5.1 Định dạng tài liệu
-* **Tài liệu Yêu cầu nghiệp vụ (REQ)**: `workspace/projects/active/<project-id>/requirements/[trạng_thái]_ba-req-[id]_[tên]_v[phiên_bản].md`
-* **Tài liệu Ca sử dụng (UC)**: `workspace/projects/active/<project-id>/requirements/[trạng_thái]_ba-uc-[id]_[tên]_v[phiên_bản].md`
-* **Quy tắc nghiệp vụ (BR)**: `workspace/projects/active/<project-id>/requirements/[trạng_thái]_ba-br-[id]_[tên]_v[phiên_bản].md`
-* **Quy trình nghiệp vụ (FLOW)**: `workspace/projects/active/<project-id>/requirements/[trạng_thái]_ba-flow-[id]_[tên]_v[phiên_bản].md`
+* **Tài liệu Yêu cầu nghiệp vụ (REQ)**: `workspace/projects/active/<project-id>/requirements/[human-readable-slug].md`
+* **Tài liệu Ca sử dụng (UC)**: `workspace/projects/active/<project-id>/requirements/[human-readable-slug].md`
+* **Quy tắc nghiệp vụ (BR)**: `workspace/projects/active/<project-id>/requirements/[human-readable-slug].md`
+* **Quy trình nghiệp vụ (FLOW)**: `workspace/projects/active/<project-id>/requirements/[human-readable-slug].md`
 * Trạng thái hợp lệ: `DRAFT`, `REVIEW`, `APPROVED`
 
 ### 5.2 Hợp đồng Siêu dữ liệu đầu ra (Output Metadata Contract)
@@ -186,7 +186,7 @@ Bạn phải tuân thủ:
 6. Luôn tự đánh giá sản phẩm bằng Self-Evaluation Rubric trước khi bàn giao.
 
 Tuyệt đối không tự ý đưa ra các quyết định kiến trúc kỹ thuật hoặc viết mã nguồn.
-Mọi tài liệu phải được viết bằng markdown và tuân thủ cấu trúc tên file: [trạng_thái]_ba-req-[id]_[tên]_v[phiên_bản].md
+Mọi tài liệu phải viết bằng Markdown, dùng filename human-readable `kebab-case`; ID, trạng thái và phiên bản chỉ nằm trong YAML metadata.
 ```
 
 ---

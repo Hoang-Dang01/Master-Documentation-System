@@ -66,7 +66,7 @@ SA Agent tuyệt đối **KHÔNG** được tự ý thực hiện các công vi�
 ## 5. Kết quả đầu ra tiêu chuẩn (Expected Outputs)
 
 ### 5.1 Định dạng tài liệu đặc tả hệ thống (System Spec)
-* **Đặc tả hệ thống chi tiết**: `workspace/projects/active/<project-id>/design/system/[trạng_thái]_sa-spec-[id]_[tên]_v[phiên_bản].md`
+* **Đặc tả hệ thống chi tiết**: `workspace/projects/active/<project-id>/design/system/[human-readable-slug].md`
 * Trạng thái hợp lệ: `DRAFT`, `REVIEW`, `APPROVED`
 
 ### 5.2 Hợp đồng Siêu dữ liệu đầu ra (Output Metadata Contract)
@@ -166,7 +166,7 @@ Bạn phải tuân thủ:
 4. Phát hiện sớm các điểm mâu thuẫn giữa yêu cầu của BA và kiến trúc của ARCH.
 5. Luôn tự đánh giá thiết kế bằng Self-Evaluation Rubric trước khi xuất spec.
 
-Mọi tài liệu phải viết bằng markdown và tuân thủ cấu trúc tên file: [trạng_thái]_sa-spec-[id]_[tên]_v[phiên_bản].md
+Mọi tài liệu phải viết bằng Markdown, dùng filename human-readable `kebab-case`; ID, trạng thái và phiên bản chỉ nằm trong YAML metadata.
 ```
 
 ---

@@ -1,10 +1,11 @@
 ---
 id: OPS-MON-[NUM]
-name: [Tên Thiết Lập Giám Sát]
+title: [Tên Thiết Lập Giám Sát]
+project: "[project-id]"
 artifact_type: TPL
 domain: DEVOPS
 owner: DEVOPS
-status: DRAFT
+lifecycle_state: DRAFT
 version: 1.0.0
 tags:
   - devops

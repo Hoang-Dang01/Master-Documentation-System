@@ -98,6 +98,7 @@ Tất cả tài liệu trong Project Profiles phải chứa YAML Frontmatter chu
 ---
 id: PM-CTX-[PROJECT]-INTAKE
 title: Tóm tắt yêu cầu thô ban đầu
+project: [project-id]
 phase: "00"
 lifecycle_state: DRAFT | REVIEW | APPROVED | DEPRECATED | ARCHIVED
 execution_state: NOT_STARTED | IN_PROGRESS | BLOCKED | COMPLETED | NOT_APPLICABLE
@@ -117,6 +118,7 @@ tags: []
 ---
 id: PM-FSB-[PROJECT]-[NUMBER]
 title: Đánh giá khả thi dự án
+project: [project-id]
 phase: "00"
 lifecycle_state: DRAFT | REVIEW | APPROVED | DEPRECATED | ARCHIVED
 execution_state: NOT_STARTED | IN_PROGRESS | BLOCKED | COMPLETED | NOT_APPLICABLE
@@ -142,6 +144,7 @@ tags: []
 ---
 id: PM-CTX-[PROJECT]-BRIEF
 title: Hồ sơ dự án và Phân bổ Nhân sự
+project: [project-id]
 phase: "01"
 lifecycle_state: DRAFT | REVIEW | APPROVED | DEPRECATED | ARCHIVED
 execution_state: NOT_STARTED | IN_PROGRESS | BLOCKED | COMPLETED | NOT_APPLICABLE
@@ -161,6 +164,7 @@ tags: []
 ---
 id: BA-CTX-[PROJECT]-BUSINESS
 title: Bối cảnh nghiệp vụ và ROI dự án
+project: [project-id]
 phase: "01"
 lifecycle_state: DRAFT | REVIEW | APPROVED | DEPRECATED | ARCHIVED
 execution_state: NOT_STARTED | IN_PROGRESS | BLOCKED | COMPLETED | NOT_APPLICABLE
@@ -179,6 +183,7 @@ tags: []
 ---
 id: ARCH-CTX-[PROJECT]-CONSTRAINTS
 title: Ràng buộc Kỹ thuật và Vận hành Tối cao
+project: [project-id]
 phase: "01"
 lifecycle_state: DRAFT | REVIEW | APPROVED | DEPRECATED | ARCHIVED
 execution_state: NOT_STARTED | IN_PROGRESS | BLOCKED | COMPLETED | NOT_APPLICABLE

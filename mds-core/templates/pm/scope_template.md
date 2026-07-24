@@ -1,10 +1,11 @@
 ---
 id: PM-SCOPE-[NUM]
-name: [Tên Phạm Vi Dự Án]
+title: [Tên Phạm Vi Dự Án]
+project: "[project-id]"
 artifact_type: TPL
 domain: PM
 owner: PM
-status: DRAFT
+lifecycle_state: DRAFT
 version: 1.0.0
 tags:
   - pm

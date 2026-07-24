@@ -9,33 +9,51 @@ Tài liệu này định nghĩa chi tiết 5 quy tắc chuẩn tắc bắt buộ
 
 ---
 
-## RULE 1: Naming Convention (Quy ước đặt tên file)
+## RULE 1: Human-first Naming (Quy ước đặt tên ưu tiên con người)
 
-Mọi file tài liệu thực thể (không bao gồm các file cấu trúc meta) bắt buộc phải tuân theo cấu trúc cú pháp sau để đảm bảo không bị lẫn lộn giữa các dự án trong môi trường multi-project:
+MDS tách tên artifact thành ba lớp:
 
 ```text
-[LIFECYCLE_STATE]_ROLE-TYPE-PROJECT-COMPONENT-NUMBER_NAME_vVERSION.extension
+title    → tên tự nhiên dành cho người đọc
+id       → khóa kỹ thuật dành cho hệ thống và traceability
+filename → slug lưu trữ ngắn, ổn định và dễ đọc
 ```
 
-*   `LIFECYCLE_STATE`: Trạng thái trưởng thành của tài liệu (xem RULE 3):
-    `[DRAFT|REVIEW|APPROVED|DEPRECATED|ARCHIVED]`
-*   `ROLE`: Vai trò sở hữu tài liệu:
-    `[PM|BA|SA|ARCH|BE|FE|QA|DEVOPS|ORCH|KC]`
-    > *Lưu ý*: `ORCH` = Orchestrator Agent, `KC` = Knowledge Curator Agent.
-*   `TYPE`: Mã thực thể 2-4 ký tự viết hoa:
-    `[CTX|FSB|BRD|FLOW|UC|REQ|BR|NFR|ADR|HLD|SEC|API|DB|SRV|UI|DEC|TSK|TC|BUG|REL|INC|RUN|FIN|RSK]`
-*   `PROJECT`: Mã dự án viết tắt 3-5 ký tự viết hoa (ví dụ: `EDU` - EduMeet, `MED` - Medstand, `MDS` - MDS Core).
-*   `COMPONENT`: Tên phân hệ viết tắt 3-10 ký tự viết hoa (ví dụ: `AUTH`, `MEET`, `BILL`).
-*   `NUMBER`: 3 chữ số đếm tăng dần (ví dụ: `001`, `002`).
-*   `NAME`: Tên ngắn gọn viết hoa không dấu, ngăn cách bằng dấu gạch dưới (ví dụ: `USER_LOGIN`).
-*   `VERSION`: Định dạng SemVer 3 chỉ số `v[MAJOR].[MINOR].[PATCH]` (ví dụ: `v1.0.0`).
+Filename của project artifact dùng:
 
-*Ví dụ hợp lệ*:
 ```text
-[APPROVED]_BE-API-EDU-AUTH-001_LOGIN_ENDPOINT_v1.0.0.md
-[DRAFT]_SA-NFR-MED-SYS-002_LATENCY_BUDGET_v0.1.0.md
-[REVIEW]_PM-RSK-MDS-PROJ-001_INFRA_COST_RISK_v1.0.0.md
+<human-readable-slug>.<extension>
 ```
+
+Slug phải viết thường, chỉ dùng `a-z`, `0-9`, dấu `-`, tối đa 80 ký tự và
+không chứa lifecycle state, version, role code, `FINAL`, `LATEST` hoặc
+`UPDATED`.
+
+```text
+dao-tao-mo-hinh-phat-hien-url.md
+thiet-ke-api-chi-tiet-phieu.md
+phan-quyen-tai-xe.md
+kiem-thu-chuc-nang-qr.md
+```
+
+Thông tin kỹ thuật nằm trong YAML Frontmatter:
+
+```yaml
+id: BE-SRV-EDU-AI-001
+title: Đào tạo mô hình phát hiện URL
+project: edumeet
+lifecycle_state: APPROVED
+version: 1.0.0
+owner: dev_agent
+```
+
+`title` không mang tiền tố kỹ thuật như `REQ:`, `SRV:` hoặc ID. Quan hệ giữa
+artifact tham chiếu bằng `id`, không tham chiếu bằng filename. Các file hệ
+thống ổn định như `project_brief.md`, `business_context.md`, `constraints.md`
+và `status.md` là ngoại lệ có chủ đích.
+
+Quy tắc chi tiết và ví dụ UI nằm tại
+[`naming_convention.md`](naming_convention.md).
 
 ---
 

@@ -1,6 +1,7 @@
 ---
 id: BA-BRD-[PROJECT]-[NUMBER]
-title: "BRD: [Tên Tài Liệu BRD]"
+title: "[Tên Tài Liệu BRD]"
+project: "[project-id]"
 phase: "02"
 
 # Layer 1 — Lifecycle State (độ trưởng thành nội dung)

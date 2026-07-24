@@ -1,7 +1,8 @@
 ---
 id: BA-REQ-[PROJECT]-[COMPONENT]-[NUMBER]
 # COMPONENT conventions: SYS (System-wide) | AUTH | MEDIA | DATA | BILL | API | ...
-title: "REQ: [Tên Yêu Cầu Chức Năng]"
+title: "[Tên Yêu Cầu Chức Năng]"
+project: "[project-id]"
 phase: "02"
 
 # Layer 1 — Lifecycle State (Độ chín muồi của tài liệu - Documentation Maturity)

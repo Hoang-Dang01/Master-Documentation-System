@@ -61,8 +61,8 @@
 ### 5.1 Định dạng tài liệu & Tên File
 Mọi tài liệu đầu ra bắt buộc phải được đặt tên chính xác theo cú pháp của **Naming Convention**:
 
-* **[Tên loại tài liệu 1]**: `workspace/projects/active/<project-id>/[thư_mục]/[LIFECYCLE_STATE]_[ROLE]-[TYPE]-[PROJECT]-[COMPONENT]-[NUMBER]_[NAME]_v[VERSION].md`
-  - *Ví dụ*: `[APPROVED]_BE-API-EDU-AUTH-001_LOGIN_ENDPOINT_v1.0.0.md`
+* **[Tên loại tài liệu 1]**: `workspace/projects/active/<project-id>/[thư_mục]/[human-readable-slug].md`
+  - *Ví dụ*: `thiet-ke-api-dang-nhap.md`
 
 ### 5.2 Hợp đồng Siêu dữ liệu đầu ra (Output Metadata Contract)
 Mọi tài liệu do bạn tạo ra **bắt buộc** phải chứa phần YAML Frontmatter chuẩn tắc theo **Hybrid Layered State Model** sau:
@@ -71,6 +71,7 @@ Mọi tài liệu do bạn tạo ra **bắt buộc** phải chứa phần YAML F
 ---
 id: [ROLE]-[TYPE]-[PROJECT]-[COMPONENT]-[NUMBER]
 title: "[Tiêu đề tài liệu]"
+project: "[project-id]"
 phase: "[00 -> 09]"
 
 # Layer 1 — Lifecycle State (độ trưởng thành nội dung)

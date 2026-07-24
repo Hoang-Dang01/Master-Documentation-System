@@ -1,7 +1,8 @@
 ---
 id: BE-DB-[PROJECT]-[COMPONENT]-[NUMBER]
 # For mds-core/global DB schemas: CORE-BE-DB-[NAME]-V[VERSION]
-title: "DB: [Tên Bảng Vật Lý]"
+title: "[Tên Bảng Vật Lý]"
+project: "[project-id]"
 phase: "04"                          # Phase 04: Database & Schema Design
 
 # Layer 1 — Lifecycle State (Độ chín muồi của tài liệu - Documentation Maturity)

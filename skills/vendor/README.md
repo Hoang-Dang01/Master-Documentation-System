@@ -44,3 +44,10 @@ The imported working tree was clean before integration.
 
 These folders are attributed upstream material. MDS-specific project management
 policy lives in `../mds/mds-project-management/`.
+
+## Exposure policy
+
+`registry.yaml` is the allowlist used by MDS routing. The full upstream tree is
+preserved for attribution and updates, but unlisted Matt Pocock skills are not
+part of the active MDS skill surface. Deprecated, in-progress, personal, and
+miscellaneous roots are ignored by default.

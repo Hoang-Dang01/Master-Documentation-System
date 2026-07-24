@@ -1,7 +1,8 @@
 ---
 id: BA-UC-[PROJECT]-[COMPONENT]-[NUMBER]
 # COMPONENT conventions: SYS (System-wide) | AUTH | MEDIA | DATA | BILL | API | ...
-title: "UC: [Tên Use Case]"
+title: "[Tên Use Case]"
+project: "[project-id]"
 phase: "02"
 
 # Layer 1 — Lifecycle State (Độ chín muồi của tài liệu - Documentation Maturity)

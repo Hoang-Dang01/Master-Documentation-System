@@ -1,7 +1,8 @@
 ---
 id: BA-BR-[PROJECT]-[COMPONENT]-[NUMBER]
 # COMPONENT conventions: SYS (System-wide) | AUTH | MEDIA | DATA | BILL | API | ...
-title: "BR: [Tên Quy Tắc Nghiệp Vụ]"
+title: "[Tên Quy Tắc Nghiệp Vụ]"
+project: "[project-id]"
 phase: "02"
 
 # Layer 1 — Lifecycle State (Độ chín muồi của tài liệu - Documentation Maturity)

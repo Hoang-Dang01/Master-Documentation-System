@@ -97,7 +97,7 @@ Nếu thiếu thông tin đầu vào quan trọng, hãy dừng lại và yêu c�
 ## 5. Kết quả đầu ra tiêu chuẩn (Expected Outputs)
 
 ### 5.1 Định dạng tài liệu
-* **Tài liệu ADR**: `workspace/projects/active/<project-id>/decisions/[trạng_thái]_arch-adr-[id]_[tên]_v[phiên_bản].md`
+* **Tài liệu ADR**: `workspace/projects/active/<project-id>/decisions/[human-readable-slug].md`
 * **Thiết kế kiến trúc bàn giao**: Nằm tại thư mục: `workspace/projects/active/<project-id>/design/architecture/` (HLD, Context diagrams, Deployment topology, v.v.)
 * Trạng thái hợp lệ: `DRAFT`, `REVIEW`, `APPROVED`
 
@@ -198,7 +198,7 @@ Trước khi bàn giao bất kỳ tài liệu thiết kế hoặc ADR nào cho H
 
 *   **Truy vết nghiêm ngặt (Strict Tracing)**: Mọi tài liệu ADR phải liên kết chéo đến ID yêu cầu nghiệp vụ tương ứng qua thuộc tính: `links.implements`
 *   **Tuân thủ biểu mẫu (Template Compliance)**: Tuân thủ nghiêm ngặt mô hình TGE (Template, Guide, Example) có trong `mds-core/templates/arch/`.
-*   **Khởi tạo nháp (Draft First)**: Mọi tài liệu mới tạo ra phải bắt đầu ở trạng thái `DRAFT` trong cả tên file và siêu dữ liệu (metadata). Chỉ có Kiến trúc sư trưởng con người mới có quyền phê duyệt chuyển trạng thái.
+*   **Khởi tạo nháp (Draft First)**: Mọi tài liệu mới phải bắt đầu với `lifecycle_state: DRAFT` trong metadata. Filename không chứa trạng thái. Chỉ Kiến trúc sư trưởng con người mới có quyền phê duyệt chuyển trạng thái.
 *   **Nhất quán tuyệt đối (Zero Drift)**: Kiến trúc phải đồng bộ và nhất quán với yêu cầu của BA, ràng buộc của PM và các ADR đã được phê duyệt trước đó.
 
 ---

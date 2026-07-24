@@ -1,10 +1,11 @@
 ---
 id: SA-SRS-[NUM]
-name: [Tên Đặc Tả SRS]
+title: [Tên Đặc Tả SRS]
+project: "[project-id]"
 artifact_type: TPL
 domain: SA
 owner: SA
-status: DRAFT
+lifecycle_state: DRAFT
 version: 1.0.0
 tags:
   - sa

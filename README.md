@@ -22,6 +22,23 @@ npm.cmd install
 npm.cmd run dev
 ```
 
+Mặc định, dữ liệu người dùng được lưu ngoài source repository tại:
+
+```text
+%USERPROFILE%\Documents\MDS-Workspace
+```
+
+Muốn dùng ổ đĩa hoặc thư mục khác:
+
+```powershell
+$env:MDS_DATA_DIR = "D:\MDS-Workspace"
+npm.cmd run dev
+```
+
+Thư mục [`workspace/`](workspace/) trong repository chỉ là seed EduMeet dành
+cho phát triển và lần chạy đầu; không đặt dữ liệu khách hàng hoặc API key vào
+đó. Xem [ranh giới dữ liệu local](docs/DATA_LAYOUT.md).
+
 Kiểm tra và chạy bản production:
 
 ```powershell
@@ -62,7 +79,7 @@ Mọi tài liệu trên đều được liên kết chặt chẽ với nhau. N�
 
 ## 📍 Trạng thái dự án hiện tại (Current State)
 
-*   **Active Project**: [EduMeet](workspace/projects/active/edumeet/)
+*   **Development seed**: [EduMeet](workspace/projects/active/edumeet/)
 *   **Current Phase**: `Phase 03: Design` ➔ [mds-core/guides/lifecycle/03_design](mds-core/guides/lifecycle/03_design/)
 *   **Current Focus**: Thiết kế kiến trúc tổng thể, cơ sở dữ liệu, API Contracts và các quyết định ADR.
 
@@ -76,7 +93,8 @@ Mọi tài liệu trên đều được liên kết chặt chẽ với nhau. N�
 *   [`skills`](skills/) — Skill AI‑EOS của MDS và thư viện vendor đã gộp vào cùng repo.
 *   [`skills/mds/PM_WORKFLOW.md`](skills/mds/PM_WORKFLOW.md) — Luồng Project/Delivery Management từ scope đến release và handoff.
 *   [`workflows`](workflows/) — Automation definitions có version và approval gate.
-*   [`workspace/projects`](workspace/projects/) — Dữ liệu runtime của từng dự án.
+*   [`docs/DATA_LAYOUT.md`](docs/DATA_LAYOUT.md) — Ranh giới giữa source repo và dữ liệu runtime local.
+*   [`workspace/projects`](workspace/projects/) — Seed/fixture EduMeet cho development; dữ liệu thật nằm trong `MDS_DATA_DIR`.
 *   [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) — Ranh giới kiến trúc và vertical slice đầu tiên.
 *   [`docs/STRUCTURE.md`](docs/STRUCTURE.md) — Cây thư mục hiện tại.
 *   [`docs/STRUCTURE.generated.md`](docs/STRUCTURE.generated.md) — Cây vật lý tự sinh bằng `npm run docs:structure`.

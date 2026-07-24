@@ -39,8 +39,8 @@ Migration state is tracked separately as `UNASSESSED`, `PENDING`,
 | `skills/vendor/deanpeters-product-manager/` | Upstream | Same path | `VENDOR` | `DONE` | CC BY-NC-SA 4.0 notice retained. |
 | `skills/vendor/obra-superpowers/` | Upstream | Same path | `VENDOR` | `DONE` | MIT license retained. |
 | `packages/core`, `application`, `infrastructure`, `workflow-engine`, `shared` | MDS restructure | Same paths | `MOVE` | `DONE` | Physical boundaries consolidated; implementation remains incremental. |
-| `workspace/projects/active/edumeet/` | MDS legacy | Same path | `MOVE` | `DONE` | Existing active project content moved under project id `edumeet`. |
-| `workspace/projects/project_index.md` | MDS legacy | `workspace/projects/index.yaml` plus compatibility view | `KEEP` | `DONE` | YAML is canonical; Markdown remains a manually maintained human-readable view. |
+| `workspace/projects/active/edumeet/` | MDS legacy | Development seed for `MDS_DATA_DIR/projects/active/edumeet/` | `KEEP` | `DONE` | Repository copy is used for development and first-run bootstrap only. |
+| `workspace/projects/project_index.md` | MDS legacy | `MDS_DATA_DIR/projects/index.yaml` plus compatibility view | `KEEP` | `DONE` | Runtime YAML is canonical; repository copy remains a seed/fixture. |
 | `docs/STRUCTURE.md` | MDS restructure | Human boundary guide | `KEEP` | `DONE` | Must not be the physical-tree source of truth. |
 | `docs/STRUCTURE.generated.md` | Repository scanner | Generated from filesystem | `GENERATED` | `DONE` | Rebuild with `npm run docs:structure`. |
 | `docs/LEGACY_STRUCTURE.md` | MDS legacy | `docs/archive/` after references are checked | `ARCHIVE` | `PENDING` | Still useful during consolidation. |

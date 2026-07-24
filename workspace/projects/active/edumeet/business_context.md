@@ -1,10 +1,11 @@
 ---
-id: CTX-BIZ-001
-name: Active Business Context
+id: BA-CTX-EDU-BUSINESS
+title: Bối cảnh nghiệp vụ EduMeet
+project: edumeet
 artifact_type: REG
 domain: META
 owner: PM
-status: APPROVED
+lifecycle_state: APPROVED
 version: 1.0.0
 tags:
   - business

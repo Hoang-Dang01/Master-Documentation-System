@@ -1,7 +1,8 @@
 ---
 id: BE-SRV-[PROJECT]-[COMPONENT]-[NUMBER]
 # For mds-core/global services: CORE-BE-SRV-[NAME]-V[VERSION]
-title: "SRV: [Tên Dịch Vụ / Component]"
+title: "[Tên Dịch Vụ / Component]"
+project: "[project-id]"
 phase: "05"                          # Phase 05: Backend API & Service Design
 
 # Layer 1 — Lifecycle State (Độ chín muồi của tài liệu - Documentation Maturity)

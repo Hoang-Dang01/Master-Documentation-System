@@ -4,19 +4,25 @@
   "private": true,
   "description": "Local-first Personal Engineering Operating System",
   "scripts": {
+    "predev": "npm --workspace @mds/document-ingestion run build",
     "dev": "npm --workspace @mds/desktop run dev",
-    "build": "npm --workspace @mds/desktop run build",
-    "typecheck": "npm --workspace @mds/desktop run typecheck",
+    "build": "npm --workspace @mds/document-ingestion run build && npm --workspace @mds/desktop run build",
+    "typecheck": "npm --workspace @mds/document-ingestion run typecheck && npm --workspace @mds/desktop run typecheck",
+    "presmoke": "npm --workspace @mds/document-ingestion run build",
     "smoke": "npm --workspace @mds/desktop run smoke",
+    "prestart": "npm --workspace @mds/document-ingestion run build",
     "start": "npm --workspace @mds/desktop run start",
     "validate:docs": "node scripts/automation/scripts/detect_drift.js",
+    "validate:skills": "node scripts/automation/scripts/validate_skill_registry.js",
+    "test:ingestion": "npm run build --silent && node tests/integration/document-import.cjs",
     "docs:structure": "node scripts/automation/scripts/generate_structure.js",
     "validate:structure": "node scripts/automation/scripts/generate_structure.js --check",
     "build:glossary": "node scripts/automation/scripts/glossary/build_glossary.js"
   },
   "workspaces": [
     "apps/*",
-    "packages/*"
+    "packages/*",
+    "packages/*/*"
   ],
   "engines": {
     "node": ">=20"

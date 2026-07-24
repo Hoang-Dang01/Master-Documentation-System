@@ -1,10 +1,11 @@
 ---
 id: FE-UI-[NUM]
-name: [Tên Đặc Tả Giao Diện]
+title: [Tên Đặc Tả Giao Diện]
+project: "[project-id]"
 artifact_type: TPL
 domain: FE
 owner: FE
-status: DRAFT
+lifecycle_state: DRAFT
 version: 1.0.0
 tags:
   - fe

@@ -1,6 +1,7 @@
 ---
 id: BE-SRV-EDU-AI-001
-title: "SRV: URL Detection Model Training Specification"
+title: "Đào tạo mô hình phát hiện URL"
+project: edumeet
 phase: "05"
 lifecycle_state: APPROVED
 execution_state: NOT_APPLICABLE

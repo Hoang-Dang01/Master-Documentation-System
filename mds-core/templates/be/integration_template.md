@@ -1,7 +1,8 @@
 ---
 id: BE-INT-[PROJECT]-[COMPONENT]-[NUMBER]
 # For mds-core/global integrations: CORE-BE-INT-[NAME]-V[VERSION]
-title: "INT: [Tên Hệ Thống Thứ Ba] Integration"
+title: "[Tên Hệ Thống Thứ Ba]"
+project: "[project-id]"
 phase: "05"                          # Phase 05: Integration & API Design
 
 # Layer 1 — Lifecycle State (Độ chín muồi của tài liệu - Documentation Maturity)

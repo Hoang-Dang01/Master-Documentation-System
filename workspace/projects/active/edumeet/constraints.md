@@ -1,10 +1,11 @@
 ---
-id: CTX-CONST-001
-name: Active Project Constraints
+id: ARCH-CTX-EDU-CONSTRAINTS
+title: Ràng buộc của dự án EduMeet
+project: edumeet
 artifact_type: REG
 domain: META
 owner: PM
-status: APPROVED
+lifecycle_state: APPROVED
 version: 1.0.0
 tags:
   - constraints

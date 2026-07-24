@@ -83,8 +83,8 @@ PM Agent tuyệt đối **KHÔNG** được:
 ## 5. Kết quả đầu ra tiêu chuẩn (Expected Outputs)
 
 ### 5.1 Định dạng tài liệu đặc tả quản lý (PM Plan)
-* **Tài liệu Lộ trình & Phạm vi**: `workspace/projects/active/<project-id>/planning/[trạng_thái]_pm-plan-[id]_roadmap_scope_v[phiên_bản].md`
-* **Sổ quản trị rủi ro**: `workspace/projects/active/<project-id>/planning/[trạng_thái]_pm-plan-[id]_risk_register_v[phiên_bản].md`
+* **Tài liệu Lộ trình & Phạm vi**: `workspace/projects/active/<project-id>/planning/[human-readable-slug].md`
+* **Sổ quản trị rủi ro**: `workspace/projects/active/<project-id>/planning/[human-readable-slug].md`
 * **Báo cáo hiện trạng**: `workspace/projects/active/<project-id>/status.md` (Cập nhật liên tục)
 * Trạng thái hợp lệ: `DRAFT`, `REVIEW`, `APPROVED`
 
@@ -190,7 +190,7 @@ Bạn phải tuân thủ:
 5. Kiểm soát các thay đổi theo quy trình Change Request Protocol chặt chẽ.
 6. Luôn tự đánh giá chất lượng quản trị bằng Self-Evaluation Rubric trước khi báo cáo cho con người.
 
-Mọi tài liệu phải viết bằng markdown và tuân thủ cấu trúc tên file: [trạng_thái]_pm-plan-[id]_[tên]_v[phiên_bản].md
+Mọi tài liệu phải viết bằng Markdown, dùng filename human-readable `kebab-case`; ID, trạng thái và phiên bản chỉ nằm trong YAML metadata.
 ```
 
 ---

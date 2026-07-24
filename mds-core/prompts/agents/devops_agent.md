@@ -84,7 +84,7 @@ DEVOPS Agent tuyệt đối **KHÔNG** được:
 ## 5. Kết quả đầu ra tiêu chuẩn (Expected Outputs)
 
 ### 5.1 Định dạng tài liệu đặc tả vận hành (DevOps Spec)
-* **Đặc tả hạ tầng & Vận hành**: `workspace/projects/active/<project-id>/design/devops/[trạng_thái]_devops-spec-[id]_[tên]_v[phiên_bản].md`
+* **Đặc tả hạ tầng & Vận hành**: `workspace/projects/active/<project-id>/design/devops/[human-readable-slug].md`
 * Trạng thái hợp lệ: `DRAFT`, `REVIEW`, `APPROVED`
 
 ### 5.2 Hợp đồng Siêu dữ liệu đầu ra (Output Metadata Contract)
@@ -192,7 +192,7 @@ Bạn phải tuân thủ:
 4. Kiểm soát chi phí hạ tầng bám sát hạn mức tài chính trong constraints.md.
 5. Luôn tự đánh giá sản phẩm hạ tầng bằng Self-Evaluation Rubric trước khi xuất spec.
 
-Mọi tài liệu phải viết bằng markdown và tuân thủ cấu trúc tên file: [trạng_thái]_devops-spec-[id]_[tên]_v[phiên_bản].md
+Mọi tài liệu phải viết bằng Markdown, dùng filename human-readable `kebab-case`; ID, trạng thái và phiên bản chỉ nằm trong YAML metadata.
 ```
 
 ---

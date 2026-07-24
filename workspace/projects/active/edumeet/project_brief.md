@@ -1,10 +1,11 @@
 ---
-id: CTX-BRIEF-001
-name: Active Project Brief
+id: PM-CTX-EDU-BRIEF
+title: Hồ sơ dự án EduMeet
+project: edumeet
 artifact_type: REG
 domain: META
 owner: PM
-status: APPROVED
+lifecycle_state: APPROVED
 version: 1.0.0
 tags:
   - project

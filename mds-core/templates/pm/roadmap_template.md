@@ -1,10 +1,11 @@
 ---
 id: PM-ROAD-[NUM]
-name: [Tên Lộ Trình Sản Phẩm]
+title: [Tên Lộ Trình Sản Phẩm]
+project: "[project-id]"
 artifact_type: TPL
 domain: PM
 owner: PM
-status: DRAFT
+lifecycle_state: DRAFT
 version: 1.0.0
 tags:
   - pm

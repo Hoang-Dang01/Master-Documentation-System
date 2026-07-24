@@ -76,7 +76,7 @@ FE Agent tuyệt đối **KHÔNG** được:
 ## 5. Kết quả đầu ra tiêu chuẩn (Expected Outputs)
 
 ### 5.1 Định dạng tài liệu đặc tả giao diện (FE Spec)
-* **Đặc tả kỹ thuật Frontend**: `workspace/projects/active/<project-id>/design/frontend/[trạng_thái]_fe-spec-[id]_[tên]_v[phiên_bản].md`
+* **Đặc tả kỹ thuật Frontend**: `workspace/projects/active/<project-id>/design/frontend/[human-readable-slug].md`
 * Trạng thái hợp lệ: `DRAFT`, `REVIEW`, `APPROVED`
 
 ### 5.2 Hợp đồng Siêu dữ liệu đầu ra (Output Metadata Contract)
@@ -193,7 +193,7 @@ Bạn phải tuân thủ:
 4. Đảm bảo tính dễ tiếp cận (Accessibility) WCAG trên mọi màn hình.
 5. Luôn tự đánh giá sản phẩm bằng Self-Evaluation Rubric trước khi xuất kết quả.
 
-Mọi tài liệu phải viết bằng markdown và tuân thủ cấu trúc tên file: [trạng_thái]_fe-spec-[id]_[tên]_v[phiên_bản].md
+Mọi tài liệu phải viết bằng Markdown, dùng filename human-readable `kebab-case`; ID, trạng thái và phiên bản chỉ nằm trong YAML metadata.
 ```
 
 ---

@@ -73,7 +73,7 @@ BE Agent tuyệt đối **KHÔNG** được:
 ## 5. Kết quả đầu ra tiêu chuẩn (Expected Outputs)
 
 ### 5.1 Định dạng tài liệu đặc tả kỹ thuật (BE Spec)
-* **Đặc tả kỹ thuật Backend**: `workspace/projects/active/<project-id>/design/backend/[trạng_thái]_be-spec-[id]_[tên]_v[phiên_bản].md`
+* **Đặc tả kỹ thuật Backend**: `workspace/projects/active/<project-id>/design/backend/[human-readable-slug].md`
 * Trạng thái hợp lệ: `DRAFT`, `REVIEW`, `APPROVED`
 
 ### 5.2 Hợp đồng Siêu dữ liệu đầu ra (Output Metadata Contract)
@@ -185,7 +185,7 @@ Bạn phải tuân thủ:
 4. Phát hiện sớm các rủi ro runtime (race conditions, N+1 queries, resource leaks) và xử lý chúng triệt để.
 5. Luôn tự đánh giá sản phẩm bằng Self-Evaluation Rubric trước khi xuất kết quả.
 
-Mọi tài liệu phải viết bằng markdown và tuân thủ cấu trúc tên file: [trạng_thái]_be-spec-[id]_[tên]_v[phiên_bản].md
+Mọi tài liệu phải viết bằng Markdown, dùng filename human-readable `kebab-case`; ID, trạng thái và phiên bản chỉ nằm trong YAML metadata.
 ```
 
 ---

@@ -1,10 +1,11 @@
 ---
 id: OPS-INFRA-[NUM]
-name: [Tên Hạ Tầng Môi Trường]
+title: [Tên Hạ Tầng Môi Trường]
+project: "[project-id]"
 artifact_type: TPL
 domain: DEVOPS
 owner: DEVOPS
-status: DRAFT
+lifecycle_state: DRAFT
 version: 1.0.0
 tags:
   - devops

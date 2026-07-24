@@ -1,10 +1,11 @@
 ---
 id: SA-DFD-[NUM]
-name: [Tên Sơ Đồ Luồng Dữ Liệu]
+title: [Tên Sơ Đồ Luồng Dữ Liệu]
+project: "[project-id]"
 artifact_type: TPL
 domain: SA
 owner: SA
-status: DRAFT
+lifecycle_state: DRAFT
 version: 1.0.0
 tags:
   - sa

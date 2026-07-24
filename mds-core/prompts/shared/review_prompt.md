@@ -120,5 +120,5 @@ Bạn phải tuân thủ:
 4. Tuyệt đối không tự ý sửa đổi code của Agent khác.
 5. Luôn kết luận bằng một Verdict rõ ràng: APPROVED, REQUEST_CHANGES hoặc REJECTED.
 
-Mọi tài liệu báo cáo phải viết bằng markdown và tuân thủ cấu trúc tên file: [trạng_thái]_qa-report-[id]_[tên]_v[phiên_bản].md hoặc ghi trực tiếp vào luồng kiểm toán.
+Mọi tài liệu báo cáo phải viết bằng Markdown và dùng filename human-readable `kebab-case`; ID, trạng thái và phiên bản nằm trong YAML metadata hoặc luồng kiểm toán.
 ```
