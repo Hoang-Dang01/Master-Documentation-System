@@ -44,6 +44,7 @@ Migration state is tracked separately as `UNASSESSED`, `PENDING`,
 | `docs/STRUCTURE.md` | MDS restructure | Human boundary guide | `KEEP` | `DONE` | Must not be the physical-tree source of truth. |
 | `docs/STRUCTURE.generated.md` | Repository scanner | Generated from filesystem | `GENERATED` | `DONE` | Rebuild with `npm run docs:structure`. |
 | `docs/LEGACY_STRUCTURE.md` | MDS legacy | `docs/archive/` after references are checked | `ARCHIVE` | `PENDING` | Still useful during consolidation. |
+| Scalar-only frontmatter parsing in application packages | MDS runtime | Shared deterministic graph parser/normalizer seam under `packages/application/requirements/src/graph.ts` | `MERGE` | `IN_PROGRESS` | Slice 1 adds evidence-backed relationship parsing without removing existing ingestion/review parsers; consolidation requires compatibility evidence and a later approved migration. |
 
 ## Removal gate
 

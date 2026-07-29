@@ -1,0 +1,253 @@
+{
+  "schema_version": "1.0.0",
+  "project_id": "MDS",
+  "board_version": "0.1.0",
+  "updated_at": "2026-07-27",
+  "approval_state": "APPROVED",
+  "approved_by": "human-project-authority",
+  "approved_at": "2026-07-27",
+  "scope": {
+    "requirement_ids": ["BA-REQ-MDS-KG-001"],
+    "design_ids": ["ARCH-ADR-MDS-KG-001"],
+    "excluded": [
+      "SQLite persistence",
+      "Electron graph IPC",
+      "Knowledge Graph UI",
+      "Graph RAG and AI-generated relationships"
+    ]
+  },
+  "milestones": [
+    {
+      "id": "MDS-KG-S1",
+      "name": "Evidence-backed deterministic graph projection",
+      "target_date": null,
+      "task_ids": [
+        "PM-TSK-MDS-KGRAPH-001",
+        "PM-TSK-MDS-KGRAPH-002",
+        "PM-TSK-MDS-KGRAPH-003",
+        "PM-TSK-MDS-KGRAPH-004",
+        "PM-TSK-MDS-KGRAPH-005",
+        "PM-TSK-MDS-KGRAPH-006",
+        "PM-TSK-MDS-KGRAPH-007",
+        "PM-TSK-MDS-KGRAPH-008",
+        "PM-TSK-MDS-KGRAPH-009",
+        "PM-TSK-MDS-KGRAPH-010"
+      ]
+    }
+  ],
+  "tasks": [
+    {
+      "id": "PM-TSK-MDS-KGRAPH-001",
+      "title": "Confirm and preserve the Slice 1 repository baseline",
+      "lifecycle_state": "APPROVED",
+      "execution_state": "COMPLETED",
+      "owner_role": "PM",
+      "effort": 1,
+      "blocked_by": [],
+      "linked_requirements": ["BA-REQ-MDS-KG-001"],
+      "linked_designs": ["ARCH-ADR-MDS-KG-001"],
+      "acceptance_criteria": [
+        "Branch, commit, dirty paths, overlap rules, and excluded paths are reviewed before implementation.",
+        "No pre-existing change is reset, overwritten, deleted, or reformatted as a side effect."
+      ],
+      "verification": {
+        "commands": ["git status --short", "git diff --stat"],
+        "evidence": ["docs/implementation/knowledge-graph/repository-baseline.md", "docs/implementation/knowledge-graph/slice-1-evidence.md"]
+      },
+      "risks": ["The working tree may change after this draft baseline was captured."]
+    },
+    {
+      "id": "PM-TSK-MDS-KGRAPH-002",
+      "title": "Define graph contracts without creating a second ontology",
+      "lifecycle_state": "APPROVED",
+      "execution_state": "COMPLETED",
+      "owner_role": "ARCH",
+      "effort": 2,
+      "blocked_by": ["PM-TSK-MDS-KGRAPH-001"],
+      "linked_requirements": ["BA-REQ-MDS-KG-001"],
+      "linked_designs": ["ARCH-ADR-MDS-KG-001"],
+      "acceptance_criteria": [
+        "Contracts cover artifact nodes, canonical outbound edges, evidence, parse issues, graph issues, and index results.",
+        "Relationship types are consumed from canonical MDS policy rather than redefined as a competing list."
+      ],
+      "verification": {
+        "commands": ["npm.cmd run typecheck"],
+        "evidence": ["packages/core/domain/src/index.ts", "docs/implementation/knowledge-graph/slice-1-evidence.md"]
+      },
+      "risks": ["Canonical orphan and cycle semantics still require architect/KC clarification."]
+    },
+    {
+      "id": "PM-TSK-MDS-KGRAPH-003",
+      "title": "Parse current MDS frontmatter relationship forms",
+      "lifecycle_state": "APPROVED",
+      "execution_state": "COMPLETED",
+      "owner_role": "BE",
+      "effort": 3,
+      "blocked_by": ["PM-TSK-MDS-KGRAPH-002"],
+      "linked_requirements": ["BA-REQ-MDS-KG-001"],
+      "linked_designs": ["ARCH-ADR-MDS-KG-001"],
+      "acceptance_criteria": [
+        "Fixtures cover scalar metadata, list relationships, nested maps, and list-of-object links.",
+        "Malformed YAML is returned as a parse issue and is not silently truncated."
+      ],
+      "verification": {
+        "commands": ["npm.cmd run typecheck", "node tests/integration/graph-index.cjs --parser-only"],
+        "evidence": ["tests/fixtures/graph/", "docs/implementation/knowledge-graph/slice-1-evidence.md"]
+      },
+      "risks": ["Selecting a YAML dependency may modify the lockfile and requires review of packaging/security impact."]
+    },
+    {
+      "id": "PM-TSK-MDS-KGRAPH-004",
+      "title": "Normalize declared relationships to canonical outbound edges",
+      "lifecycle_state": "APPROVED",
+      "execution_state": "COMPLETED",
+      "owner_role": "BE",
+      "effort": 2,
+      "blocked_by": ["PM-TSK-MDS-KGRAPH-003"],
+      "linked_requirements": ["BA-REQ-MDS-KG-001"],
+      "linked_designs": ["ARCH-ADR-MDS-KG-001"],
+      "acceptance_criteria": [
+        "Supported input forms produce one normalized relationship structure.",
+        "No inverse alias such as implemented_by is persisted as a new relationship type."
+      ],
+      "verification": {
+        "commands": ["node tests/integration/graph-index.cjs --normalization-only"],
+        "evidence": ["packages/application/requirements/src/graph.ts", "docs/implementation/knowledge-graph/slice-1-evidence.md"]
+      },
+      "risks": ["Legacy metadata aliases may need an explicit compatibility decision."]
+    },
+    {
+      "id": "PM-TSK-MDS-KGRAPH-005",
+      "title": "Build a deterministic in-memory graph projection",
+      "lifecycle_state": "APPROVED",
+      "execution_state": "COMPLETED",
+      "owner_role": "BE",
+      "effort": 3,
+      "blocked_by": ["PM-TSK-MDS-KGRAPH-004"],
+      "linked_requirements": ["BA-REQ-MDS-KG-001"],
+      "linked_designs": ["ARCH-ADR-MDS-KG-001"],
+      "acceptance_criteria": [
+        "Valid unique artifacts become nodes and valid relationships become edges.",
+        "Equivalent inputs produce equivalent nodes, edges, and issue ordering.",
+        "The builder does not write source artifacts or introduce persistence."
+      ],
+      "verification": {
+        "commands": ["node tests/integration/graph-index.cjs --determinism"],
+        "evidence": ["packages/application/requirements/src/graph.ts", "tests/integration/graph-index.cjs"]
+      },
+      "risks": ["Unstable ordering can make rebuild evidence unreliable."]
+    },
+    {
+      "id": "PM-TSK-MDS-KGRAPH-006",
+      "title": "Retain source evidence for every graph edge",
+      "lifecycle_state": "APPROVED",
+      "execution_state": "COMPLETED",
+      "owner_role": "BE",
+      "effort": 2,
+      "blocked_by": ["PM-TSK-MDS-KGRAPH-005"],
+      "linked_requirements": ["BA-REQ-MDS-KG-001"],
+      "linked_designs": ["ARCH-ADR-MDS-KG-001"],
+      "acceptance_criteria": [
+        "Each edge identifies source path, YAML field path, raw target value, and origin.",
+        "Line positions are retained when the selected parser can provide them and otherwise reported as unavailable."
+      ],
+      "verification": {
+        "commands": ["node tests/integration/graph-index.cjs --evidence"],
+        "evidence": ["packages/application/requirements/src/graph.ts", "tests/integration/graph-index.cjs"]
+      },
+      "risks": ["Some YAML parsers discard source locations unless AST/document APIs are used."]
+    },
+    {
+      "id": "PM-TSK-MDS-KGRAPH-007",
+      "title": "Report duplicate IDs and broken references without discarding valid graph data",
+      "lifecycle_state": "APPROVED",
+      "execution_state": "COMPLETED",
+      "owner_role": "BE",
+      "effort": 2,
+      "blocked_by": ["PM-TSK-MDS-KGRAPH-005"],
+      "linked_requirements": ["BA-REQ-MDS-KG-001"],
+      "linked_designs": ["ARCH-ADR-MDS-KG-001"],
+      "acceptance_criteria": [
+        "Duplicate IDs and missing targets include actionable source evidence.",
+        "Valid unrelated nodes and edges remain in the projection when a non-fatal issue exists."
+      ],
+      "verification": {
+        "commands": ["node tests/integration/graph-index.cjs --integrity"],
+        "evidence": ["tests/integration/graph-index.cjs", "docs/implementation/knowledge-graph/slice-1-evidence.md"]
+      },
+      "risks": ["Duplicate-ID winner selection must be deterministic and must not imply approval."]
+    },
+    {
+      "id": "PM-TSK-MDS-KGRAPH-008",
+      "title": "Validate relationship policy and governed cycles",
+      "lifecycle_state": "APPROVED",
+      "execution_state": "COMPLETED",
+      "owner_role": "ARCH",
+      "effort": 3,
+      "blocked_by": ["PM-TSK-MDS-KGRAPH-005"],
+      "linked_requirements": ["BA-REQ-MDS-KG-001"],
+      "linked_designs": ["ARCH-ADR-MDS-KG-001"],
+      "acceptance_criteria": [
+        "Non-canonical relationship types are reported.",
+        "Cycle checks apply only to policy-governed DAG relationships and do not reject all reference cycles.",
+        "Unresolved orphan semantics are reported as unverified rather than invented."
+      ],
+      "verification": {
+        "commands": ["node tests/integration/graph-index.cjs --policy"],
+        "evidence": ["packages/application/requirements/src/graph.ts", "tests/integration/graph-index.cjs"]
+      },
+      "risks": ["Current policy names the primary lineage as a DAG but does not fully enumerate every cycle-permitted edge."]
+    },
+    {
+      "id": "PM-TSK-MDS-KGRAPH-009",
+      "title": "Demonstrate the graph projection on an isolated EduMeet seed copy",
+      "lifecycle_state": "APPROVED",
+      "execution_state": "COMPLETED",
+      "owner_role": "QA",
+      "effort": 2,
+      "blocked_by": [
+        "PM-TSK-MDS-KGRAPH-006",
+        "PM-TSK-MDS-KGRAPH-007",
+        "PM-TSK-MDS-KGRAPH-008"
+      ],
+      "linked_requirements": ["BA-REQ-MDS-KG-001"],
+      "linked_designs": ["ARCH-ADR-MDS-KG-001"],
+      "acceptance_criteria": [
+        "The test copies the seed to a temporary project and never modifies workspace source files.",
+        "The report includes deterministic node and edge counts.",
+        "The known missing target BA-REQ-EDU-AI-001 is reported with evidence."
+      ],
+      "verification": {
+        "commands": ["node tests/integration/graph-index.cjs", "git diff -- workspace/projects/active/edumeet"],
+        "evidence": ["tests/integration/graph-index.cjs", "docs/implementation/knowledge-graph/slice-1-evidence.md"]
+      },
+      "risks": ["Seed content may change; assertions should preserve intended behavior without hiding new issues."]
+    },
+    {
+      "id": "PM-TSK-MDS-KGRAPH-010",
+      "title": "Produce Slice 1 Definition of Done evidence for the next gate",
+      "lifecycle_state": "APPROVED",
+      "execution_state": "COMPLETED",
+      "owner_role": "PM",
+      "effort": 1,
+      "blocked_by": ["PM-TSK-MDS-KGRAPH-009"],
+      "linked_requirements": ["BA-REQ-MDS-KG-001"],
+      "linked_designs": ["ARCH-ADR-MDS-KG-001"],
+      "acceptance_criteria": [
+        "Fresh typecheck, build, parser, graph, policy, integration, and source-preservation evidence is recorded.",
+        "Unverified items, ontology incompatibilities, residual risks, and pre-existing changes remain visible.",
+        "The report requests a human decision and does not approve Slice 2 automatically."
+      ],
+      "verification": {
+        "commands": [
+          "npm.cmd run typecheck",
+          "npm.cmd run build",
+          "node tests/integration/graph-index.cjs",
+          "git status --short"
+        ],
+        "evidence": ["docs/implementation/knowledge-graph/slice-1-evidence.md"]
+      },
+      "risks": ["A green command is insufficient if evidence is not tied to the current commit and working tree."]
+    }
+  ]
+}

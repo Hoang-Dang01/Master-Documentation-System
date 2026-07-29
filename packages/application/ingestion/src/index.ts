@@ -2,6 +2,14 @@ import { createHash } from "node:crypto";
 import { promises as fs } from "node:fs";
 import path from "node:path";
 import mammoth from "mammoth";
+import {
+  assertSha256,
+  validateArtifactMetadata,
+  type ArtifactMetadata,
+} from "@mds/domain";
+
+const MAX_SOURCE_BYTES = 10 * 1024 * 1024;
+const MAX_EXTRACTED_TEXT_BYTES = 5 * 1024 * 1024;
 
 export type ArtifactSummary = {
   id: string;
@@ -24,6 +32,20 @@ export type ImportedDocument = {
   requirementRelativePath: string;
 };
 
+export class DuplicateSourceError extends Error {
+  readonly code = "DUPLICATE_SOURCE";
+
+  constructor(
+    readonly checksum: string,
+    readonly existingRelativePath: string,
+  ) {
+    super(
+      `Tài liệu này đã được nhập trước đó tại ${existingRelativePath}.`,
+    );
+    this.name = "DuplicateSourceError";
+  }
+}
+
 const FRONTMATTER_PATTERN = /^---\s*\r?\n([\s\S]*?)\r?\n---\s*\r?\n/;
 
 function parseFrontmatter(content: string): Record<string, string> | null {
@@ -44,6 +66,34 @@ function parseFrontmatter(content: string): Record<string, string> | null {
     if (value) metadata[key] = value;
   }
   return metadata;
+}
+
+function assertSafeSourceBuffer(
+  sourcePath: string,
+  extension: string,
+  sourceBuffer: Buffer,
+): void {
+  if (sourceBuffer.byteLength === 0) {
+    throw new Error("Tài liệu rỗng.");
+  }
+  if (sourceBuffer.byteLength > MAX_SOURCE_BYTES) {
+    throw new Error("Tài liệu vượt quá giới hạn 10 MB.");
+  }
+
+  if (
+    extension === ".docx" &&
+    !(sourceBuffer[0] === 0x50 && sourceBuffer[1] === 0x4b)
+  ) {
+    throw new Error("File DOCX không có chữ ký ZIP hợp lệ.");
+  }
+
+  if (extension !== ".docx" && sourceBuffer.includes(0)) {
+    throw new Error("File văn bản chứa byte nhị phân không hợp lệ.");
+  }
+
+  if (sourcePath.trim().length === 0) {
+    throw new Error("Đường dẫn nguồn không hợp lệ.");
+  }
 }
 
 function slugify(value: string): string {
@@ -154,6 +204,21 @@ async function extractText(sourcePath: string): Promise<string> {
   return (await fs.readFile(sourcePath, "utf8")).trim();
 }
 
+async function findDuplicateSource(
+  projectPath: string,
+  checksum: string,
+): Promise<string | null> {
+  const files = await walkMarkdown(projectPath);
+  for (const filePath of files) {
+    const content = await fs.readFile(filePath, "utf8");
+    const metadata = parseFrontmatter(content);
+    if (metadata?.source_checksum_sha256 === checksum) {
+      return path.relative(projectPath, filePath).replaceAll("\\", "/");
+    }
+  }
+  return null;
+}
+
 function extractCandidateRequirements(text: string): string[] {
   const candidates = text
     .split(/\r?\n|(?<=[.!?])\s+/)
@@ -177,6 +242,16 @@ export async function listProjectArtifacts(
     const content = await fs.readFile(filePath, "utf8");
     const metadata = parseFrontmatter(content);
     if (!metadata?.title) continue;
+    const relativePath = path
+      .relative(safeProjectPath, filePath)
+      .replaceAll("\\", "/");
+    const metadataErrors = validateArtifactMetadata(
+      metadata as ArtifactMetadata,
+      relativePath,
+    );
+    if (metadataErrors.length > 0) {
+      throw new Error(`Artifact metadata không hợp lệ:\n${metadataErrors.join("\n")}`);
+    }
     const stat = await fs.stat(filePath);
     artifacts.push({
       id: metadata.id ?? "NO-ID",
@@ -187,9 +262,7 @@ export async function listProjectArtifacts(
       version: metadata.version ?? "0.1.0",
       owner: metadata.owner ?? "unassigned",
       fileName: path.basename(filePath),
-      relativePath: path
-        .relative(safeProjectPath, filePath)
-        .replaceAll("\\", "/"),
+      relativePath,
       updatedAt: stat.mtime.toISOString(),
     });
   }
@@ -211,10 +284,19 @@ export async function importDocument(
   }
 
   const sourceBuffer = await fs.readFile(sourcePath);
+  assertSafeSourceBuffer(sourcePath, extension, sourceBuffer);
   const checksum = createHash("sha256").update(sourceBuffer).digest("hex");
+  assertSha256(checksum, "source checksum");
+  const duplicatePath = await findDuplicateSource(safeProjectPath, checksum);
+  if (duplicatePath) {
+    throw new DuplicateSourceError(checksum, duplicatePath);
+  }
   const extractedText = await extractText(sourcePath);
   if (!extractedText) {
     throw new Error("Tài liệu không có nội dung văn bản để nhập.");
+  }
+  if (Buffer.byteLength(extractedText, "utf8") > MAX_EXTRACTED_TEXT_BYTES) {
+    throw new Error("Nội dung sau khi trích xuất vượt quá giới hạn 5 MB.");
   }
 
   const originalTitle = humanizeFileName(sourcePath);

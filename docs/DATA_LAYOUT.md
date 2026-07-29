@@ -40,6 +40,12 @@ The first run creates the data directories and copies the repository's
 `workspace/projects/active/edumeet/` seed only when the external data folder
 does not already contain that project. Existing user data is never replaced.
 
+The Electron main process can also save the selected data-root path in
+`app.getPath("userData")/settings.json`. Provider secrets, when configured,
+are encrypted with Electron `safeStorage` in
+`app.getPath("userData")/secrets.json`; plaintext keys are never written to
+the workspace or repository.
+
 ## Project-owned data
 
 Each project remains self-contained under `projects/active/<project-id>/`:
@@ -70,4 +76,3 @@ The Electron main process resolves the data root once at startup. Renderer code
 only receives the selected project path through the preload bridge. Parsers,
 workflow code and persistence adapters must never assume that the repository
 contains the user's runtime data.
-

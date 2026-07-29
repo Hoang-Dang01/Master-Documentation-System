@@ -7,6 +7,8 @@ const node_path_1 = __importDefault(require("node:path"));
 const node_fs_1 = require("node:fs");
 const electron_1 = require("electron");
 const document_ingestion_1 = require("@mds/document-ingestion");
+const requirements_1 = require("@mds/requirements");
+const workflow_engine_1 = require("@mds/workflow-engine");
 const repositoryRoot = node_path_1.default.resolve(__dirname, "..", "..", "..", "..");
 const seedWorkspaceRoot = node_path_1.default.join(repositoryRoot, "workspace");
 const isSmokeTest = process.env.MDS_SMOKE_TEST === "1";
@@ -15,14 +17,45 @@ let dataRootPath = "";
 let activeProjectsRoot = "";
 let defaultWorkspacePath = "";
 let mainWindow = null;
-function resolveDataRoot() {
+function settingsPath() {
+    return node_path_1.default.join(electron_1.app.getPath("userData"), "settings.json");
+}
+function secretsPath() {
+    return node_path_1.default.join(electron_1.app.getPath("userData"), "secrets.json");
+}
+async function readJson(filePath, fallback) {
+    try {
+        return JSON.parse(await node_fs_1.promises.readFile(filePath, "utf8"));
+    }
+    catch {
+        return fallback;
+    }
+}
+async function writeJsonAtomic(filePath, value) {
+    await node_fs_1.promises.mkdir(node_path_1.default.dirname(filePath), { recursive: true });
+    const temporaryPath = `${filePath}.${process.pid}.tmp`;
+    await node_fs_1.promises.writeFile(temporaryPath, `${JSON.stringify(value, null, 2)}\n`, "utf8");
+    await node_fs_1.promises.rename(temporaryPath, filePath);
+}
+async function readSettings() {
+    return readJson(settingsPath(), {});
+}
+async function saveSettings(patch) {
+    const settings = { ...(await readSettings()), ...patch };
+    await writeJsonAtomic(settingsPath(), settings);
+    return settings;
+}
+async function resolveDataRoot() {
     const configuredRoot = process.env.MDS_DATA_DIR?.trim();
-    return configuredRoot
-        ? node_path_1.default.resolve(configuredRoot)
+    if (configuredRoot)
+        return node_path_1.default.resolve(configuredRoot);
+    const settings = await readSettings();
+    return settings.dataRootPath
+        ? node_path_1.default.resolve(settings.dataRootPath)
         : node_path_1.default.join(electron_1.app.getPath("documents"), "MDS-Workspace");
 }
 async function ensureDataWorkspace() {
-    dataRootPath = resolveDataRoot();
+    dataRootPath = await resolveDataRoot();
     activeProjectsRoot = node_path_1.default.join(dataRootPath, "projects", "active");
     defaultWorkspacePath = node_path_1.default.join(activeProjectsRoot, "edumeet");
     await Promise.all([
@@ -77,10 +110,33 @@ function registerIpcHandlers() {
             defaultPath: defaultWorkspacePath,
             properties: ["openDirectory", "createDirectory"]
         });
+        if (!result.canceled && result.filePaths[0]) {
+            const selectedPath = node_path_1.default.resolve(result.filePaths[0]);
+            const activeMarker = `${node_path_1.default.sep}projects${node_path_1.default.sep}active${node_path_1.default.sep}`;
+            const markerIndex = selectedPath.toLowerCase().indexOf(activeMarker.toLowerCase());
+            if (markerIndex >= 0) {
+                await saveSettings({
+                    dataRootPath: selectedPath.slice(0, markerIndex),
+                });
+            }
+        }
         return {
             canceled: result.canceled,
             path: result.canceled ? null : result.filePaths[0] ?? null
         };
+    });
+    electron_1.ipcMain.handle("workspace:choose-data-root", async () => {
+        const result = await electron_1.dialog.showOpenDialog({
+            title: "Chọn thư mục dữ liệu MDS",
+            defaultPath: dataRootPath,
+            properties: ["openDirectory", "createDirectory"],
+        });
+        if (result.canceled || !result.filePaths[0]) {
+            return { canceled: true, dataRootPath };
+        }
+        await saveSettings({ dataRootPath: node_path_1.default.resolve(result.filePaths[0]) });
+        await ensureDataWorkspace();
+        return { canceled: false, dataRootPath };
     });
     electron_1.ipcMain.handle("workspace:open", async (_event, workspacePath) => {
         if (typeof workspacePath !== "string" || workspacePath.trim().length === 0) {
@@ -113,6 +169,82 @@ function registerIpcHandlers() {
         }
         const imported = await (0, document_ingestion_1.importDocument)(result.filePaths[0], projectPath, activeProjectsRoot);
         return { canceled: false, document: imported };
+    });
+    electron_1.ipcMain.handle("requirement:review", async (_event, projectPath, relativePath, decision, actor, reason) => {
+        if (typeof projectPath !== "string" ||
+            typeof relativePath !== "string" ||
+            (decision !== "APPROVED" && decision !== "REJECTED")) {
+            throw new Error("Review request không hợp lệ.");
+        }
+        return (0, requirements_1.reviewRequirement)(projectPath, activeProjectsRoot, relativePath, decision, typeof actor === "string" ? actor : "human", typeof reason === "string" ? reason : "");
+    });
+    electron_1.ipcMain.handle("impact:create", async (_event, projectPath, requirementPath) => {
+        if (typeof projectPath !== "string" ||
+            typeof requirementPath !== "string") {
+            throw new Error("Impact request không hợp lệ.");
+        }
+        return (0, requirements_1.createImpactReport)(projectPath, activeProjectsRoot, requirementPath);
+    });
+    electron_1.ipcMain.handle("workflow:start", async (_event, projectPath, workflowId, stepIds) => {
+        if (typeof projectPath !== "string" ||
+            typeof workflowId !== "string" ||
+            !Array.isArray(stepIds) ||
+            !stepIds.every((stepId) => typeof stepId === "string")) {
+            throw new Error("Workflow start request không hợp lệ.");
+        }
+        return (0, workflow_engine_1.startWorkflow)({
+            projectPath,
+            activeProjectsRoot,
+            project: node_path_1.default.basename(projectPath),
+            workflowId,
+            stepIds,
+        });
+    });
+    electron_1.ipcMain.handle("workflow:advance", async (_event, projectPath, runId, outcome, error) => {
+        if (typeof projectPath !== "string" ||
+            typeof runId !== "string" ||
+            (outcome !== "COMPLETED" &&
+                outcome !== "WAITING_APPROVAL" &&
+                outcome !== "FAILED")) {
+            throw new Error("Workflow advance request không hợp lệ.");
+        }
+        return (0, workflow_engine_1.advanceWorkflow)(projectPath, activeProjectsRoot, runId, outcome, typeof error === "string" ? error : undefined);
+    });
+    electron_1.ipcMain.handle("settings:save-provider-secret", async (_event, provider, secret) => {
+        if (typeof provider !== "string" ||
+            !/^[a-z0-9-]{2,32}$/i.test(provider) ||
+            typeof secret !== "string" ||
+            secret.trim().length === 0) {
+            throw new Error("Provider secret không hợp lệ.");
+        }
+        if (!electron_1.safeStorage.isEncryptionAvailable()) {
+            throw new Error("OS secure storage chưa khả dụng trên máy này.");
+        }
+        const secrets = await readJson(secretsPath(), {});
+        secrets[provider.toLowerCase()] = electron_1.safeStorage
+            .encryptString(secret)
+            .toString("base64");
+        await writeJsonAtomic(secretsPath(), secrets);
+        return { ok: true };
+    });
+    electron_1.ipcMain.handle("settings:provider-secret-status", async (_event, provider) => {
+        if (typeof provider !== "string") {
+            throw new Error("Provider không hợp lệ.");
+        }
+        const secrets = await readJson(secretsPath(), {});
+        return {
+            configured: Boolean(secrets[provider.toLowerCase()]),
+            secureStorageAvailable: electron_1.safeStorage.isEncryptionAvailable(),
+        };
+    });
+    electron_1.ipcMain.handle("settings:delete-provider-secret", async (_event, provider) => {
+        if (typeof provider !== "string") {
+            throw new Error("Provider không hợp lệ.");
+        }
+        const secrets = await readJson(secretsPath(), {});
+        delete secrets[provider.toLowerCase()];
+        await writeJsonAtomic(secretsPath(), secrets);
+        return { ok: true };
     });
     electron_1.ipcMain.handle("artifact:open", async (_event, projectPath, relativeArtifactPath) => {
         if (typeof projectPath !== "string" ||
@@ -174,7 +306,12 @@ function createMainWindow() {
           bridgeReady: Boolean(
             window.mds?.getAppInfo &&
             window.mds?.listArtifacts &&
-            window.mds?.importDocument
+            window.mds?.importDocument &&
+            window.mds?.reviewRequirement &&
+            window.mds?.createImpactReport &&
+            window.mds?.startWorkflow &&
+            window.mds?.chooseDataRoot &&
+            window.mds?.providerSecretStatus
           ),
           rootReady: Boolean(document.querySelector("#root")?.children.length)
         })

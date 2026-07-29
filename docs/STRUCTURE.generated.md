@@ -257,7 +257,12 @@ Master-Documentation-System/
 │   │   ├── knowledge-base/
 │   │   │   └── .gitkeep
 │   │   ├── requirements/
-│   │   │   └── .gitkeep
+│   │   │   ├── dist/  [generated contents omitted]
+│   │   │   ├── src/
+│   │   │   │   └── index.ts
+│   │   │   ├── .gitkeep
+│   │   │   ├── package.json
+│   │   │   └── tsconfig.json
 │   │   ├── .gitkeep
 │   │   └── README.md
 │   ├── core/
@@ -266,7 +271,12 @@ Master-Documentation-System/
 │   │   ├── audit/
 │   │   │   └── .gitkeep
 │   │   ├── domain/
-│   │   │   └── .gitkeep
+│   │   │   ├── dist/  [generated contents omitted]
+│   │   │   ├── src/
+│   │   │   │   └── index.ts
+│   │   │   ├── .gitkeep
+│   │   │   ├── package.json
+│   │   │   └── tsconfig.json
 │   │   ├── validation/
 │   │   │   └── .gitkeep
 │   │   └── README.md
@@ -286,8 +296,13 @@ Master-Documentation-System/
 │   ├── workflow-engine/
 │   │   ├── automation-registry/
 │   │   │   └── .gitkeep
+│   │   ├── dist/  [generated contents omitted]
+│   │   ├── src/
+│   │   │   └── index.ts
 │   │   ├── .gitkeep
-│   │   └── README.md
+│   │   ├── package.json
+│   │   ├── README.md
+│   │   └── tsconfig.json
 │   └── README.md
 ├── scripts/
 │   ├── automation/
@@ -931,7 +946,9 @@ Master-Documentation-System/
 │   │   └── mds-project-management-cycle.json
 │   ├── integration/
 │   │   ├── .gitkeep
-│   │   └── document-import.cjs
+│   │   ├── document-import.cjs
+│   │   ├── requirements-review.cjs
+│   │   └── workflow-runtime.cjs
 │   └── README.md
 ├── workflows/
 │   ├── definitions/

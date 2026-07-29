@@ -1,17 +1,13 @@
 {
-  "name": "@mds/document-ingestion",
+  "name": "@mds/domain",
   "version": "0.1.0",
   "private": true,
-  "description": "Local document import, normalization, preservation, and draft requirement extraction",
+  "description": "MDS runtime domain contracts and invariant helpers",
   "main": "dist/index.js",
-  "types": "src/index.ts",
+  "types": "dist/index.d.ts",
   "scripts": {
     "build": "tsc -p tsconfig.json",
     "typecheck": "tsc -p tsconfig.json --noEmit"
-  },
-  "dependencies": {
-    "@mds/domain": "*",
-    "mammoth": "^1.12.0"
   },
   "devDependencies": {
     "@types/node": "^26.1.1",

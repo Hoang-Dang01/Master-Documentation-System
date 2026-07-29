@@ -1,17 +1,16 @@
 {
-  "name": "@mds/document-ingestion",
+  "name": "@mds/requirements",
   "version": "0.1.0",
   "private": true,
-  "description": "Local document import, normalization, preservation, and draft requirement extraction",
+  "description": "MDS requirement review, approval, audit, and deterministic impact use cases",
   "main": "dist/index.js",
-  "types": "src/index.ts",
+  "types": "dist/index.d.ts",
   "scripts": {
     "build": "tsc -p tsconfig.json",
     "typecheck": "tsc -p tsconfig.json --noEmit"
   },
   "dependencies": {
-    "@mds/domain": "*",
-    "mammoth": "^1.12.0"
+    "@mds/domain": "*"
   },
   "devDependencies": {
     "@types/node": "^26.1.1",

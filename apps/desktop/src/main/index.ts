@@ -1,10 +1,25 @@
 import path from "node:path";
 import { promises as fs } from "node:fs";
-import { app, BrowserWindow, dialog, ipcMain, shell } from "electron";
+import {
+  app,
+  BrowserWindow,
+  dialog,
+  ipcMain,
+  safeStorage,
+  shell,
+} from "electron";
 import {
   importDocument,
   listProjectArtifacts
 } from "@mds/document-ingestion";
+import {
+  createImpactReport,
+  reviewRequirement,
+} from "@mds/requirements";
+import {
+  advanceWorkflow,
+  startWorkflow,
+} from "@mds/workflow-engine";
 
 const repositoryRoot = path.resolve(__dirname, "..", "..", "..", "..");
 const seedWorkspaceRoot = path.join(repositoryRoot, "workspace");
@@ -15,15 +30,58 @@ let activeProjectsRoot = "";
 let defaultWorkspacePath = "";
 let mainWindow: BrowserWindow | null = null;
 
-function resolveDataRoot(): string {
+type AppSettings = {
+  dataRootPath?: string;
+  provider?: string;
+  model?: string;
+};
+
+type StoredSecrets = Record<string, string>;
+
+function settingsPath(): string {
+  return path.join(app.getPath("userData"), "settings.json");
+}
+
+function secretsPath(): string {
+  return path.join(app.getPath("userData"), "secrets.json");
+}
+
+async function readJson<T>(filePath: string, fallback: T): Promise<T> {
+  try {
+    return JSON.parse(await fs.readFile(filePath, "utf8")) as T;
+  } catch {
+    return fallback;
+  }
+}
+
+async function writeJsonAtomic(filePath: string, value: unknown): Promise<void> {
+  await fs.mkdir(path.dirname(filePath), { recursive: true });
+  const temporaryPath = `${filePath}.${process.pid}.tmp`;
+  await fs.writeFile(temporaryPath, `${JSON.stringify(value, null, 2)}\n`, "utf8");
+  await fs.rename(temporaryPath, filePath);
+}
+
+async function readSettings(): Promise<AppSettings> {
+  return readJson<AppSettings>(settingsPath(), {});
+}
+
+async function saveSettings(patch: Partial<AppSettings>): Promise<AppSettings> {
+  const settings = { ...(await readSettings()), ...patch };
+  await writeJsonAtomic(settingsPath(), settings);
+  return settings;
+}
+
+async function resolveDataRoot(): Promise<string> {
   const configuredRoot = process.env.MDS_DATA_DIR?.trim();
-  return configuredRoot
-    ? path.resolve(configuredRoot)
+  if (configuredRoot) return path.resolve(configuredRoot);
+  const settings = await readSettings();
+  return settings.dataRootPath
+    ? path.resolve(settings.dataRootPath)
     : path.join(app.getPath("documents"), "MDS-Workspace");
 }
 
 async function ensureDataWorkspace(): Promise<void> {
-  dataRootPath = resolveDataRoot();
+  dataRootPath = await resolveDataRoot();
   activeProjectsRoot = path.join(dataRootPath, "projects", "active");
   defaultWorkspacePath = path.join(activeProjectsRoot, "edumeet");
 
@@ -89,10 +147,36 @@ function registerIpcHandlers(): void {
       properties: ["openDirectory", "createDirectory"]
     });
 
+    if (!result.canceled && result.filePaths[0]) {
+      const selectedPath = path.resolve(result.filePaths[0]);
+      const activeMarker = `${path.sep}projects${path.sep}active${path.sep}`;
+      const markerIndex = selectedPath.toLowerCase().indexOf(
+        activeMarker.toLowerCase(),
+      );
+      if (markerIndex >= 0) {
+        await saveSettings({
+          dataRootPath: selectedPath.slice(0, markerIndex),
+        });
+      }
+    }
     return {
       canceled: result.canceled,
       path: result.canceled ? null : result.filePaths[0] ?? null
     };
+  });
+
+  ipcMain.handle("workspace:choose-data-root", async () => {
+    const result = await dialog.showOpenDialog({
+      title: "Chọn thư mục dữ liệu MDS",
+      defaultPath: dataRootPath,
+      properties: ["openDirectory", "createDirectory"],
+    });
+    if (result.canceled || !result.filePaths[0]) {
+      return { canceled: true, dataRootPath };
+    }
+    await saveSettings({ dataRootPath: path.resolve(result.filePaths[0]) });
+    await ensureDataWorkspace();
+    return { canceled: false, dataRootPath };
   });
 
   ipcMain.handle("workspace:open", async (_event, workspacePath: unknown) => {
@@ -137,6 +221,150 @@ function registerIpcHandlers(): void {
     );
     return { canceled: false, document: imported };
   });
+
+  ipcMain.handle(
+    "requirement:review",
+    async (
+      _event,
+      projectPath: unknown,
+      relativePath: unknown,
+      decision: unknown,
+      actor: unknown,
+      reason: unknown,
+    ) => {
+      if (
+        typeof projectPath !== "string" ||
+        typeof relativePath !== "string" ||
+        (decision !== "APPROVED" && decision !== "REJECTED")
+      ) {
+        throw new Error("Review request không hợp lệ.");
+      }
+      return reviewRequirement(
+        projectPath,
+        activeProjectsRoot,
+        relativePath,
+        decision,
+        typeof actor === "string" ? actor : "human",
+        typeof reason === "string" ? reason : "",
+      );
+    },
+  );
+
+  ipcMain.handle(
+    "impact:create",
+    async (_event, projectPath: unknown, requirementPath: unknown) => {
+      if (
+        typeof projectPath !== "string" ||
+        typeof requirementPath !== "string"
+      ) {
+        throw new Error("Impact request không hợp lệ.");
+      }
+      return createImpactReport(
+        projectPath,
+        activeProjectsRoot,
+        requirementPath,
+      );
+    },
+  );
+
+  ipcMain.handle(
+    "workflow:start",
+    async (_event, projectPath: unknown, workflowId: unknown, stepIds: unknown) => {
+      if (
+        typeof projectPath !== "string" ||
+        typeof workflowId !== "string" ||
+        !Array.isArray(stepIds) ||
+        !stepIds.every((stepId) => typeof stepId === "string")
+      ) {
+        throw new Error("Workflow start request không hợp lệ.");
+      }
+      return startWorkflow({
+        projectPath,
+        activeProjectsRoot,
+        project: path.basename(projectPath),
+        workflowId,
+        stepIds,
+      });
+    },
+  );
+
+  ipcMain.handle(
+    "workflow:advance",
+    async (
+      _event,
+      projectPath: unknown,
+      runId: unknown,
+      outcome: unknown,
+      error: unknown,
+    ) => {
+      if (
+        typeof projectPath !== "string" ||
+        typeof runId !== "string" ||
+        (outcome !== "COMPLETED" &&
+          outcome !== "WAITING_APPROVAL" &&
+          outcome !== "FAILED")
+      ) {
+        throw new Error("Workflow advance request không hợp lệ.");
+      }
+      return advanceWorkflow(
+        projectPath,
+        activeProjectsRoot,
+        runId,
+        outcome,
+        typeof error === "string" ? error : undefined,
+      );
+    },
+  );
+
+  ipcMain.handle(
+    "settings:save-provider-secret",
+    async (_event, provider: unknown, secret: unknown) => {
+      if (
+        typeof provider !== "string" ||
+        !/^[a-z0-9-]{2,32}$/i.test(provider) ||
+        typeof secret !== "string" ||
+        secret.trim().length === 0
+      ) {
+        throw new Error("Provider secret không hợp lệ.");
+      }
+      if (!safeStorage.isEncryptionAvailable()) {
+        throw new Error("OS secure storage chưa khả dụng trên máy này.");
+      }
+      const secrets = await readJson<StoredSecrets>(secretsPath(), {});
+      secrets[provider.toLowerCase()] = safeStorage
+        .encryptString(secret)
+        .toString("base64");
+      await writeJsonAtomic(secretsPath(), secrets);
+      return { ok: true };
+    },
+  );
+
+  ipcMain.handle(
+    "settings:provider-secret-status",
+    async (_event, provider: unknown) => {
+      if (typeof provider !== "string") {
+        throw new Error("Provider không hợp lệ.");
+      }
+      const secrets = await readJson<StoredSecrets>(secretsPath(), {});
+      return {
+        configured: Boolean(secrets[provider.toLowerCase()]),
+        secureStorageAvailable: safeStorage.isEncryptionAvailable(),
+      };
+    },
+  );
+
+  ipcMain.handle(
+    "settings:delete-provider-secret",
+    async (_event, provider: unknown) => {
+      if (typeof provider !== "string") {
+        throw new Error("Provider không hợp lệ.");
+      }
+      const secrets = await readJson<StoredSecrets>(secretsPath(), {});
+      delete secrets[provider.toLowerCase()];
+      await writeJsonAtomic(secretsPath(), secrets);
+      return { ok: true };
+    },
+  );
 
   ipcMain.handle(
     "artifact:open",
@@ -217,7 +445,12 @@ function createMainWindow(): BrowserWindow {
           bridgeReady: Boolean(
             window.mds?.getAppInfo &&
             window.mds?.listArtifacts &&
-            window.mds?.importDocument
+            window.mds?.importDocument &&
+            window.mds?.reviewRequirement &&
+            window.mds?.createImpactReport &&
+            window.mds?.startWorkflow &&
+            window.mds?.chooseDataRoot &&
+            window.mds?.providerSecretStatus
           ),
           rootReady: Boolean(document.querySelector("#root")?.children.length)
         })

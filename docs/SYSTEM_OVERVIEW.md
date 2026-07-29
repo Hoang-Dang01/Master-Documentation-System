@@ -53,8 +53,14 @@ bản hiện tại.
 
 ### Human approval
 
-Output sinh tự động bắt đầu ở trạng thái `DRAFT`. Requirement, impact report,
-thiết kế và thay đổi đã approved không được tự động trở thành quyết định cuối.
+Mọi output sinh tự động phải bắt đầu ở trạng thái `DRAFT`. Requirement, impact
+report, thiết kế và thay đổi chỉ trở thành nguồn chính thức sau khi được người
+có thẩm quyền phê duyệt. AI và automation không được tự chuyển artifact sang
+`APPROVED`.
+
+Lifecycle canonical hiện tại gồm `DRAFT`, `REVIEW`, `APPROVED`, `DEPRECATED`
+và `ARCHIVED`. Các trạng thái như `REJECTED` hoặc `SUPERSEDED` chỉ được thêm
+sau khi schema, validator và migration rule được cập nhật đồng bộ.
 
 ### Traceability
 
@@ -77,6 +83,11 @@ Sinh Requirement DRAFT
 Hiển thị và mở artifact từ desktop app
 ```
 
+Requirement DRAFT trong vertical slice hiện tại được tạo bằng logic
+deterministic first-pass: nội dung được tách theo dòng/câu, lọc theo độ dài và
+đưa vào template requirement. AI chưa tham gia runtime và không có mock AI
+đứng sau kết quả này.
+
 Đã có:
 
 - Electron shell, preload bridge và React renderer.
@@ -92,13 +103,34 @@ Hiển thị và mở artifact từ desktop app
 Chưa hoàn thiện:
 
 - Màn hình chỉnh sửa và approve/reject requirement.
-- Approval history và audit trail chạy thật.
-- Impact analysis.
-- Workflow executor có persistence, retry và resume.
+- Approval history/audit trail dạng file-based đã có; UI và persistence SQLite
+  vẫn chưa có.
+- Deterministic impact report đã có; impact analysis có AI hỗ trợ vẫn chưa có.
+- Workflow state machine có persistence/resume tối thiểu; YAML executor đầy đủ,
+  retry policy và orchestration các step thật vẫn chưa có.
 - AI provider adapter.
 - SQLite runtime.
-- Secure API-key storage.
+- Settings UI để chọn workspace và cấu hình provider.
+- Production input hardening đầy đủ (MIME/signature nâng cao, archive bomb).
 - Installer và portable executable.
+
+### Definition of Done cho vertical slice import
+
+Vertical slice import chỉ được coi là hoàn thành khi toàn bộ checklist này đạt:
+
+- [x] Import DOCX, Markdown và TXT thành công.
+- [x] File nguồn được sao chép nguyên byte sang project `sources/`.
+- [x] SHA-256 được tính và lưu trong normalized source artifact.
+- [x] Requirement DRAFT có `source_artifact` và quan hệ truy vết về nguồn.
+- [x] Đóng/mở lại app vẫn liệt kê được artifact từ filesystem.
+- [x] Runtime import ghi vào `MDS_DATA_DIR`, không ghi vào source repository.
+- [x] Import lại cùng một file được phát hiện bằng checksum và yêu cầu người
+  dùng quyết định thay vì âm thầm tạo bản sao.
+- [x] Artifact runtime có metadata sai bị validator từ chối trước khi đi tiếp.
+- [x] Build, typecheck, document validation và ingestion integration test pass.
+
+Hai mục chưa đạt là điều kiện còn thiếu của import slice, không được xem là
+feature đã hoàn thành.
 
 ## 4. Kiến trúc logic
 
@@ -287,6 +319,26 @@ Có thể đổi bằng:
 $env:MDS_DATA_DIR = "D:\MDS-Workspace"
 ```
 
+`MDS_DATA_DIR` hiện là override dành cho development, automation và người dùng
+kỹ thuật. Main process đã có API chọn data root và ghi nhớ lựa chọn trong
+`app.getPath("userData")/settings.json`; Settings UI chưa nối vào API này.
+
+Trải nghiệm production:
+
+```text
+Lần mở đầu
+→ người dùng chọn thư mục workspace
+
+App ghi nhớ lựa chọn
+→ app settings trong userData
+
+Các lần mở sau
+→ dùng lại workspace đã chọn
+
+MDS_DATA_DIR
+→ vẫn có quyền override cho development/automation
+```
+
 Chi tiết nằm tại [`DATA_LAYOUT.md`](DATA_LAYOUT.md).
 
 ## 11. Bảo mật và dữ liệu
@@ -303,8 +355,40 @@ Các đường dẫn project được kiểm tra để chỉ thao tác trong act
 Artifact path được resolve và kiểm tra trước khi mở. Source được giữ cùng
 checksum để hỗ trợ truy vết.
 
-API-key storage chưa được triển khai. Cho đến khi có secure storage, không lưu
-API key trong repository, project artifact hoặc file YAML của workspace.
+DOCX, Markdown và TXT nhập từ bên ngoài luôn là **untrusted input**. Nội dung
+tài liệu là dữ liệu cần phân tích, không có quyền thay đổi system instruction,
+approval policy, tool permission hoặc security boundary.
+
+Kiểm soát đã có:
+
+- Chỉ chấp nhận extension `.docx`, `.md` và `.txt`.
+- Resolve và kiểm tra project/artifact path để chặn path traversal ra ngoài
+  active projects root.
+- DOCX được trích xuất dưới dạng raw text bằng Mammoth; không render HTML hoặc
+  thực thi macro/nội dung nhúng.
+- React hiển thị preview như text, không inject HTML từ tài liệu.
+- File nguồn được giữ cùng SHA-256 để kiểm tra provenance.
+
+Kiểm soát còn phải bổ sung trước khi nhận tài liệu không tin cậy ở production:
+
+- Giới hạn dung lượng file và kích thước nội dung sau giải nén.
+- Kiểm tra MIME/file signature thay vì chỉ dựa vào extension.
+- Từ chối DOCX lỗi, encrypted file, archive bomb và payload nhúng bất thường.
+- Không cho Markdown hoặc nội dung nhúng thực thi script.
+- Không tự mở link hoặc gọi network từ nội dung tài liệu.
+- Khi tích hợp AI, đóng gói tài liệu trong data boundary rõ ràng và coi mọi câu
+  như “bỏ qua rule”, “gửi project lên mạng” hoặc “gọi tool” là prompt injection,
+  không phải instruction hợp lệ.
+- Không gửi nội dung ra AI provider nếu người dùng chưa chọn provider và chấp
+  thuận phạm vi dữ liệu được gửi.
+
+Provider secret được mã hóa bằng Electron `safeStorage` và lưu trong
+`app.getPath("userData")/secrets.json`; preload chỉ expose thao tác save/status/
+delete, không expose plaintext secret cho renderer. Nếu OS secure storage không
+khả dụng, MDS từ chối lưu secret.
+
+AI provider adapter và Settings UI chưa hoàn thiện. Không lưu API key trong
+repository, project artifact hoặc file YAML của workspace.
 
 ## 12. Cách chạy
 
@@ -334,6 +418,15 @@ npm.cmd run test:ingestion
 npm.cmd run smoke
 ```
 
+### Mục tiêu phân phối
+
+| Đối tượng | Hình thức | Trạng thái |
+|---|---|---|
+| Developer | `git clone` → `npm install` → `npm run dev` | Đã dùng được |
+| Người dùng thông thường | `MDS-Setup.exe` | Chưa triển khai |
+| Portable | `MDS-Portable.exe` | Chưa triển khai |
+| Server trung tâm | Không bắt buộc | Không thuộc dependency runtime |
+
 ## 13. Ưu tiên phát triển tiếp theo
 
 Không cần tái cấu trúc lớn hoặc rename thêm thư mục. Thứ tự ưu tiên:
@@ -357,4 +450,3 @@ Import DOCX
 → Persisted artifact
 → Impact report
 ```
-
