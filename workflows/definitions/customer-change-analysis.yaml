@@ -1,6 +1,26 @@
 id: customer-change-analysis
 name: Customer Change Analysis
-version: 0.1.0
+version: 1.0.0
+lifecycle_state: APPROVED
+approved_by: human-project-authority
+approved_at: 2026-08-14
+
+authority:
+  product_boundary: BA-REQ-MDS-FOUND-001@1.0.0
+  artifact_truth: BA-REQ-MDS-TRUTH-001@1.0.0
+  architecture: ARCH-ADR-MDS-FOUND-001@1.0.0
+  truth_standard: mds-core/standards/artifact_truth.md
+
+boundary:
+  terminates_at: implementation-context-package
+  managed_project_source_access: READ_ONLY_EVIDENCE
+  forbidden_actions:
+    - modify-managed-project-source
+    - modify-managed-project-test-code
+    - create-managed-project-commit
+    - merge-managed-project-pull-request
+    - deploy-managed-project
+    - auto-approve-artifact
 
 trigger:
   type: manual
@@ -8,6 +28,13 @@ trigger:
 inputs:
   - source_documents
   - target_project
+  - human_approver
+  - change_reason
+
+optional_inputs:
+  - target_lineage_id
+  - repository_evidence
+  - test_evidence
 
 steps:
   - id: parse-documents
@@ -25,50 +52,125 @@ steps:
     depends_on:
       - parse-documents
 
-  - id: review-requirements
-    executor: human-approval
+  - id: resolve-requirement-lineage
+    executor: deterministic
+    action: resolve-approved-head-and-create-draft-version
     implementation_state: PENDING
+    rules:
+      - never-edit-approved-version
+      - preserve-prior-content-and-approval-evidence
+      - set-lineage-id
+      - link-immediate-predecessor-with-supersedes
     depends_on:
       - extract-requirements
 
-  - id: analyze-impact
-    executor: ai
-    skill: impact-analysis
+  - id: validate-requirement-draft
+    executor: validation
+    action: validate-artifact-truth-metadata-and-source-evidence
     implementation_state: PENDING
     depends_on:
-      - review-requirements
+      - resolve-requirement-lineage
 
-  - id: generate-design
-    executor: ai
-    skill: system-design
+  - id: review-requirement-version
+    executor: human-approval
     implementation_state: PENDING
+    gate:
+      decision: APPROVED_OR_REJECTED
+      approver_input: human_approver
+      record_reason: true
+      auto_approval: forbidden
     depends_on:
-      - analyze-impact
+      - validate-requirement-draft
 
-  - id: plan-implementation
-    executor: ai
-    skill: implementation-planning
-    implementation_state: PENDING
-    depends_on:
-      - generate-design
-
-  - id: build-agent-context
+  - id: transition-approved-head
     executor: deterministic
-    action: agent-context-package
+    action: approve-successor-and-deprecate-former-head
+    implementation_state: PENDING
+    transaction_invariants:
+      - exactly-one-active-approved-head-per-lineage
+      - preserve-version-snapshots
+      - append-approval-audit
+    depends_on:
+      - review-requirement-version
+
+  - id: rebuild-project-graph
+    executor: deterministic
+    action: rebuild-derived-graph-index
     implementation_state: PENDING
     depends_on:
-      - plan-implementation
+      - transition-approved-head
+
+  - id: traverse-change-impact
+    executor: deterministic
+    action: traverse-governed-relationships-with-evidence
+    implementation_state: PENDING
+    rules:
+      - retain-complete-impact-path
+      - do-not-change-unrelated-artifacts
+    depends_on:
+      - rebuild-project-graph
+
+  - id: propose-validity-transitions
+    executor: deterministic
+    action: mark-evidence-backed-affected-artifacts-needs-review
+    implementation_state: PENDING
+    allowed_transition:
+      from: CURRENT
+      to: NEEDS_REVIEW
+    forbidden_without_separate_policy:
+      - auto-mark-stale
+      - auto-resolve-conflict
+      - auto-restore-current
+    depends_on:
+      - traverse-change-impact
+
+  - id: refresh-current-project-truth
+    executor: deterministic
+    action: build-governed-truth-projection
+    implementation_state: PENDING
+    authority_rules:
+      authoritative:
+        - APPROVED_CURRENT_HEAD
+      warning:
+        - APPROVED_NEEDS_REVIEW_HEAD
+      non_authoritative:
+        - DRAFT
+        - REVIEW
+        - STALE
+        - CONFLICTED
+        - DEPRECATED
+        - ARCHIVED
+    depends_on:
+      - propose-validity-transitions
+
+  - id: build-implementation-context
+    executor: export
+    action: build-safe-implementation-context-package
+    implementation_state: PENDING
+    include_authority_labels: true
+    include_source_references: true
+    include_impact_paths: true
+    include_open_warnings: true
+    managed_project_source_mutation: forbidden
+    depends_on:
+      - refresh-current-project-truth
 
 outputs:
-  - extracted_requirements
+  - preserved_sources
+  - requirement_draft_version
   - clarification_questions
-  - impact_report
-  - design_proposal
-  - implementation_plan
-  - agent_context_package
+  - approval_record
+  - approved_head_transition
+  - impact_report_with_evidence
+  - validity_transition_report
+  - current_project_truth_projection
+  - implementation_context_package
 
 audit:
   record_inputs: true
   record_outputs: true
   record_model_usage: true
   measure_time_saved: true
+  preserve_version_snapshots: true
+  record_state_transitions: true
+  record_evidence_paths: true

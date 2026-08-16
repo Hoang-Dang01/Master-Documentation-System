@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from "react";
+import { KnowledgeGraphView } from "./KnowledgeGraphView";
 
 type IconName =
   | "activity"
@@ -115,6 +116,7 @@ function relativeTime(value: string): string {
 }
 
 export function App() {
+  const [activeView, setActiveView] = useState<"overview" | "graph">("overview");
   const [appInfo, setAppInfo] = useState<MdsAppInfo | null>(null);
   const [workspacePath, setWorkspacePath] = useState("");
   const [artifacts, setArtifacts] = useState<MdsArtifactSummary[]>([]);
@@ -197,6 +199,7 @@ export function App() {
       label: "Workspace",
       items: [
         { label: "Tổng quan", icon: "overview", target: "main-content" },
+        { label: "Bản đồ tri thức", icon: "analysis", target: "main-content" },
         { label: "Tài liệu", icon: "document", target: "documents-panel" },
       ],
     },
@@ -319,11 +322,19 @@ export function App() {
               <p className="nav-label">{group.label}</p>
               {group.items.map((item) => (
                 <button
-                  aria-current={item.target === "main-content" ? "page" : undefined}
-                  className={`nav-item ${item.target === "main-content" ? "is-active" : ""}`}
+                  aria-current={(item.label === "Bản đồ tri thức" ? activeView === "graph" : item.target === "main-content" && activeView === "overview") ? "page" : undefined}
+                  className={`nav-item ${(item.label === "Bản đồ tri thức" ? activeView === "graph" : item.target === "main-content" && activeView === "overview") ? "is-active" : ""}`}
                   disabled={item.disabled}
                   key={item.label}
-                  onClick={() => navigateTo(item.target)}
+                  onClick={() => {
+                    if (item.label === "Bản đồ tri thức") {
+                      setActiveView("graph");
+                      window.scrollTo({ top: 0, behavior: "smooth" });
+                    } else {
+                      setActiveView("overview");
+                      navigateTo(item.target);
+                    }
+                  }}
                   title={item.disabled ? "Chưa có trong lát cắt hiện tại" : undefined}
                   type="button"
                 >
@@ -407,6 +418,17 @@ export function App() {
           </div>
         </header>
 
+        {activeView === "graph" ? (
+          <main className="graph-main" id="main-content">
+            <KnowledgeGraphView
+              key={workspacePath}
+              onNotice={setNotice}
+              onOpenSource={handleOpenArtifact}
+              projectId={workspaceName === "Chưa chọn project" ? "" : workspaceName}
+              projectPath={workspacePath}
+            />
+          </main>
+        ) : (
         <main className="main-content" id="main-content">
           <div className="page-heading">
             <div>
@@ -693,6 +715,7 @@ export function App() {
             </article>
           </section>
         </main>
+        )}
       </div>
     </div>
   );

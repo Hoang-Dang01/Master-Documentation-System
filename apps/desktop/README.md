@@ -62,3 +62,8 @@ The desktop app can now:
 3. extract and display normalized text;
 4. create a human-readable requirement artifact in `DRAFT`;
 5. list documents by `title`, with ID/path hidden until technical mode is on.
+
+The typed preload bridge also exposes explicit graph index build, bounded graph
+query, node detail, and validation operations backed by the rebuildable
+`MDS_DATA_DIR/mds.sqlite` cache. No general filesystem or database handle is
+exposed to the renderer.

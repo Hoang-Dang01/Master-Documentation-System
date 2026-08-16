@@ -14,8 +14,11 @@
   },
   "dependencies": {
     "@mds/document-ingestion": "*",
+    "@mds/domain": "*",
+    "@mds/persistence": "*",
     "@mds/requirements": "*",
     "@mds/workflow-engine": "*",
+    "cytoscape": "^3.34.0",
     "react": "^19.2.8",
     "react-dom": "^19.2.8"
   },

@@ -8,15 +8,18 @@ const node_fs_1 = require("node:fs");
 const electron_1 = require("electron");
 const document_ingestion_1 = require("@mds/document-ingestion");
 const requirements_1 = require("@mds/requirements");
+const persistence_1 = require("@mds/persistence");
 const workflow_engine_1 = require("@mds/workflow-engine");
 const repositoryRoot = node_path_1.default.resolve(__dirname, "..", "..", "..", "..");
 const seedWorkspaceRoot = node_path_1.default.join(repositoryRoot, "workspace");
 const isSmokeTest = process.env.MDS_SMOKE_TEST === "1";
 const smokeScreenshotPath = process.env.MDS_SMOKE_SCREENSHOT;
+const smokeGraphView = process.env.MDS_SMOKE_GRAPH_VIEW === "1";
 let dataRootPath = "";
 let activeProjectsRoot = "";
 let defaultWorkspacePath = "";
 let mainWindow = null;
+let graphRepository = null;
 function settingsPath() {
     return node_path_1.default.join(electron_1.app.getPath("userData"), "settings.json");
 }
@@ -96,6 +99,28 @@ async function ensureDataWorkspace() {
         }
     }
 }
+function assertActiveProjectPath(projectPath) {
+    if (typeof projectPath !== "string" || projectPath.trim().length === 0) {
+        throw new Error("Project path không hợp lệ.");
+    }
+    const project = node_path_1.default.resolve(projectPath);
+    const root = node_path_1.default.resolve(activeProjectsRoot);
+    if (project === root || !project.startsWith(`${root}${node_path_1.default.sep}`)) {
+        throw new Error("Project phải nằm trong MDS_DATA_DIR/projects/active.");
+    }
+    return project;
+}
+function openGraphRepository() {
+    if (!graphRepository) {
+        graphRepository = new persistence_1.SqliteGraphIndexRepository(node_path_1.default.join(dataRootPath, "mds.sqlite"));
+        graphRepository.migrate();
+    }
+    return graphRepository;
+}
+function closeGraphRepository() {
+    graphRepository?.close();
+    graphRepository = null;
+}
 function registerIpcHandlers() {
     electron_1.ipcMain.handle("app:get-info", () => ({
         name: "Master Documentation System",
@@ -134,6 +159,7 @@ function registerIpcHandlers() {
         if (result.canceled || !result.filePaths[0]) {
             return { canceled: true, dataRootPath };
         }
+        closeGraphRepository();
         await saveSettings({ dataRootPath: node_path_1.default.resolve(result.filePaths[0]) });
         await ensureDataWorkspace();
         return { canceled: false, dataRootPath };
@@ -150,6 +176,53 @@ function registerIpcHandlers() {
             throw new Error("Project path không hợp lệ.");
         }
         return (0, document_ingestion_1.listProjectArtifacts)(projectPath, activeProjectsRoot);
+    });
+    electron_1.ipcMain.handle("graph:build-index", async (_event, projectPath) => {
+        const safeProject = assertActiveProjectPath(projectPath);
+        const result = await (0, requirements_1.buildGraphIndex)({
+            projectPath: safeProject,
+            activeProjectsRoot,
+            documentStandardsPath: node_path_1.default.join(repositoryRoot, "mds-core", "standards", "document_standards.md"),
+        });
+        openGraphRepository().replaceProject(result);
+        return result;
+    });
+    electron_1.ipcMain.handle("graph:query", (_event, query) => {
+        if (!query || typeof query !== "object" || Array.isArray(query)) {
+            throw new Error("Graph query không hợp lệ.");
+        }
+        const candidate = query;
+        if (typeof candidate.projectId !== "string" || !/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(candidate.projectId)) {
+            throw new Error("Graph project id không hợp lệ.");
+        }
+        if (candidate.limit !== undefined && (!Number.isInteger(candidate.limit) || candidate.limit < 1 || candidate.limit > 2000)) {
+            throw new Error("Graph query limit phải từ 1 đến 2000.");
+        }
+        for (const values of [candidate.artifactTypes, candidate.relationshipTypes]) {
+            if (values !== undefined && (!Array.isArray(values) || !values.every((value) => typeof value === "string"))) {
+                throw new Error("Graph query filter không hợp lệ.");
+            }
+        }
+        if (candidate.search !== undefined && typeof candidate.search !== "string") {
+            throw new Error("Graph search không hợp lệ.");
+        }
+        const graph = openGraphRepository().readProject(candidate.projectId);
+        if (!graph)
+            return { projectId: candidate.projectId, nodes: [], edges: [], issues: [] };
+        return (0, requirements_1.queryGraphProjection)(graph, candidate);
+    });
+    electron_1.ipcMain.handle("graph:get-node", (_event, projectId, nodeId) => {
+        if (typeof projectId !== "string" || typeof nodeId !== "string") {
+            throw new Error("Graph node request không hợp lệ.");
+        }
+        const graph = openGraphRepository().readProject(projectId);
+        return graph ? (0, requirements_1.getGraphNodeDetail)(graph, nodeId) : null;
+    });
+    electron_1.ipcMain.handle("graph:validate", (_event, projectId) => {
+        if (typeof projectId !== "string" || !/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(projectId)) {
+            throw new Error("Graph project id không hợp lệ.");
+        }
+        return openGraphRepository().readProject(projectId)?.issues ?? [];
     });
     electron_1.ipcMain.handle("document:import", async (_event, projectPath) => {
         if (typeof projectPath !== "string" || projectPath.trim().length === 0) {
@@ -301,8 +374,24 @@ function createMainWindow() {
         console.log(`[MDS] Renderer ready: ${window.webContents.getTitle()}`);
         if (isSmokeTest) {
             await new Promise((resolve) => setTimeout(resolve, 800));
+            if (smokeGraphView) {
+                await window.webContents.executeJavaScript(`
+          [...document.querySelectorAll("button")]
+            .find((button) => button.textContent?.includes("Bản đồ tri thức"))
+            ?.click()
+        `);
+                await new Promise((resolve) => setTimeout(resolve, 1200));
+            }
             const result = (await window.webContents.executeJavaScript(`
-        ({
+        (async () => {
+          const appInfo = await window.mds.getAppInfo();
+          const builtGraph = await window.mds.buildGraphIndex(appInfo.defaultWorkspacePath);
+          const graphProjection = await window.mds.queryGraph({ projectId: "edumeet", limit: 100 });
+          const graphIssues = await window.mds.validateGraph("edumeet");
+          const firstNode = graphProjection.nodes[0]
+            ? await window.mds.getGraphNode("edumeet", graphProjection.nodes[0].id)
+            : null;
+          return ({
           bridgeReady: Boolean(
             window.mds?.getAppInfo &&
             window.mds?.listArtifacts &&
@@ -312,12 +401,24 @@ function createMainWindow() {
             window.mds?.startWorkflow &&
             window.mds?.chooseDataRoot &&
             window.mds?.providerSecretStatus
+            && window.mds?.buildGraphIndex
+            && window.mds?.queryGraph
+            && window.mds?.getGraphNode
+            && window.mds?.validateGraph
           ),
-          rootReady: Boolean(document.querySelector("#root")?.children.length)
-        })
+          rootReady: Boolean(document.querySelector("#root")?.children.length),
+          graphViewReady: ${smokeGraphView ? "Boolean(document.querySelector('.graph-workbench') && document.querySelector('.graph-canvas'))" : "true"},
+          graphReady: Boolean(
+            builtGraph.indexedNodes === 5 &&
+            graphProjection.nodes.length === 5 &&
+            graphIssues.some((issue) => issue.type === "broken_reference") &&
+            firstNode
+          )
+          });
+        })()
       `));
-            console.log(`[MDS] Smoke test: bridge=${result.bridgeReady}, root=${result.rootReady}`);
-            if (!result.bridgeReady || !result.rootReady) {
+            console.log(`[MDS] Smoke test: bridge=${result.bridgeReady}, root=${result.rootReady}, graph=${result.graphReady}, graphView=${result.graphViewReady}`);
+            if (!result.bridgeReady || !result.rootReady || !result.graphReady || !result.graphViewReady) {
                 process.exitCode = 1;
             }
             if (smokeScreenshotPath) {
@@ -348,3 +449,4 @@ electron_1.app.on("window-all-closed", () => {
         electron_1.app.quit();
     }
 });
+electron_1.app.on("before-quit", closeGraphRepository);

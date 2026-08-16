@@ -1,0 +1,352 @@
+{
+  "schema_version": "1.0.0",
+  "project_id": "MDS",
+  "board_version": "0.1.0",
+  "updated_at": "2026-08-15",
+  "approval_state": "APPROVED",
+  "approved_by": "human-project-authority",
+  "approved_at": "2026-08-14",
+  "approval_reason": "User approved continuing with the proposed Foundation backlog.",
+  "scope": {
+    "requirement_ids": [
+      "BA-REQ-MDS-FOUND-001",
+      "BA-REQ-MDS-TRUTH-001"
+    ],
+    "design_ids": [
+      "ARCH-ADR-MDS-FOUND-001"
+    ],
+    "excluded": [
+      "Managed-project source-code mutation",
+      "Autonomous coding-agent execution",
+      "Git write operations, pull-request merge, and deployment",
+      "Bulk migration of every MDS role and prompt",
+      "Additional AI agent families",
+      "Rollback UI before lineage exists",
+      "Cloud synchronization and release packaging"
+    ]
+  },
+  "milestones": [
+    {
+      "id": "MDS-FOUND-F0",
+      "name": "Known and reproducible baseline",
+      "target_date": null,
+      "task_ids": [
+        "PM-TSK-MDS-FOUND-001",
+        "PM-TSK-MDS-FOUND-002",
+        "PM-TSK-MDS-FOUND-003"
+      ]
+    },
+    {
+      "id": "MDS-FOUND-F1",
+      "name": "Governed product boundary and artifact truth",
+      "target_date": null,
+      "task_ids": [
+        "PM-TSK-MDS-FOUND-004",
+        "PM-TSK-MDS-FOUND-005",
+        "PM-TSK-MDS-FOUND-006",
+        "PM-TSK-MDS-FOUND-007"
+      ]
+    },
+    {
+      "id": "MDS-FOUND-F2",
+      "name": "Customer Change Analysis proving slice",
+      "target_date": null,
+      "task_ids": [
+        "PM-TSK-MDS-FOUND-008",
+        "PM-TSK-MDS-FOUND-009",
+        "PM-TSK-MDS-FOUND-010",
+        "PM-TSK-MDS-FOUND-011",
+        "PM-TSK-MDS-FOUND-012",
+        "PM-TSK-MDS-FOUND-013"
+      ]
+    }
+  ],
+  "tasks": [
+    {
+      "id": "PM-TSK-MDS-FOUND-001",
+      "title": "Preserve and document the current repository baseline",
+      "lifecycle_state": "DRAFT",
+      "execution_state": "COMPLETED",
+      "owner_role": "PM",
+      "effort": 1,
+      "blocked_by": [],
+      "linked_requirements": ["BA-REQ-MDS-FOUND-001"],
+      "linked_designs": [],
+      "acceptance_criteria": [
+        "The current branch, HEAD, dirty paths, generated drift, runtime-data observation, and verification results are recorded.",
+        "No pre-existing user change is reset, overwritten, deleted, staged, or reformatted."
+      ],
+      "verification": {
+        "commands": ["git status --short", "git log -1 --format=%H"],
+        "evidence": ["docs/foundation/repository-baseline.md"]
+      },
+      "risks": ["The worktree can change after the baseline timestamp."]
+    },
+    {
+      "id": "PM-TSK-MDS-FOUND-002",
+      "title": "Restore generated structure consistency",
+      "lifecycle_state": "DRAFT",
+      "execution_state": "COMPLETED",
+      "owner_role": "PM",
+      "effort": 1,
+      "blocked_by": ["PM-TSK-MDS-FOUND-001"],
+      "linked_requirements": ["BA-REQ-MDS-FOUND-001"],
+      "linked_designs": [],
+      "acceptance_criteria": [
+        "docs/STRUCTURE.generated.md is regenerated only through npm run docs:structure.",
+        "npm run validate:structure passes on the reviewed worktree."
+      ],
+      "verification": {
+        "commands": ["npm.cmd run docs:structure", "npm.cmd run validate:structure"],
+        "evidence": ["docs/foundation/repository-baseline.md"]
+      },
+      "risks": ["The generated diff may include unrelated uncommitted paths and requires human review before acceptance."]
+    },
+    {
+      "id": "PM-TSK-MDS-FOUND-003",
+      "title": "Obtain a reproducible Electron smoke disposition",
+      "lifecycle_state": "DRAFT",
+      "execution_state": "NOT_STARTED",
+      "owner_role": "QA",
+      "effort": 2,
+      "blocked_by": ["PM-TSK-MDS-FOUND-001"],
+      "linked_requirements": ["BA-REQ-MDS-FOUND-001"],
+      "linked_designs": [],
+      "acceptance_criteria": [
+        "Smoke either passes with current UI/graph bridge assertions or has a reproducible environment/product defect with logs and owner.",
+        "A prior successful smoke report is not used as evidence for the current worktree."
+      ],
+      "verification": {
+        "commands": ["npm.cmd run smoke"],
+        "evidence": ["docs/foundation/repository-baseline.md"]
+      },
+      "risks": ["Current Windows execution fails in Electron GPU/cache/OS crypt initialization before renderer assertions."]
+    },
+    {
+      "id": "PM-TSK-MDS-FOUND-004",
+      "title": "Approve the MDS product boundary",
+      "lifecycle_state": "APPROVED",
+      "execution_state": "COMPLETED",
+      "owner_role": "BA",
+      "effort": 1,
+      "blocked_by": ["PM-TSK-MDS-FOUND-001"],
+      "linked_requirements": ["BA-REQ-MDS-FOUND-001"],
+      "linked_designs": [],
+      "acceptance_criteria": [
+        "The human project authority accepts or rejects the six-core value chain and SHALL/SHALL NOT constraints.",
+        "The decision and rationale are recorded without AI self-approval."
+      ],
+      "verification": {
+        "commands": [],
+        "evidence": ["docs/foundation/product-boundary.md"]
+      },
+      "risks": ["All downstream foundation work remains proposal-only until this scope gate is passed."]
+    },
+    {
+      "id": "PM-TSK-MDS-FOUND-005",
+      "title": "Approve artifact validity, lineage and Current Project Truth semantics",
+      "lifecycle_state": "APPROVED",
+      "execution_state": "COMPLETED",
+      "owner_role": "BA",
+      "effort": 2,
+      "blocked_by": ["PM-TSK-MDS-FOUND-004"],
+      "linked_requirements": ["BA-REQ-MDS-TRUTH-001"],
+      "linked_designs": [],
+      "acceptance_criteria": [
+        "Human authority accepts the separate lifecycle, validity, execution and lineage concepts.",
+        "Truth projection inclusion, warning and exclusion rules are explicitly decided."
+      ],
+      "verification": {
+        "commands": [],
+        "evidence": ["docs/foundation/artifact-truth-model.md"]
+      },
+      "risks": ["Ambiguous validity transitions can incorrectly exclude or trust project knowledge."]
+    },
+    {
+      "id": "PM-TSK-MDS-FOUND-006",
+      "title": "Accept the control-plane architecture decision",
+      "lifecycle_state": "APPROVED",
+      "execution_state": "COMPLETED",
+      "owner_role": "ARCH",
+      "effort": 2,
+      "blocked_by": ["PM-TSK-MDS-FOUND-004", "PM-TSK-MDS-FOUND-005"],
+      "linked_requirements": ["BA-REQ-MDS-FOUND-001", "BA-REQ-MDS-TRUTH-001"],
+      "linked_designs": ["ARCH-ADR-MDS-FOUND-001", "ARCH-ADR-MDS-FOUND-009"],
+      "acceptance_criteria": [
+        "The human architect selects an option and records consequences.",
+        "Read-only evidence adapters and managed-project write prohibition are architecturally explicit."
+      ],
+      "verification": {
+        "commands": [],
+        "evidence": ["docs/foundation/architecture-decision.md"]
+      },
+      "risks": ["Existing prompts and lifecycle descriptions remain inconsistent until migrated."]
+    },
+    {
+      "id": "PM-TSK-MDS-FOUND-007",
+      "title": "Migrate canonical foundation policy and minimum role contracts",
+      "lifecycle_state": "APPROVED",
+      "execution_state": "COMPLETED",
+      "owner_role": "ARCH",
+      "effort": 5,
+      "blocked_by": ["PM-TSK-MDS-FOUND-006"],
+      "linked_requirements": ["BA-REQ-MDS-FOUND-001", "BA-REQ-MDS-TRUTH-001"],
+      "linked_designs": ["ARCH-ADR-MDS-FOUND-001"],
+      "acceptance_criteria": [
+        "Canonical standards/schemas define approved validity and lineage rules without duplicating policy.",
+        "Only roles needed for Customer Change Analysis are migrated in this slice.",
+        "MIGRATION_MAP records every transitional prompt/role source and exit evidence."
+      ],
+      "verification": {
+        "commands": ["npm.cmd run validate:docs", "npm.cmd run validate:skills"],
+        "evidence": ["docs/MIGRATION_MAP.md"]
+      },
+      "risks": ["This changes approved governance and requires versioned replacements, not direct mutation."]
+    },
+    {
+      "id": "PM-TSK-MDS-FOUND-008",
+      "title": "Version the Customer Change Analysis workflow contract",
+      "lifecycle_state": "APPROVED",
+      "execution_state": "COMPLETED",
+      "owner_role": "PM",
+      "effort": 2,
+      "blocked_by": ["PM-TSK-MDS-FOUND-007"],
+      "linked_requirements": ["BA-REQ-MDS-TRUTH-001"],
+      "linked_designs": ["ARCH-ADR-MDS-FOUND-001"],
+      "acceptance_criteria": [
+        "The workflow contract includes version creation, approval, impact traversal, validity review, truth refresh and context generation.",
+        "No step authorizes managed-project source mutation."
+      ],
+      "verification": {
+        "commands": ["npm.cmd run validate:docs"],
+        "evidence": ["workflows/definitions/", "docs/migrations/CUSTOMER_CHANGE_ANALYSIS.md"]
+      },
+      "risks": ["Existing workflow YAML is approval-gated and must be versioned or explicitly replaced."]
+    },
+    {
+      "id": "PM-TSK-MDS-FOUND-009",
+      "title": "Implement immutable artifact version and approved-head transitions",
+      "lifecycle_state": "DRAFT",
+      "execution_state": "BLOCKED",
+      "blocked_reason": "Awaiting human architecture approval of ARCH-ADR-MDS-FOUND-009@0.1.0 before runtime implementation.",
+      "blocked_since": "2026-08-15",
+      "next_action": "Human architecture authority reviews Option A and records an approval or requested revision.",
+      "owner_role": "BE",
+      "effort": 5,
+      "blocked_by": ["PM-TSK-MDS-FOUND-008"],
+      "linked_requirements": ["BA-REQ-MDS-TRUTH-001"],
+      "linked_designs": ["ARCH-ADR-MDS-FOUND-001", "ARCH-ADR-MDS-FOUND-009"],
+      "acceptance_criteria": [
+        "An approved artifact is never edited in place for a material change.",
+        "Approving a new version preserves history and leaves exactly one approved active head.",
+        "Approval evidence identifies actor, reason, timestamp and version."
+      ],
+      "verification": {
+        "commands": ["npm.cmd run typecheck", "npm.cmd run test:requirements"],
+        "evidence": [
+          "docs/foundation/found-009-lineage-storage-adr.md",
+          "docs/foundation/found-009-implementation-plan.md",
+          "tests/integration/"
+        ]
+      },
+      "risks": ["Storage representation needs an approved detailed design before implementation."]
+    },
+    {
+      "id": "PM-TSK-MDS-FOUND-010",
+      "title": "Traverse graph impact and propose downstream validity changes",
+      "lifecycle_state": "DRAFT",
+      "execution_state": "NOT_STARTED",
+      "owner_role": "BE",
+      "effort": 5,
+      "blocked_by": ["PM-TSK-MDS-FOUND-009"],
+      "linked_requirements": ["BA-REQ-MDS-TRUTH-001", "BA-REQ-MDS-KG-001"],
+      "linked_designs": ["ARCH-ADR-MDS-FOUND-001", "ARCH-ADR-MDS-KG-001"],
+      "acceptance_criteria": [
+        "Impact is derived from governed graph relationships and retains path evidence.",
+        "The initial deterministic transition is limited to NEEDS_REVIEW unless stricter policy is approved.",
+        "Unrelated artifacts remain unchanged."
+      ],
+      "verification": {
+        "commands": ["npm.cmd run test:graph", "npm.cmd run test:graph-sqlite"],
+        "evidence": ["tests/integration/"]
+      },
+      "risks": ["Canonical relationship direction and propagation policy must be explicit to avoid false impact."]
+    },
+    {
+      "id": "PM-TSK-MDS-FOUND-011",
+      "title": "Build the Current Project Truth projection and safe context package",
+      "lifecycle_state": "DRAFT",
+      "execution_state": "NOT_STARTED",
+      "owner_role": "BE",
+      "effort": 5,
+      "blocked_by": ["PM-TSK-MDS-FOUND-009", "PM-TSK-MDS-FOUND-010"],
+      "linked_requirements": ["BA-REQ-MDS-TRUTH-001"],
+      "linked_designs": ["ARCH-ADR-MDS-FOUND-001"],
+      "acceptance_criteria": [
+        "The projection applies approved inclusion, warning and exclusion rules deterministically.",
+        "The context package labels artifact authority/version and never presents draft, stale or conflicted content as truth.",
+        "Deleting the derived cache does not delete authoritative artifacts or history."
+      ],
+      "verification": {
+        "commands": ["npm.cmd run typecheck", "npm.cmd run test:requirements", "npm.cmd run test:graph-sqlite"],
+        "evidence": ["tests/integration/"]
+      },
+      "risks": ["A weak package contract could cause a coding agent to implement unapproved content."]
+    },
+    {
+      "id": "PM-TSK-MDS-FOUND-012",
+      "title": "Deliver desktop review, truth and impact interactions",
+      "lifecycle_state": "DRAFT",
+      "execution_state": "NOT_STARTED",
+      "owner_role": "FE",
+      "effort": 5,
+      "blocked_by": ["PM-TSK-MDS-FOUND-011"],
+      "linked_requirements": ["BA-REQ-MDS-TRUTH-001"],
+      "linked_designs": ["ARCH-ADR-MDS-FOUND-001"],
+      "acceptance_criteria": [
+        "A human can edit a draft, submit review, approve/reject, inspect version history, see affected artifacts and inspect truth/context warnings.",
+        "Renderer consumes typed application operations and does not own truth or validity policy.",
+        "Accessibility and Electron security defaults remain intact."
+      ],
+      "verification": {
+        "commands": ["npm.cmd run typecheck", "npm.cmd run build", "npm.cmd run smoke"],
+        "evidence": ["apps/desktop/", "docs/foundation/"]
+      },
+      "risks": ["Current Electron smoke environment failure must be resolved or formally dispositioned before completion."]
+    },
+    {
+      "id": "PM-TSK-MDS-FOUND-013",
+      "title": "Produce fresh Foundation Definition of Done evidence",
+      "lifecycle_state": "DRAFT",
+      "execution_state": "NOT_STARTED",
+      "owner_role": "QA",
+      "effort": 3,
+      "blocked_by": ["PM-TSK-MDS-FOUND-002", "PM-TSK-MDS-FOUND-003", "PM-TSK-MDS-FOUND-012"],
+      "linked_requirements": ["BA-REQ-MDS-FOUND-001", "BA-REQ-MDS-TRUTH-001"],
+      "linked_designs": ["ARCH-ADR-MDS-FOUND-001"],
+      "acceptance_criteria": [
+        "One source change is demonstrated through approval, lineage, impact, validity, truth and context package.",
+        "Fresh build, typecheck, validators, integration tests and desktop smoke evidence are recorded.",
+        "Managed-project source content is proven unchanged by MDS analysis.",
+        "Residual risks and release approval remain explicit."
+      ],
+      "verification": {
+        "commands": [
+          "npm.cmd run typecheck",
+          "npm.cmd run build",
+          "npm.cmd run validate:docs",
+          "npm.cmd run validate:structure",
+          "npm.cmd run validate:skills",
+          "npm.cmd run test:ingestion",
+          "npm.cmd run test:requirements",
+          "npm.cmd run test:workflow",
+          "npm.cmd run test:graph",
+          "npm.cmd run test:graph-sqlite",
+          "npm.cmd run smoke"
+        ],
+        "evidence": ["docs/foundation/"]
+      },
+      "risks": ["Release remains human approval-gated even when all technical checks pass."]
+    }
+  ]
+}

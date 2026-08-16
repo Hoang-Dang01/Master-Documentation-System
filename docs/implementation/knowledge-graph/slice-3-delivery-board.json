@@ -1,0 +1,47 @@
+{
+  "schema_version": "1.0.0",
+  "project_id": "MDS",
+  "board_version": "0.1.0",
+  "updated_at": "2026-07-29",
+  "approval_state": "APPROVED",
+  "approved_by": "human-project-authority",
+  "approved_at": "2026-07-29",
+  "tasks": [
+    {
+      "id": "PM-TSK-MDS-KGRAPH-013",
+      "title": "Expose bounded graph operations through typed Electron IPC",
+      "lifecycle_state": "APPROVED",
+      "execution_state": "COMPLETED",
+      "owner_role": "BE",
+      "effort": 4,
+      "blocked_by": [],
+      "linked_requirements": ["BA-REQ-MDS-KG-001"],
+      "linked_designs": ["ARCH-ADR-MDS-KGRAPH-003"],
+      "acceptance_criteria": [
+        "Electron main builds and stores a selected active project graph in MDS_DATA_DIR/mds.sqlite.",
+        "Preload exposes DTO-only build, query, node, and validation operations.",
+        "Project paths and query limits are validated before application calls."
+      ],
+      "verification": { "commands": ["npm.cmd run typecheck", "npm.cmd run smoke"], "evidence": ["docs/implementation/knowledge-graph/slice-3-evidence.md"] },
+      "risks": ["IPC must not expose arbitrary filesystem or SQLite access."]
+    },
+    {
+      "id": "PM-TSK-MDS-KGRAPH-014",
+      "title": "Verify graph IPC through the sandboxed renderer bridge",
+      "lifecycle_state": "APPROVED",
+      "execution_state": "COMPLETED",
+      "owner_role": "QA",
+      "effort": 2,
+      "blocked_by": ["PM-TSK-MDS-KGRAPH-013"],
+      "linked_requirements": ["BA-REQ-MDS-KG-001"],
+      "linked_designs": ["ARCH-ADR-MDS-KGRAPH-003"],
+      "acceptance_criteria": [
+        "Smoke verification builds and queries the EduMeet graph through window.mds.",
+        "The known broken reference is returned through validation IPC.",
+        "No graph UI, watcher, or Graph RAG code is introduced."
+      ],
+      "verification": { "commands": ["npm.cmd run smoke", "npm.cmd run build"], "evidence": ["docs/implementation/knowledge-graph/slice-3-evidence.md"] },
+      "risks": ["Smoke execution writes only to an isolated MDS_DATA_DIR."]
+    }
+  ]
+}

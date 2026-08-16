@@ -70,6 +70,78 @@ type MdsDataRootSelection = {
   dataRootPath: string;
 };
 
+type MdsGraphEvidence = {
+  artifactPath: string;
+  fieldPath: string;
+  rawValue?: string;
+  lineStart?: number;
+  lineEnd?: number;
+  origin: string;
+};
+
+type MdsGraphNode = {
+  id: string;
+  projectId: string;
+  artifactType: string;
+  title: string;
+  lifecycleState?: string;
+  sourcePath: string;
+  contentHash: string;
+  metadata: Record<string, unknown>;
+};
+
+type MdsGraphEdge = {
+  id: string;
+  projectId: string;
+  sourceId: string;
+  targetId: string;
+  relationshipType: string;
+  direction: "outbound";
+  status: string;
+  origin: string;
+  evidence: MdsGraphEvidence[];
+};
+
+type MdsGraphIssue = {
+  id: string;
+  projectId: string;
+  type: string;
+  severity: string;
+  message: string;
+  nodeId?: string;
+  edgeId?: string;
+  evidence?: MdsGraphEvidence;
+};
+
+type MdsGraphProjection = {
+  projectId: string;
+  nodes: MdsGraphNode[];
+  edges: MdsGraphEdge[];
+  issues: MdsGraphIssue[];
+};
+
+type MdsGraphIndexResult = MdsGraphProjection & {
+  runId: string;
+  scannedFiles: number;
+  indexedNodes: number;
+  indexedEdges: number;
+  completedAt: string;
+};
+
+type MdsGraphQuery = {
+  projectId: string;
+  artifactTypes?: string[];
+  relationshipTypes?: string[];
+  search?: string;
+  limit?: number;
+};
+
+type MdsGraphNodeDetail = MdsGraphNode & {
+  incoming: MdsGraphEdge[];
+  outgoing: MdsGraphEdge[];
+  issues: MdsGraphIssue[];
+};
+
 interface Window {
   mds: {
     getAppInfo(): Promise<MdsAppInfo>;
@@ -113,5 +185,9 @@ interface Window {
       projectPath: string,
       relativeArtifactPath: string
     ): Promise<MdsOpenWorkspaceResult>;
+    buildGraphIndex(projectPath: string): Promise<MdsGraphIndexResult>;
+    queryGraph(query: MdsGraphQuery): Promise<MdsGraphProjection>;
+    getGraphNode(projectId: string, nodeId: string): Promise<MdsGraphNodeDetail | null>;
+    validateGraph(projectId: string): Promise<MdsGraphIssue[]>;
   };
 }

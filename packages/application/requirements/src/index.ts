@@ -9,6 +9,7 @@ import {
 } from "@mds/domain";
 
 export * from "./graph.js";
+export * from "./graph/ports/index.js";
 
 const FRONTMATTER_PATTERN = /^---\s*\r?\n([\s\S]*?)\r?\n---\s*\r?\n/;
 const STOP_WORDS = new Set([

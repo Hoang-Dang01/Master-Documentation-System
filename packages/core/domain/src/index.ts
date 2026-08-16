@@ -95,12 +95,35 @@ export type GraphProjection = {
   issues: GraphIssue[];
 };
 
-export type GraphIndexResult = GraphProjection & {
+/** Canonical, complete derived index for one project. */
+export type GraphIndex = {
+  projectId: string;
+  nodes: ArtifactNode[];
+  edges: ArtifactEdge[];
+  issues: GraphIssue[];
+};
+
+/** Result metadata for a completed index build. Never represents a UI query. */
+export type GraphIndexResult = GraphIndex & {
   runId: string;
   scannedFiles: number;
   indexedNodes: number;
   indexedEdges: number;
   completedAt: string;
+};
+
+export type GraphQuery = {
+  projectId: string;
+  artifactTypes?: string[];
+  relationshipTypes?: string[];
+  search?: string;
+  limit?: number;
+};
+
+export type ArtifactNodeDetail = ArtifactNode & {
+  incoming: ArtifactEdge[];
+  outgoing: ArtifactEdge[];
+  issues: GraphIssue[];
 };
 
 export type Requirement = Artifact & {

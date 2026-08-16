@@ -8,13 +8,12 @@ MDS workflow on top of the consolidated repository structure.
 
 ## Current state
 
-The import slice is implemented in `packages/application/ingestion/` and wired
-to Electron through a narrow preload API. DOCX/Markdown/TXT sources are
-preserved with checksums, normalized content is visible in the desktop app, and
-a deterministic requirement `DRAFT` is written into the active project.
-
-Human review, approval history, impact analysis, and downstream design remain
-the next slice.
+The Foundation workflow contract is now version 1.0.0 and approved. Import,
+deterministic DRAFT extraction, minimal requirement approval/audit, a keyword
+impact report, persisted workflow state, and the derived Knowledge Graph have
+partial runtime implementations. The approved contract is ahead of runtime:
+immutable lineage transitions, graph impact traversal, validity propagation,
+Current Project Truth, and safe context packaging remain pending.
 
 ## Target slice
 
@@ -22,12 +21,19 @@ the next slice.
 Select DOCX
 → preserve original and checksum
 → parse normalized text
-→ generate Requirement DRAFT with source spans
+→ create/resolve Requirement DRAFT version and lineage
+→ validate source and truth metadata
 → human edits/approves/rejects
-→ analyze impact against known artifacts
-→ persist artifacts and workflow state
-→ show evidence in desktop UI
+→ atomically transition approved head
+→ rebuild derived graph
+→ traverse affected artifacts with evidence
+→ propose CURRENT → NEEDS_REVIEW
+→ refresh Current Project Truth
+→ export safe implementation context
 ```
+
+The workflow stops at context export. Implementation belongs to Codex, Claude
+Code, a developer, or another external Implementation Plane tool.
 
 ## Canonical inputs
 
@@ -37,6 +43,7 @@ Select DOCX
 | Requirement/relationship rules | `mds-core/standards/document_standards.md` |
 | BA responsibility | `mds-core/roles/ba/` |
 | Lifecycle/gates | `mds-core/schemas/workflow_schema.md` |
+| Validity, lineage and Project Truth | `mds-core/standards/artifact_truth.md` and `mds-core/schemas/artifact_truth_schema.md` |
 | Runtime sequence | `workflows/definitions/customer-change-analysis.yaml` |
 | Project context | `MDS_DATA_DIR/projects/active/<project-id>/`; repository `workspace/` is the development seed |
 
@@ -63,10 +70,13 @@ until independent build/dependency boundaries are proven.
 2. [x] Add a deterministic integration fixture.
 3. [x] Parse DOCX through Mammoth.
 4. [x] Produce draft requirements linked to the preserved source artifact.
-5. Add human review and approval history.
-6. Produce an impact report from approved requirements.
-7. Connect the minimal desktop flow.
-8. Add smoke/e2e evidence.
+5. [x] Approve the Foundation workflow contract.
+6. Implement immutable version lineage and approved-head transition.
+7. Replace keyword impact matching with evidence-backed graph traversal.
+8. Add validity propagation and Current Project Truth projection.
+9. Generate a safe implementation context package.
+10. Connect review/history/impact/truth/context interactions in desktop.
+11. Add fresh smoke/e2e evidence.
 
 ## Exit criteria
 
@@ -80,6 +90,10 @@ until independent build/dependency boundaries are proven.
 - [x] Desktop typecheck, build, smoke, and the ingestion test pass.
 - [x] No API key or secret is stored in project artifacts or committed files.
 - [ ] Migration map rows touched by this slice have evidence before status changes.
+- [x] Workflow contract forbids managed-project source/test mutation and
+  terminates at the implementation context package.
+- [ ] Runtime enforces one approved active head per lineage.
+- [ ] Context package excludes non-authoritative content from instructions.
 
 ## Explicit non-goals
 

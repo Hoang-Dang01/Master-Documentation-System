@@ -13,9 +13,14 @@ import {
   listProjectArtifacts
 } from "@mds/document-ingestion";
 import {
+  buildGraphIndex,
   createImpactReport,
+  getGraphNodeDetail,
+  queryGraphProjection,
   reviewRequirement,
 } from "@mds/requirements";
+import { SqliteGraphIndexRepository } from "@mds/persistence";
+import type { GraphQuery } from "@mds/domain";
 import {
   advanceWorkflow,
   startWorkflow,
@@ -25,10 +30,12 @@ const repositoryRoot = path.resolve(__dirname, "..", "..", "..", "..");
 const seedWorkspaceRoot = path.join(repositoryRoot, "workspace");
 const isSmokeTest = process.env.MDS_SMOKE_TEST === "1";
 const smokeScreenshotPath = process.env.MDS_SMOKE_SCREENSHOT;
+const smokeGraphView = process.env.MDS_SMOKE_GRAPH_VIEW === "1";
 let dataRootPath = "";
 let activeProjectsRoot = "";
 let defaultWorkspacePath = "";
 let mainWindow: BrowserWindow | null = null;
+let graphRepository: SqliteGraphIndexRepository | null = null;
 
 type AppSettings = {
   dataRootPath?: string;
@@ -131,6 +138,31 @@ async function ensureDataWorkspace(): Promise<void> {
   }
 }
 
+function assertActiveProjectPath(projectPath: unknown): string {
+  if (typeof projectPath !== "string" || projectPath.trim().length === 0) {
+    throw new Error("Project path không hợp lệ.");
+  }
+  const project = path.resolve(projectPath);
+  const root = path.resolve(activeProjectsRoot);
+  if (project === root || !project.startsWith(`${root}${path.sep}`)) {
+    throw new Error("Project phải nằm trong MDS_DATA_DIR/projects/active.");
+  }
+  return project;
+}
+
+function openGraphRepository(): SqliteGraphIndexRepository {
+  if (!graphRepository) {
+    graphRepository = new SqliteGraphIndexRepository(path.join(dataRootPath, "mds.sqlite"));
+    graphRepository.migrate();
+  }
+  return graphRepository;
+}
+
+function closeGraphRepository(): void {
+  graphRepository?.close();
+  graphRepository = null;
+}
+
 function registerIpcHandlers(): void {
   ipcMain.handle("app:get-info", () => ({
     name: "Master Documentation System",
@@ -174,6 +206,7 @@ function registerIpcHandlers(): void {
     if (result.canceled || !result.filePaths[0]) {
       return { canceled: true, dataRootPath };
     }
+    closeGraphRepository();
     await saveSettings({ dataRootPath: path.resolve(result.filePaths[0]) });
     await ensureDataWorkspace();
     return { canceled: false, dataRootPath };
@@ -193,6 +226,56 @@ function registerIpcHandlers(): void {
       throw new Error("Project path không hợp lệ.");
     }
     return listProjectArtifacts(projectPath, activeProjectsRoot);
+  });
+
+  ipcMain.handle("graph:build-index", async (_event, projectPath: unknown) => {
+    const safeProject = assertActiveProjectPath(projectPath);
+    const result = await buildGraphIndex({
+      projectPath: safeProject,
+      activeProjectsRoot,
+      documentStandardsPath: path.join(repositoryRoot, "mds-core", "standards", "document_standards.md"),
+    });
+    openGraphRepository().replaceProject(result);
+    return result;
+  });
+
+  ipcMain.handle("graph:query", (_event, query: unknown) => {
+    if (!query || typeof query !== "object" || Array.isArray(query)) {
+      throw new Error("Graph query không hợp lệ.");
+    }
+    const candidate = query as Partial<GraphQuery>;
+    if (typeof candidate.projectId !== "string" || !/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(candidate.projectId)) {
+      throw new Error("Graph project id không hợp lệ.");
+    }
+    if (candidate.limit !== undefined && (!Number.isInteger(candidate.limit) || candidate.limit < 1 || candidate.limit > 2000)) {
+      throw new Error("Graph query limit phải từ 1 đến 2000.");
+    }
+    for (const values of [candidate.artifactTypes, candidate.relationshipTypes]) {
+      if (values !== undefined && (!Array.isArray(values) || !values.every((value) => typeof value === "string"))) {
+        throw new Error("Graph query filter không hợp lệ.");
+      }
+    }
+    if (candidate.search !== undefined && typeof candidate.search !== "string") {
+      throw new Error("Graph search không hợp lệ.");
+    }
+    const graph = openGraphRepository().readProject(candidate.projectId);
+    if (!graph) return { projectId: candidate.projectId, nodes: [], edges: [], issues: [] };
+    return queryGraphProjection(graph, candidate as GraphQuery);
+  });
+
+  ipcMain.handle("graph:get-node", (_event, projectId: unknown, nodeId: unknown) => {
+    if (typeof projectId !== "string" || typeof nodeId !== "string") {
+      throw new Error("Graph node request không hợp lệ.");
+    }
+    const graph = openGraphRepository().readProject(projectId);
+    return graph ? getGraphNodeDetail(graph, nodeId) : null;
+  });
+
+  ipcMain.handle("graph:validate", (_event, projectId: unknown) => {
+    if (typeof projectId !== "string" || !/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(projectId)) {
+      throw new Error("Graph project id không hợp lệ.");
+    }
+    return openGraphRepository().readProject(projectId)?.issues ?? [];
   });
 
   ipcMain.handle("document:import", async (_event, projectPath: unknown) => {
@@ -440,8 +523,24 @@ function createMainWindow(): BrowserWindow {
 
     if (isSmokeTest) {
       await new Promise((resolve) => setTimeout(resolve, 800));
+      if (smokeGraphView) {
+        await window.webContents.executeJavaScript(`
+          [...document.querySelectorAll("button")]
+            .find((button) => button.textContent?.includes("Bản đồ tri thức"))
+            ?.click()
+        `);
+        await new Promise((resolve) => setTimeout(resolve, 1200));
+      }
       const result = (await window.webContents.executeJavaScript(`
-        ({
+        (async () => {
+          const appInfo = await window.mds.getAppInfo();
+          const builtGraph = await window.mds.buildGraphIndex(appInfo.defaultWorkspacePath);
+          const graphProjection = await window.mds.queryGraph({ projectId: "edumeet", limit: 100 });
+          const graphIssues = await window.mds.validateGraph("edumeet");
+          const firstNode = graphProjection.nodes[0]
+            ? await window.mds.getGraphNode("edumeet", graphProjection.nodes[0].id)
+            : null;
+          return ({
           bridgeReady: Boolean(
             window.mds?.getAppInfo &&
             window.mds?.listArtifacts &&
@@ -451,16 +550,28 @@ function createMainWindow(): BrowserWindow {
             window.mds?.startWorkflow &&
             window.mds?.chooseDataRoot &&
             window.mds?.providerSecretStatus
+            && window.mds?.buildGraphIndex
+            && window.mds?.queryGraph
+            && window.mds?.getGraphNode
+            && window.mds?.validateGraph
           ),
-          rootReady: Boolean(document.querySelector("#root")?.children.length)
-        })
-      `)) as { bridgeReady: boolean; rootReady: boolean };
+          rootReady: Boolean(document.querySelector("#root")?.children.length),
+          graphViewReady: ${smokeGraphView ? "Boolean(document.querySelector('.graph-workbench') && document.querySelector('.graph-canvas'))" : "true"},
+          graphReady: Boolean(
+            builtGraph.indexedNodes === 5 &&
+            graphProjection.nodes.length === 5 &&
+            graphIssues.some((issue) => issue.type === "broken_reference") &&
+            firstNode
+          )
+          });
+        })()
+      `)) as { bridgeReady: boolean; rootReady: boolean; graphReady: boolean; graphViewReady: boolean };
 
       console.log(
-        `[MDS] Smoke test: bridge=${result.bridgeReady}, root=${result.rootReady}`
+        `[MDS] Smoke test: bridge=${result.bridgeReady}, root=${result.rootReady}, graph=${result.graphReady}, graphView=${result.graphViewReady}`
       );
 
-      if (!result.bridgeReady || !result.rootReady) {
+      if (!result.bridgeReady || !result.rootReady || !result.graphReady || !result.graphViewReady) {
         process.exitCode = 1;
       }
 
@@ -498,3 +609,5 @@ app.on("window-all-closed", () => {
     app.quit();
   }
 });
+
+app.on("before-quit", closeGraphRepository);

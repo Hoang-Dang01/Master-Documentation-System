@@ -1,0 +1,53 @@
+{
+  "schema_version": "1.0.0",
+  "project_id": "MDS",
+  "board_version": "0.1.0",
+  "updated_at": "2026-07-29",
+  "approval_state": "APPROVED",
+  "approved_by": "human-project-authority",
+  "approved_at": "2026-07-29",
+  "tasks": [
+    {
+      "id": "PM-TSK-MDS-KGRAPH-011",
+      "title": "Persist and rebuild the graph projection in SQLite",
+      "lifecycle_state": "APPROVED",
+      "execution_state": "COMPLETED",
+      "owner_role": "BE",
+      "effort": 5,
+      "blocked_by": [],
+      "linked_requirements": ["BA-REQ-MDS-KG-001"],
+      "linked_designs": ["ARCH-ADR-MDS-KGRAPH-002"],
+      "acceptance_criteria": [
+        "A transactional full rebuild persists nodes, edges, evidence, issues, and run metadata.",
+        "Deleting the database and rebuilding yields an equivalent project projection.",
+        "Foreign keys are enabled and Markdown remains unchanged."
+      ],
+      "verification": {
+        "commands": ["npm.cmd run test:graph-sqlite"],
+        "evidence": ["tests/integration/graph-sqlite.cjs", "docs/implementation/knowledge-graph/slice-2-evidence.md"]
+      },
+      "risks": ["better-sqlite3 is a native module and must match the Electron ABI."]
+    },
+    {
+      "id": "PM-TSK-MDS-KGRAPH-012",
+      "title": "Verify Electron compatibility and bounded graph performance",
+      "lifecycle_state": "APPROVED",
+      "execution_state": "COMPLETED",
+      "owner_role": "QA",
+      "effort": 2,
+      "blocked_by": ["PM-TSK-MDS-KGRAPH-011"],
+      "linked_requirements": ["BA-REQ-MDS-KG-001"],
+      "linked_designs": ["ARCH-ADR-MDS-KGRAPH-002"],
+      "acceptance_criteria": [
+        "The native module loads in the installed Electron runtime.",
+        "A bounded 10000-node and 50000-edge persistence/query benchmark completes and reports measurements.",
+        "No Electron graph API, UI, or Graph RAG code is introduced."
+      ],
+      "verification": {
+        "commands": ["npm.cmd run test:graph-sqlite", "npm.cmd run smoke"],
+        "evidence": ["tests/integration/graph-sqlite-benchmark.cjs", "docs/implementation/knowledge-graph/slice-2-evidence.md"]
+      },
+      "risks": ["Electron rebuild may require a compiler toolchain if no prebuilt binary matches."]
+    }
+  ]
+}

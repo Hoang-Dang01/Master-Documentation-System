@@ -7,6 +7,9 @@ import type {
   EdgeEvidence,
   GraphIndexResult,
   GraphIssue,
+  GraphProjection,
+  GraphQuery,
+  ArtifactNodeDetail,
 } from "@mds/domain";
 
 const FRONTMATTER = /^---\s*\r?\n([\s\S]*?)\r?\n---(?:\s*\r?\n|$)/;
@@ -379,5 +382,44 @@ export async function buildGraphIndex(options: BuildGraphIndexOptions): Promise<
     edges,
     issues,
     completedAt,
+  };
+}
+
+export function queryGraphProjection(
+  graph: GraphIndexResult,
+  query: GraphQuery,
+): GraphProjection {
+  const limit = Math.max(1, Math.min(query.limit ?? 500, 2000));
+  const artifactTypes = new Set(query.artifactTypes ?? []);
+  const relationshipTypes = new Set(query.relationshipTypes ?? []);
+  const search = query.search?.trim().toLocaleLowerCase() ?? "";
+  const nodes = graph.nodes.filter((node) =>
+    (artifactTypes.size === 0 || artifactTypes.has(node.artifactType)) &&
+    (!search || `${node.id} ${node.title}`.toLocaleLowerCase().includes(search)),
+  ).slice(0, limit);
+  const nodeIds = new Set(nodes.map((node) => node.id));
+  const allNodeIds = new Set(graph.nodes.map((node) => node.id));
+  const edges = graph.edges.filter((edge) =>
+    nodeIds.has(edge.sourceId) && (nodeIds.has(edge.targetId) || !allNodeIds.has(edge.targetId)) &&
+    (relationshipTypes.size === 0 || relationshipTypes.has(edge.relationshipType)),
+  );
+  const edgeIds = new Set(edges.map((edge) => edge.id));
+  const issues = graph.issues.filter((issue) =>
+    (!issue.nodeId || nodeIds.has(issue.nodeId)) && (!issue.edgeId || edgeIds.has(issue.edgeId) || !query.search),
+  );
+  return { projectId: graph.projectId, nodes, edges, issues };
+}
+
+export function getGraphNodeDetail(
+  graph: GraphIndexResult,
+  nodeId: string,
+): ArtifactNodeDetail | null {
+  const node = graph.nodes.find((candidate) => candidate.id === nodeId);
+  if (!node) return null;
+  return {
+    ...node,
+    incoming: graph.edges.filter((edge) => edge.targetId === nodeId),
+    outgoing: graph.edges.filter((edge) => edge.sourceId === nodeId),
+    issues: graph.issues.filter((issue) => issue.nodeId === nodeId),
   };
 }

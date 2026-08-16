@@ -16,6 +16,8 @@ Boundary `README.md` metadata uses:
 | Concern | Canonical source | Consumers | Drift rule |
 |---|---|---|---|
 | Document naming, lifecycle, relationships | `mds-core/standards/` | Schemas, prompts, skills, validators | Standards win. |
+| Artifact validity, version lineage, Current Project Truth | `mds-core/standards/artifact_truth.md` | Schemas, graph/impact use cases, context builder, desktop views | The truth standard wins; derived caches and views never redefine authority. |
+| Product boundary and feature routing | `docs/foundation/product-boundary.md` and `docs/foundation/architecture-decision.md` | Architecture docs, lifecycle, roles, prompts, roadmap | Approved Foundation boundary wins for managed-project control-plane versus Implementation Plane decisions. |
 | Role responsibilities, inputs, outputs, workflow | `mds-core/roles/<role>/` | Agent prompts, subskills, UI role view | Consumers reference; repeated policy is transitional. |
 | Lifecycle phases and quality gates | `mds-core/guides/lifecycle/` and `mds-core/schemas/workflow_schema.md` | Workflows, PM/ORCH prompts, desktop progress UI | Schema/guides win. |
 | Artifact structure | `mds-core/templates/` | Skills, agents, generators | Skill-local duplicate templates are transitional unless output-specific. |

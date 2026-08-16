@@ -33,4 +33,20 @@ COMPLETED
 CANCELLED
 ```
 
-The first vertical slice is `customer-change-analysis.yaml`.
+The first vertical slice is `customer-change-analysis.yaml`. Version 1.0.0 is
+the human-approved Foundation contract:
+
+```text
+preserve source
+→ create a requirement DRAFT version
+→ human approval
+→ transition the approved lineage head
+→ traverse graph impact
+→ propose NEEDS_REVIEW validity
+→ refresh Current Project Truth
+→ export a safe implementation context package
+```
+
+The workflow terminates at the context package. No workflow executor may modify
+managed-project source/test code, create commits, merge pull requests, deploy,
+or auto-approve an artifact.

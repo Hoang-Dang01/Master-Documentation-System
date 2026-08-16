@@ -15,6 +15,10 @@ const desktopApi = {
     saveProviderSecret: (provider, secret) => electron_1.ipcRenderer.invoke("settings:save-provider-secret", provider, secret),
     providerSecretStatus: (provider) => electron_1.ipcRenderer.invoke("settings:provider-secret-status", provider),
     deleteProviderSecret: (provider) => electron_1.ipcRenderer.invoke("settings:delete-provider-secret", provider),
-    openArtifact: (projectPath, relativeArtifactPath) => electron_1.ipcRenderer.invoke("artifact:open", projectPath, relativeArtifactPath)
+    openArtifact: (projectPath, relativeArtifactPath) => electron_1.ipcRenderer.invoke("artifact:open", projectPath, relativeArtifactPath),
+    buildGraphIndex: (projectPath) => electron_1.ipcRenderer.invoke("graph:build-index", projectPath),
+    queryGraph: (query) => electron_1.ipcRenderer.invoke("graph:query", query),
+    getGraphNode: (projectId, nodeId) => electron_1.ipcRenderer.invoke("graph:get-node", projectId, nodeId),
+    validateGraph: (projectId) => electron_1.ipcRenderer.invoke("graph:validate", projectId),
 };
 electron_1.contextBridge.exposeInMainWorld("mds", desktopApi);

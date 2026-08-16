@@ -30,6 +30,7 @@ Master-Documentation-System/
 │   │   │       ├── App.tsx
 │   │   │       ├── global.d.ts
 │   │   │       ├── index.html
+│   │   │       ├── KnowledgeGraphView.tsx
 │   │   │       ├── main.tsx
 │   │   │       └── styles.css
 │   │   ├── package.json
@@ -41,6 +42,34 @@ Master-Documentation-System/
 ├── docs/
 │   ├── archive/
 │   │   └── .gitkeep
+│   ├── foundation/
+│   │   ├── architecture-decision.md
+│   │   ├── artifact-truth-model.md
+│   │   ├── delivery-board.json
+│   │   ├── found-007-evidence.md
+│   │   ├── found-008-evidence.md
+│   │   ├── found-009-implementation-plan.md
+│   │   ├── found-009-lineage-storage-adr.md
+│   │   ├── product-boundary.md
+│   │   ├── README.md
+│   │   ├── repository-baseline.md
+│   │   └── roadmap.md
+│   ├── implementation/
+│   │   └── knowledge-graph/
+│   │       ├── adr.md
+│   │       ├── delivery-board.json
+│   │       ├── README.md
+│   │       ├── repository-baseline.md
+│   │       ├── requirement.md
+│   │       ├── slice-1-evidence.md
+│   │       ├── slice-2-adr.md
+│   │       ├── slice-2-delivery-board.json
+│   │       ├── slice-2-evidence.md
+│   │       ├── slice-3-adr.md
+│   │       ├── slice-3-delivery-board.json
+│   │       ├── slice-3-evidence.md
+│   │       ├── slice-4-adr.md
+│   │       └── slice-4-evidence.md
 │   ├── migrations/
 │   │   └── CUSTOMER_CHANGE_ANALYSIS.md
 │   ├── views/
@@ -180,11 +209,13 @@ Master-Documentation-System/
 │   │       ├── responsibilities.md
 │   │       └── workflow.md
 │   ├── schemas/
+│   │   ├── artifact_truth_schema.md
 │   │   ├── entity_schema.md
 │   │   ├── project_schema.md
 │   │   ├── role_schema.md
 │   │   └── workflow_schema.md
 │   ├── standards/
+│   │   ├── artifact_truth.md
 │   │   ├── ba_traceability.md
 │   │   ├── base_template_guide.md
 │   │   ├── document_standards.md
@@ -259,6 +290,11 @@ Master-Documentation-System/
 │   │   ├── requirements/
 │   │   │   ├── dist/  [generated contents omitted]
 │   │   │   ├── src/
+│   │   │   │   ├── graph/
+│   │   │   │   │   └── ports/
+│   │   │   │   │       ├── graph-index-repository.ts
+│   │   │   │   │       └── index.ts
+│   │   │   │   ├── graph.ts
 │   │   │   │   └── index.ts
 │   │   │   ├── .gitkeep
 │   │   │   ├── package.json
@@ -288,7 +324,14 @@ Master-Documentation-System/
 │   │   ├── integrations/
 │   │   │   └── .gitkeep
 │   │   ├── persistence/
-│   │   │   └── .gitkeep
+│   │   │   ├── dist/  [generated contents omitted]
+│   │   │   ├── src/
+│   │   │   │   ├── graph/
+│   │   │   │   │   └── sqlite-graph-index-repository.ts
+│   │   │   │   └── index.ts
+│   │   │   ├── .gitkeep
+│   │   │   ├── package.json
+│   │   │   └── tsconfig.json
 │   │   └── README.md
 │   ├── shared/
 │   │   ├── .gitkeep
@@ -942,11 +985,20 @@ Master-Documentation-System/
 │   ├── end-to-end/
 │   │   └── .gitkeep
 │   ├── fixtures/
+│   │   ├── graph/
+│   │   │   ├── list-object.md
+│   │   │   ├── list.md
+│   │   │   ├── malformed.md
+│   │   │   ├── nested-map.md
+│   │   │   └── scalar.md
 │   │   ├── .gitkeep
 │   │   └── mds-project-management-cycle.json
 │   ├── integration/
 │   │   ├── .gitkeep
 │   │   ├── document-import.cjs
+│   │   ├── graph-index.cjs
+│   │   ├── graph-sqlite-benchmark.cjs
+│   │   ├── graph-sqlite.cjs
 │   │   ├── requirements-review.cjs
 │   │   └── workflow-runtime.cjs
 │   └── README.md
