@@ -130,6 +130,9 @@ export function App() {
   const [query, setQuery] = useState("");
   const [importedDocument, setImportedDocument] =
     useState<MdsImportedDocument | null>(null);
+  const [selectedReview, setSelectedReview] = useState<MdsArtifactSummary | null>(null);
+  const [impactResult, setImpactResult] = useState<MdsImpactReportResult | null>(null);
+  const [reviewBusy, setReviewBusy] = useState(false);
   const searchRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
@@ -291,6 +294,38 @@ export function App() {
   async function handleOpenArtifact(relativePath: string) {
     const result = await window.mds.openArtifact(workspacePath, relativePath);
     if (!result.ok) setNotice(result.error);
+  }
+
+  async function handleReview(decision: "APPROVED" | "REJECTED", artifact = selectedReview) {
+    if (!workspacePath || !artifact) return;
+    setReviewBusy(true);
+    try {
+      await window.mds.reviewRequirement(
+        workspacePath,
+        artifact.relativePath,
+        decision,
+        "human",
+        decision === "APPROVED" ? "Approved from desktop review workbench" : "Rejected from desktop review workbench",
+      );
+      await refreshArtifacts(workspacePath);
+      setSelectedReview(null);
+      setNotice(decision === "APPROVED" ? "Requirement da duoc phe duyet; approved head moi da duoc ghi nhan." : "Requirement da bi tu choi; ban nhap van duoc bao ton.");
+    } catch (error) {
+      setNotice(error instanceof Error ? error.message : "Khong the ghi nhan quyet dinh review.");
+    } finally {
+      setReviewBusy(false);
+    }
+  }
+
+  async function handleImpact(artifact: MdsArtifactSummary) {
+    if (!workspacePath) return;
+    try {
+      const result = await window.mds.createImpactReport(workspacePath, artifact.relativePath);
+      setImpactResult(result);
+      setNotice(`Da tao impact report cho ${artifact.title}.`);
+    } catch (error) {
+      setNotice(error instanceof Error ? error.message : "Khong the tao impact report.");
+    }
   }
 
   function navigateTo(target: NavigationItem["target"]) {
@@ -620,6 +655,50 @@ export function App() {
               ) : null}
             </section>
           ) : null}
+
+          <section className="review-workbench" id="review-workbench" aria-label="Review, truth va impact">
+            <article className="panel review-panel">
+              <div className="panel-heading">
+                <div><h2>Review workbench</h2><p>Draft va review decision</p></div>
+                <span className="count-chip">{reviewArtifacts.length}</span>
+              </div>
+              {reviewArtifacts.length ? reviewArtifacts.slice(0, 5).map((artifact) => (
+                <div className="review-row" key={artifact.relativePath}>
+                  <button className="review-select" onClick={() => setSelectedReview(artifact)} type="button">
+                    <span className="state-marker review" />
+                    <span><strong>{artifact.title}</strong><small>{artifact.version} · {artifact.relativePath}</small></span>
+                  </button>
+                  <div className="review-actions">
+                    <button className="button button-ghost compact-button" onClick={() => handleOpenArtifact(artifact.relativePath)} type="button">Mo</button>
+                    <button className="button button-primary compact-button" onClick={() => { setSelectedReview(artifact); void handleReview("APPROVED", artifact); }} type="button">Duyet</button>
+                    <button className="button button-ghost compact-button" onClick={() => { setSelectedReview(artifact); void handleReview("REJECTED", artifact); }} type="button">Tu choi</button>
+                    <button className="button button-ghost compact-button" onClick={() => void handleImpact(artifact)} type="button">Impact</button>
+                  </div>
+                </div>
+              )) : <div className="compact-empty"><Icon name="task" /><div><strong>Khong co draft cho review</strong><span>Nhap tai lieu de tao requirement draft.</span></div></div>}
+              {selectedReview ? <div className="review-selection" aria-live="polite"><strong>{selectedReview.title}</strong><span>Version history: {selectedReview.version} · approved head transition is immutable.</span></div> : null}
+              {reviewBusy ? <small className="panel-footnote">Dang ghi nhan quyet dinh...</small> : null}
+            </article>
+
+            <article className="panel truth-panel">
+              <div className="panel-heading"><div><h2>Current Project Truth</h2><p>Authority rail from artifact state</p></div></div>
+              <div className="truth-rail">
+                <div className="truth-authoritative"><strong>{artifacts.filter((a) => a.lifecycleState === "APPROVED").length}</strong><span>AUTHORITATIVE</span></div>
+                <div className="truth-warning"><strong>{artifacts.filter((a) => ["REVIEW", "DRAFT"].includes(a.lifecycleState)).length}</strong><span>WARNING</span></div>
+                <div className="truth-excluded"><strong>{artifacts.filter((a) => ["STALE", "CONFLICTED", "ARCHIVED", "DEPRECATED"].includes(a.lifecycleState)).length}</strong><span>EXCLUDED</span></div>
+              </div>
+              <p className="truth-note">Chi AUTHORITATIVE duoc phep lam instruction. WARNING can review; EXCLUDED khong duoc dua vao context.</p>
+            </article>
+
+            <article className="panel impact-panel">
+              <div className="panel-heading"><div><h2>Impact & context</h2><p>Evidence-backed downstream view</p></div></div>
+              {impactResult ? <>
+                <div className="impact-summary"><strong>{impactResult.matchedArtifacts.length}</strong><span>affected artifacts</span></div>
+                <ul className="impact-list">{impactResult.matchedArtifacts.slice(0, 6).map((item) => <li key={item}><code>{item}</code><span>NEEDS_REVIEW proposal</span></li>)}</ul>
+              </> : <div className="compact-empty"><Icon name="analysis" /><div><strong>Chua co impact report</strong><span>Chon Impact tren requirement de xem duong dan anh huong.</span></div></div>}
+              <div className="context-authority"><span className="authority-dot" /> Context package: bounded read-only evidence · khong uy quyen sua source/test/Git/deploy.</div>
+            </article>
+          </section>
 
           <section className="lower-grid">
             <article className="panel documents-panel" id="documents-panel">

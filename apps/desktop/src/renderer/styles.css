@@ -1107,6 +1107,31 @@ button:disabled {
   }
 }
 
+/* FOUND-012 review / truth / impact workbench */
+.review-workbench { display: grid; grid-template-columns: minmax(0, 1.35fr) minmax(220px, .8fr) minmax(240px, .9fr); gap: 14px; margin-top: 14px; }
+.review-panel, .truth-panel, .impact-panel { min-width: 0; }
+.review-row { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 10px 0; border-bottom: 1px solid var(--border); }
+.review-select { display: flex; min-width: 0; align-items: center; gap: 9px; padding: 0; color: inherit; background: transparent; border: 0; cursor: pointer; text-align: left; }
+.review-select > span:last-child { display: grid; gap: 3px; min-width: 0; }
+.review-select strong, .review-select small { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.review-select small { color: var(--text-muted); font-size: 10px; }
+.review-actions { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 4px; }
+.compact-button { min-height: 28px; padding: 5px 8px; font-size: 10px; }
+.review-selection { display: grid; gap: 4px; margin-top: 10px; padding: 9px; color: var(--text-muted); background: var(--panel-hover); border-left: 2px solid var(--accent); font-size: 11px; }
+.review-selection strong { color: var(--text); }
+.panel-footnote { display: block; margin-top: 8px; color: var(--text-muted); }
+.truth-rail { display: grid; grid-template-columns: repeat(3, 1fr); gap: 7px; margin-top: 10px; }
+.truth-rail > div { display: grid; gap: 4px; padding: 10px 7px; border-top: 2px solid currentColor; background: var(--panel-hover); }
+.truth-rail strong { font: 24px Georgia, serif; }
+.truth-rail span { font-size: 8px; letter-spacing: .08em; }
+.truth-authoritative { color: #278c79; }.truth-warning { color: #b9791c; }.truth-excluded { color: #9b5b5b; }
+.truth-note { margin: 14px 0 0; color: var(--text-muted); font-size: 11px; line-height: 1.5; }
+.impact-summary { display: flex; align-items: baseline; gap: 8px; margin: 12px 0; color: var(--text-muted); }.impact-summary strong { color: var(--text); font: 28px Georgia, serif; }
+.impact-list { display: grid; gap: 6px; max-height: 130px; margin: 0; padding: 0; overflow: auto; list-style: none; }.impact-list li { display: grid; gap: 2px; padding: 6px 8px; background: var(--panel-hover); }.impact-list code { overflow: hidden; color: var(--text); font-size: 10px; text-overflow: ellipsis; white-space: nowrap; }.impact-list span { color: #b9791c; font-size: 9px; }
+.context-authority { display: flex; gap: 6px; margin-top: 12px; color: var(--text-muted); font-size: 10px; line-height: 1.4; }.authority-dot { width: 7px; height: 7px; flex: 0 0 auto; margin-top: 3px; border-radius: 50%; background: #278c79; }
+@media (max-width: 1100px) { .review-workbench { grid-template-columns: 1fr 1fr; }.impact-panel { grid-column: 1 / -1; } }
+@media (max-width: 720px) { .review-workbench { grid-template-columns: 1fr; }.impact-panel { grid-column: auto; }.review-row { align-items: flex-start; flex-direction: column; }.review-actions { justify-content: flex-start; } }
+
 /* Knowledge Graph — engineering traceability atlas */
 .graph-main {
   min-height: calc(100vh - 56px);

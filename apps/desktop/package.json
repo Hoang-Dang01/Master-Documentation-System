@@ -9,7 +9,7 @@
     "dev:electron": "tsc -p tsconfig.electron.json && concurrently --kill-others --names compiler,desktop \"tsc -p tsconfig.electron.json --watch --preserveWatchOutput\" \"wait-on tcp:5173 file:dist-electron/main/index.js file:dist-electron/preload/index.js && cross-env VITE_DEV_SERVER_URL=http://127.0.0.1:5173 node scripts/start-electron.cjs\"",
     "build": "vite build && tsc -p tsconfig.electron.json",
     "typecheck": "tsc -p tsconfig.json --noEmit && tsc -p tsconfig.electron.json --noEmit",
-    "smoke": "cross-env MDS_SMOKE_TEST=1 node scripts/start-electron.cjs",
+    "smoke": "node scripts/run-smoke.cjs",
     "start": "node scripts/start-electron.cjs"
   },
   "dependencies": {

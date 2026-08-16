@@ -106,7 +106,7 @@
       "id": "PM-TSK-MDS-FOUND-003",
       "title": "Obtain a reproducible Electron smoke disposition",
       "lifecycle_state": "DRAFT",
-      "execution_state": "NOT_STARTED",
+      "execution_state": "COMPLETED",
       "owner_role": "QA",
       "effort": 2,
       "blocked_by": ["PM-TSK-MDS-FOUND-001"],
@@ -118,9 +118,15 @@
       ],
       "verification": {
         "commands": ["npm.cmd run smoke"],
-        "evidence": ["docs/foundation/repository-baseline.md"]
+        "evidence": [
+          "docs/foundation/repository-baseline.md",
+          "docs/foundation/found-003-electron-smoke-evidence.md"
+        ]
       },
-      "risks": ["Current Windows execution fails in Electron GPU/cache/OS crypt initialization before renderer assertions."]
+      "risks": [
+        "The managed Windows smoke subprocess requires --no-sandbox; production startup must never inherit that test-only switch.",
+        "A packaged Windows application smoke remains future release evidence."
+      ]
     },
     {
       "id": "PM-TSK-MDS-FOUND-004",
@@ -226,11 +232,10 @@
     {
       "id": "PM-TSK-MDS-FOUND-009",
       "title": "Implement immutable artifact version and approved-head transitions",
-      "lifecycle_state": "DRAFT",
-      "execution_state": "BLOCKED",
-      "blocked_reason": "Awaiting human architecture approval of ARCH-ADR-MDS-FOUND-009@0.1.0 before runtime implementation.",
-      "blocked_since": "2026-08-15",
-      "next_action": "Human architecture authority reviews Option A and records an approval or requested revision.",
+      "lifecycle_state": "APPROVED",
+      "execution_state": "COMPLETED",
+      "blocked_reason": "",
+      "next_action": "FOUND-010 may begin from the approved lineage head and governed graph evidence.",
       "owner_role": "BE",
       "effort": 5,
       "blocked_by": ["PM-TSK-MDS-FOUND-008"],
@@ -246,16 +251,17 @@
         "evidence": [
           "docs/foundation/found-009-lineage-storage-adr.md",
           "docs/foundation/found-009-implementation-plan.md",
+          "docs/foundation/found-009-evidence.md",
           "tests/integration/"
         ]
       },
-      "risks": ["Storage representation needs an approved detailed design before implementation."]
+      "risks": ["Windows filesystem replacement and stale-lock reclamation remain hardening risks; current implementation fails closed and records recovery evidence."]
     },
     {
       "id": "PM-TSK-MDS-FOUND-010",
       "title": "Traverse graph impact and propose downstream validity changes",
       "lifecycle_state": "DRAFT",
-      "execution_state": "NOT_STARTED",
+      "execution_state": "COMPLETED",
       "owner_role": "BE",
       "effort": 5,
       "blocked_by": ["PM-TSK-MDS-FOUND-009"],
@@ -267,16 +273,16 @@
         "Unrelated artifacts remain unchanged."
       ],
       "verification": {
-        "commands": ["npm.cmd run test:graph", "npm.cmd run test:graph-sqlite"],
-        "evidence": ["tests/integration/"]
+        "commands": ["npm.cmd run test:impact", "npm.cmd run test:graph", "npm.cmd run test:graph-sqlite"],
+        "evidence": ["tests/integration/impact-traversal.cjs", "docs/foundation/found-010-evidence.md"]
       },
-      "risks": ["Canonical relationship direction and propagation policy must be explicit to avoid false impact."]
+      "risks": ["Durable validity persistence and Current Project Truth remain scoped to FOUND-011."]
     },
     {
       "id": "PM-TSK-MDS-FOUND-011",
       "title": "Build the Current Project Truth projection and safe context package",
-      "lifecycle_state": "DRAFT",
-      "execution_state": "NOT_STARTED",
+      "lifecycle_state": "APPROVED",
+      "execution_state": "COMPLETED",
       "owner_role": "BE",
       "effort": 5,
       "blocked_by": ["PM-TSK-MDS-FOUND-009", "PM-TSK-MDS-FOUND-010"],
@@ -288,16 +294,16 @@
         "Deleting the derived cache does not delete authoritative artifacts or history."
       ],
       "verification": {
-        "commands": ["npm.cmd run typecheck", "npm.cmd run test:requirements", "npm.cmd run test:graph-sqlite"],
-        "evidence": ["tests/integration/"]
+        "commands": ["npm.cmd run test:truth", "npm.cmd run test:impact", "npm.cmd run test:requirements", "npm.cmd run test:graph-sqlite"],
+        "evidence": ["tests/integration/truth-context.cjs", "docs/foundation/found-011-evidence.md"]
       },
-      "risks": ["A weak package contract could cause a coding agent to implement unapproved content."]
+      "risks": ["Desktop UI wiring remains in FOUND-012; the context contract intentionally fails closed for non-authoritative artifacts."]
     },
     {
       "id": "PM-TSK-MDS-FOUND-012",
       "title": "Deliver desktop review, truth and impact interactions",
-      "lifecycle_state": "DRAFT",
-      "execution_state": "NOT_STARTED",
+      "lifecycle_state": "APPROVED",
+      "execution_state": "COMPLETED",
       "owner_role": "FE",
       "effort": 5,
       "blocked_by": ["PM-TSK-MDS-FOUND-011"],
@@ -312,7 +318,7 @@
         "commands": ["npm.cmd run typecheck", "npm.cmd run build", "npm.cmd run smoke"],
         "evidence": ["apps/desktop/", "docs/foundation/"]
       },
-      "risks": ["Current Electron smoke environment failure must be resolved or formally dispositioned before completion."]
+      "risks": ["Browser-specific click-through automation was unavailable; the current smoke harness proves renderer boot and typed graph bridge only. In-app rich draft editing remains deferred."]
     },
     {
       "id": "PM-TSK-MDS-FOUND-013",

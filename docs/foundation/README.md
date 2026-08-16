@@ -32,6 +32,15 @@ gated as marked.
 8. [`found-009-implementation-plan.md`](found-009-implementation-plan.md) —
    blocked execution proposal and fault-oriented test matrix pending approval
    of the detailed ADR.
+9. [`found-003-electron-smoke-evidence.md`](found-003-electron-smoke-evidence.md)
+   — current Windows Electron smoke disposition and fresh renderer/graph bridge
+   assertions.
+10. [`found-009-evidence.md`](found-009-evidence.md) — fresh immutable lineage,
+    approved-head, recovery, tamper, and compatibility evidence.
+11. [`found-010-evidence.md`](found-010-evidence.md) — graph traversal paths,
+    relationship evidence, and `NEEDS_REVIEW`-only validity proposals.
+12. [`found-011-evidence.md`](found-011-evidence.md) — deterministic Current
+    Project Truth classification and safe authority-labeled context package.
 
 ## Current authority
 

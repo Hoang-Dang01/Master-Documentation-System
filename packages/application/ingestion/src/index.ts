@@ -7,6 +7,7 @@ import {
   validateArtifactMetadata,
   type ArtifactMetadata,
 } from "@mds/domain";
+import { registerRequirementCandidateFromFile } from "@mds/requirements";
 
 const MAX_SOURCE_BYTES = 10 * 1024 * 1024;
 const MAX_EXTRACTED_TEXT_BYTES = 5 * 1024 * 1024;
@@ -30,6 +31,8 @@ export type ImportedDocument = {
   sourceRelativePath: string;
   normalizedRelativePath: string;
   requirementRelativePath: string;
+  requirementLineageId: string;
+  requirementVersionId: string;
 };
 
 export class DuplicateSourceError extends Error {
@@ -146,14 +149,18 @@ function assertProjectPath(projectPath: string, activeProjectsRoot: string): str
   return resolvedProject;
 }
 
-async function walkMarkdown(directoryPath: string): Promise<string[]> {
+async function walkMarkdown(
+  directoryPath: string,
+  options: { includeLineageVersions?: boolean } = {},
+): Promise<string[]> {
   const files: string[] = [];
   const entries = await fs.readdir(directoryPath, { withFileTypes: true });
   for (const entry of entries) {
     if (entry.name.startsWith(".")) continue;
+    if (!options.includeLineageVersions && entry.name === "artifacts") continue;
     const entryPath = path.join(directoryPath, entry.name);
     if (entry.isDirectory()) {
-      files.push(...(await walkMarkdown(entryPath)));
+      files.push(...(await walkMarkdown(entryPath, options)));
     } else if (entry.isFile() && entry.name.toLowerCase().endsWith(".md")) {
       files.push(entryPath);
     }
@@ -361,6 +368,7 @@ ${extractedText}
   const candidates = extractCandidateRequirements(extractedText);
   const requirementContent = `---
 id: ${requirementId}
+lineage_id: ${requirementId}
 title: ${yamlString(`Yêu cầu từ ${originalTitle}`)}
 project: ${projectName}
 lifecycle_state: DRAFT
@@ -391,6 +399,17 @@ ${candidates.map((candidate, index) => `${index + 1}. ${candidate}`).join("\n")}
 - Phạm vi nào không thuộc yêu cầu?
 `;
   await fs.writeFile(requirementPath, requirementContent, "utf8");
+  const requirementRelativePath = path
+    .relative(safeProjectPath, requirementPath)
+    .replaceAll("\\", "/");
+  const registered = await registerRequirementCandidateFromFile({
+    projectPath: safeProjectPath,
+    activeProjectsRoot,
+    lineageId: requirementId,
+    version: "0.1.0",
+    sourceRelativePath: requirementRelativePath,
+    projectId: projectName,
+  });
 
   return {
     title: originalTitle,
@@ -402,8 +421,8 @@ ${candidates.map((candidate, index) => `${index + 1}. ${candidate}`).join("\n")}
     normalizedRelativePath: path
       .relative(safeProjectPath, normalizedPath)
       .replaceAll("\\", "/"),
-    requirementRelativePath: path
-      .relative(safeProjectPath, requirementPath)
-      .replaceAll("\\", "/"),
+    requirementRelativePath,
+    requirementLineageId: registered.lineageId,
+    requirementVersionId: registered.versionId,
   };
 }

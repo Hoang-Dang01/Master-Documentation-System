@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "@mds/domain": "*",
+    "@mds/requirements": "*",
     "mammoth": "^1.12.0"
   },
   "devDependencies": {

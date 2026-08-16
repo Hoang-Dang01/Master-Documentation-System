@@ -1,3 +1,5 @@
+export * from "./lineage.js";
+
 export const LIFECYCLE_STATES = [
   "DRAFT",
   "REVIEW",

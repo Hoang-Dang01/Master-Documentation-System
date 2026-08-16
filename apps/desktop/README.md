@@ -53,6 +53,13 @@ external data is never replaced. See
 
 Use `npm.cmd run build` to create the renderer and Electron output, then `npm.cmd start` to launch that build.
 
+`npm.cmd run smoke` launches the built app with an isolated temporary data,
+user-data, and cache root. On Windows the smoke harness adds Chromium's
+`--no-sandbox` process switch because the managed/headless test environment
+cannot start the GPU child process under its outer sandbox. This switch applies
+only to the smoke subprocess; the shipped `BrowserWindow` still requires
+`sandbox: true`, `contextIsolation: true`, and `nodeIntegration: false`.
+
 ## Implemented vertical slice
 
 The desktop app can now:

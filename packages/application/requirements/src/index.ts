@@ -7,6 +7,17 @@ import {
   type AuditEvent,
   type LifecycleState,
 } from "@mds/domain";
+import {
+  decideRequirementVersion,
+  loadRequirementLineage,
+  readRequirementVersion,
+  registerRequirementCandidate,
+} from "./lineage.js";
+import { proposeImpactFromGraph } from "./impact.js";
+
+export * from "./lineage.js";
+export * from "./impact.js";
+export * from "./truth.js";
 
 export * from "./graph.js";
 export * from "./graph/ports/index.js";
@@ -37,6 +48,9 @@ export type RequirementReviewResult = {
   relativePath: string;
   lifecycleState: LifecycleState;
   approvalId: string;
+  lineageId: string;
+  versionId: string;
+  approvedHeadVersionId: string | null;
 };
 
 export type ImpactReportResult = {
@@ -132,7 +146,7 @@ async function readMarkdownFiles(directoryPath: string): Promise<string[]> {
   const files: string[] = [];
   const entries = await fs.readdir(directoryPath, { withFileTypes: true });
   for (const entry of entries) {
-    if (entry.name.startsWith(".") || entry.name === "audit") continue;
+    if (entry.name.startsWith(".") || entry.name === "audit" || entry.name === "artifacts") continue;
     const entryPath = path.join(directoryPath, entry.name);
     if (entry.isDirectory()) {
       files.push(...(await readMarkdownFiles(entryPath)));
@@ -155,39 +169,55 @@ export async function reviewRequirement(
   const artifactPath = safeArtifactPath(safeProject, relativePath);
   const content = await fs.readFile(artifactPath, "utf8");
   const metadata = parseFrontmatter(content);
-  if (!metadata?.id || !metadata.lifecycle_state) {
+  if (!metadata?.id || !metadata.lifecycle_state || !metadata.version) {
     throw new Error("Requirement thiếu id hoặc lifecycle_state.");
   }
-  const nextState = assertApprovalTransition(
+  assertApprovalTransition(
     metadata.lifecycle_state as LifecycleState,
     decision,
   );
+  const lineageId = metadata.lineage_id ?? metadata.id;
+  let lineage;
+  try {
+    lineage = await loadRequirementLineage(safeProject, activeProjectsRoot, lineageId);
+  } catch (error) {
+    if ((error as NodeJS.ErrnoException).code !== "ENOENT") throw error;
+    await registerRequirementCandidate({
+      projectPath: safeProject,
+      activeProjectsRoot,
+      lineageId,
+      version: metadata.version,
+      content,
+      projectId: metadata.project ?? path.basename(safeProject),
+    });
+    lineage = await loadRequirementLineage(safeProject, activeProjectsRoot, lineageId);
+  }
+  const candidateVersionId = `${lineageId}@${metadata.version}`;
   const now = new Date().toISOString();
-  const approval: AuditEvent = {
-    id: "",
-    type: decision === "APPROVED" ? "REQUIREMENT_APPROVED" : "REQUIREMENT_REJECTED",
-    project: metadata.project ?? path.basename(safeProject),
-    artifactId: metadata.id,
+  const transitionId = createHash("sha256")
+    .update(`${lineageId}:${candidateVersionId}:${decision}:${actor.trim()}:${reason.trim()}:${now}`)
+    .digest("hex")
+    .slice(0, 24);
+  const decided = await decideRequirementVersion({
+    projectPath: safeProject,
+    activeProjectsRoot,
+    lineageId,
+    candidateVersionId,
+    decision,
     actor: actor.trim() || "human",
-    occurredAt: now,
-    data: { reason: reason.trim() || "No reason supplied" },
-  };
-  approval.id = auditId(approval);
-  const updatedContent = replaceOrAppendMetadata(content, {
-    lifecycle_state: nextState,
-    approval_state: decision,
-    approval_id: approval.id,
-    approval_actor: approval.actor,
-    approval_reason: reason.trim() || "No reason supplied",
-    approval_decided_at: now,
+    reason: reason.trim() || "No reason supplied",
+    transitionId,
+    expectedRevision: lineage.revision,
+    decidedAt: now,
   });
-  await writeAtomic(artifactPath, updatedContent);
-  await appendAudit(safeProject, approval);
   return {
     artifactId: metadata.id,
-    relativePath: path.relative(safeProject, artifactPath).replaceAll("\\", "/"),
-    lifecycleState: nextState,
-    approvalId: approval.id,
+    relativePath: decided.relativePath,
+    lifecycleState: decided.lifecycleState,
+    approvalId: decided.approvalId ?? transitionId,
+    lineageId,
+    versionId: candidateVersionId,
+    approvedHeadVersionId: decided.approvedHeadVersionId,
   };
 }
 
@@ -218,13 +248,24 @@ export async function createImpactReport(
   requirementRelativePath: string,
 ): Promise<ImpactReportResult> {
   const safeProject = safeProjectPath(projectPath, activeProjectsRoot);
-  const requirementPath = safeArtifactPath(safeProject, requirementRelativePath);
-  const requirementContent = await fs.readFile(requirementPath, "utf8");
+  const requestedPath = safeArtifactPath(safeProject, requirementRelativePath);
+  const requestedContent = await fs.readFile(requestedPath, "utf8");
+  const requestedMetadata = parseFrontmatter(requestedContent);
+  if (!requestedMetadata?.id) {
+    throw new Error("Requirement is missing identity metadata.");
+  }
+  const approved = await readRequirementVersion(
+    safeProject,
+    activeProjectsRoot,
+    requestedMetadata.lineage_id ?? requestedMetadata.id,
+  );
+  const requirementPath = path.join(safeProject, approved.result.relativePath);
+  const requirementContent = approved.content;
   const requirementMetadata = parseFrontmatter(requirementContent);
   if (!requirementMetadata?.id || !requirementMetadata.title) {
     throw new Error("Requirement thiếu metadata để phân tích tác động.");
   }
-  if (requirementMetadata.lifecycle_state !== "APPROVED") {
+  if (approved.result.lifecycleState !== "APPROVED") {
     throw new Error("Chỉ requirement APPROVED mới được phân tích tác động.");
   }
 
@@ -324,4 +365,12 @@ ${matches.length
     relativePath: path.relative(safeProject, reportPath).replaceAll("\\", "/"),
     matchedArtifacts: matches.map((match) => match.file),
   };
+}
+
+export function createGraphImpactProposal(
+  graph: import("@mds/domain").GraphIndexResult,
+  sourceArtifactId: string,
+  sourceVersion?: string,
+) {
+  return proposeImpactFromGraph(graph, sourceArtifactId, { sourceVersion });
 }

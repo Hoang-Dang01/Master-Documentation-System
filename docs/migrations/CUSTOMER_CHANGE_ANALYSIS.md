@@ -72,9 +72,9 @@ until independent build/dependency boundaries are proven.
 4. [x] Produce draft requirements linked to the preserved source artifact.
 5. [x] Approve the Foundation workflow contract.
 6. Implement immutable version lineage and approved-head transition.
-7. Replace keyword impact matching with evidence-backed graph traversal.
-8. Add validity propagation and Current Project Truth projection.
-9. Generate a safe implementation context package.
+7. [x] Replace keyword impact matching with evidence-backed graph traversal.
+8. [x] Add validity propagation and Current Project Truth projection.
+9. [x] Generate a safe implementation context package.
 10. Connect review/history/impact/truth/context interactions in desktop.
 11. Add fresh smoke/e2e evidence.
 
@@ -92,7 +92,7 @@ until independent build/dependency boundaries are proven.
 - [ ] Migration map rows touched by this slice have evidence before status changes.
 - [x] Workflow contract forbids managed-project source/test mutation and
   terminates at the implementation context package.
-- [ ] Runtime enforces one approved active head per lineage.
+- [x] Runtime enforces one approved active head per lineage.
 - [ ] Context package excludes non-authoritative content from instructions.
 
 ## Explicit non-goals

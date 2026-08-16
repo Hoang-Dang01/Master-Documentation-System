@@ -4,8 +4,8 @@ title: Immutable lineage implementation readiness and test matrix
 project: mds
 phase: "05"
 lifecycle_state: DRAFT
-execution_state: BLOCKED
-blocked_reason: Awaiting human approval of ARCH-ADR-MDS-FOUND-009@0.1.0
+execution_state: COMPLETED
+blocked_reason: ""
 version: 0.1.0
 owner: be_agent
 created_by: codex
@@ -14,7 +14,7 @@ last_updated: 2026-08-15
 source_refs:
   - BA-REQ-MDS-TRUTH-001@1.0.0
   - ARCH-ADR-MDS-FOUND-001@1.0.0
-  - ARCH-ADR-MDS-FOUND-009@0.1.0
+  - ARCH-ADR-MDS-FOUND-009@1.0.0
   - PM-TSK-MDS-FOUND-009
 tags: [foundation, implementation-plan, lineage, test-matrix, blocked]
 links:
@@ -28,10 +28,8 @@ links:
 
 ## Activation gate
 
-This is a reviewable execution proposal, not authorization to change runtime
-code. Work starts only after the human architecture authority approves a
-version of `ARCH-ADR-MDS-FOUND-009`. If another option is selected, this plan
-must be revised before implementation.
+`ARCH-ADR-MDS-FOUND-009@1.0.0` was approved by the human project authority on
+2026-08-16. This plan is active for the bounded FOUND-009 implementation.
 
 ## Deliverable
 
@@ -177,4 +175,3 @@ fallback must be read-only for already governed lineages.
 approved delivery board has fresh evidence, the approved ADR is linked, the
 full task-level checks pass, and no failed atomicity/tamper test is waived by
 the agent.
-

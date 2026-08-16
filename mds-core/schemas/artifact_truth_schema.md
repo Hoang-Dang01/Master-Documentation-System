@@ -54,6 +54,23 @@ Validators report or reject:
 7. context output that omits authority labels; and
 8. derived cache loss that prevents reconstruction from source artifacts.
 
+## Effective lifecycle authority
+
+For a lineage implemented under `ARCH-ADR-MDS-FOUND-009@1.0.0`, the immutable
+Markdown version owns content and its sealed content hash. The structured
+`lineage.json` manifest owns the effective lifecycle state and
+`approved_head_version_id` used by runtime decisions.
+
+Deprecating a former approved head therefore updates the manifest atomically;
+it does not rewrite the former approved Markdown bytes. A historical
+frontmatter lifecycle value records the state at which that version was sealed
+and must not be interpreted as the current head without resolving its manifest.
+
+Manifest and content are one authoritative pair. A missing version file,
+content-hash mismatch, invalid predecessor, or manifest with multiple approved
+heads is `CONFLICTED` for authoritative reads and blocks approval until a human
+reviews recovery evidence.
+
 ## Transition contract
 
 ```text
@@ -73,4 +90,3 @@ Resolved conflict or refreshed specification:
 
 AI may generate a transition proposal. Approval, conflict resolution, and
 replacement of approved content remain human-gated.
-

@@ -3,14 +3,17 @@ id: ARCH-ADR-MDS-FOUND-009
 title: Store immutable artifact versions with an authoritative lineage manifest
 project: mds
 phase: "03"
-lifecycle_state: DRAFT
+lifecycle_state: APPROVED
 execution_state: NOT_APPLICABLE
-decision_status: PROPOSED
-version: 0.1.0
+decision_status: ACCEPTED
+version: 1.0.0
 owner: arch_agent
 created_by: codex
 created_at: 2026-08-15
-last_updated: 2026-08-15
+last_updated: 2026-08-16
+approved_by: human-project-authority
+approved_at: 2026-08-16
+approval_reason: User approved continuing through the goal after Option A was presented as the sole architecture gate.
 source_refs:
   - BA-REQ-MDS-TRUTH-001@1.0.0
   - ARCH-ADR-MDS-FOUND-001@1.0.0
@@ -27,11 +30,12 @@ links:
 
 # Store immutable artifact versions with an authoritative lineage manifest
 
-## Gate status
+## Approval record
 
-This ADR is a design proposal. It does not authorize runtime implementation and
-must not be treated as `APPROVED` until the human architecture authority
-accepts an option.
+The human project authority accepted Option A on 2026-08-16 by instructing MDS
+to continue through the goal after the Option A architecture gate was
+presented. This approval authorizes the bounded FOUND-009 implementation; it
+does not approve a release or later FOUND-010 through FOUND-012 scope.
 
 ## Context
 
@@ -117,7 +121,7 @@ Costs:
 - cannot make file mutation and audit append one governed operation; and
 - does not satisfy the approved truth model.
 
-## Proposed decision
+## Decision
 
 Select **Option A**.
 
@@ -346,10 +350,8 @@ Costs and residual risks:
 - Do not auto-repair a hash mismatch or auto-approve a recovered candidate.
 - Do not present a derived cache as approval evidence.
 
-## Approval requested
+## Decision authority
 
-The human architecture authority is asked to approve or reject Option A,
-including the identity contract, runtime layout, manifest as approved-head
-authority, and manifest replacement as the commit point. Runtime work remains
-blocked until that decision is recorded.
-
+The approved scope includes the identity contract, runtime layout, manifest as
+approved-head authority, and manifest replacement as the commit point. Any
+material change to those choices requires a new ADR version and human approval.

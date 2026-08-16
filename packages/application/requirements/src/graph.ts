@@ -216,7 +216,7 @@ export async function loadCanonicalRelationshipTypes(
 async function walkMarkdown(directory: string): Promise<string[]> {
   const files: string[] = [];
   for (const entry of await fs.readdir(directory, { withFileTypes: true })) {
-    if (entry.name.startsWith(".") || entry.name === "audit") continue;
+    if (entry.name.startsWith(".") || entry.name === "audit" || entry.name === "artifacts") continue;
     const entryPath = path.join(directory, entry.name);
     if (entry.isDirectory()) files.push(...await walkMarkdown(entryPath));
     else if (entry.isFile() && entry.name.toLowerCase().endsWith(".md")) files.push(entryPath);

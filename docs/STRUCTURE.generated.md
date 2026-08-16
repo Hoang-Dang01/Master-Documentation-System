@@ -20,6 +20,7 @@ Master-Documentation-System/
 │   │   ├── dist/  [generated contents omitted]
 │   │   ├── dist-electron/  [generated contents omitted]
 │   │   ├── scripts/
+│   │   │   ├── run-smoke.cjs
 │   │   │   └── start-electron.cjs
 │   │   ├── src/
 │   │   │   ├── main/
@@ -46,10 +47,15 @@ Master-Documentation-System/
 │   │   ├── architecture-decision.md
 │   │   ├── artifact-truth-model.md
 │   │   ├── delivery-board.json
+│   │   ├── found-003-electron-smoke-evidence.md
 │   │   ├── found-007-evidence.md
 │   │   ├── found-008-evidence.md
+│   │   ├── found-009-evidence.md
 │   │   ├── found-009-implementation-plan.md
 │   │   ├── found-009-lineage-storage-adr.md
+│   │   ├── found-010-evidence.md
+│   │   ├── found-011-evidence.md
+│   │   ├── found-012-evidence.md
 │   │   ├── product-boundary.md
 │   │   ├── README.md
 │   │   ├── repository-baseline.md
@@ -72,6 +78,9 @@ Master-Documentation-System/
 │   │       └── slice-4-evidence.md
 │   ├── migrations/
 │   │   └── CUSTOMER_CHANGE_ANALYSIS.md
+│   ├── superpowers/
+│   │   └── plans/
+│   │       └── 2026-08-16-found-009-immutable-lineage.md
 │   ├── views/
 │   │   ├── project_view.md
 │   │   ├── role_view.md
@@ -295,7 +304,10 @@ Master-Documentation-System/
 │   │   │   │   │       ├── graph-index-repository.ts
 │   │   │   │   │       └── index.ts
 │   │   │   │   ├── graph.ts
-│   │   │   │   └── index.ts
+│   │   │   │   ├── impact.ts
+│   │   │   │   ├── index.ts
+│   │   │   │   ├── lineage.ts
+│   │   │   │   └── truth.ts
 │   │   │   ├── .gitkeep
 │   │   │   ├── package.json
 │   │   │   └── tsconfig.json
@@ -309,7 +321,8 @@ Master-Documentation-System/
 │   │   ├── domain/
 │   │   │   ├── dist/  [generated contents omitted]
 │   │   │   ├── src/
-│   │   │   │   └── index.ts
+│   │   │   │   ├── index.ts
+│   │   │   │   └── lineage.ts
 │   │   │   ├── .gitkeep
 │   │   │   ├── package.json
 │   │   │   └── tsconfig.json
@@ -999,7 +1012,10 @@ Master-Documentation-System/
 │   │   ├── graph-index.cjs
 │   │   ├── graph-sqlite-benchmark.cjs
 │   │   ├── graph-sqlite.cjs
+│   │   ├── impact-traversal.cjs
+│   │   ├── lineage-runtime.cjs
 │   │   ├── requirements-review.cjs
+│   │   ├── truth-context.cjs
 │   │   └── workflow-runtime.cjs
 │   └── README.md
 ├── workflows/

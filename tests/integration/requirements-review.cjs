@@ -9,6 +9,10 @@ const {
 } = require("../../packages/application/ingestion/dist/index.js");
 const {
   createImpactReport,
+  loadRequirementLineage,
+  readRequirementVersion,
+  registerRequirementCandidate,
+  decideRequirementVersion,
   reviewRequirement,
 } = require("../../packages/application/requirements/dist/index.js");
 
@@ -79,6 +83,22 @@ Dịch vụ trả về thông báo khi trạng thái phiếu thay đổi.
       "Đã xác nhận phạm vi và tiêu chí chấp nhận.",
     );
     assert.equal(approval.lifecycleState, "APPROVED");
+    assert.equal(approval.lineageId, imported.requirementLineageId);
+    assert.equal(approval.versionId, imported.requirementVersionId);
+    assert.equal(approval.approvedHeadVersionId, imported.requirementVersionId);
+    assert.match(approval.relativePath, /^artifacts\/lineages\//);
+
+    const originalDraft = await fs.readFile(
+      path.join(projectPath, imported.requirementRelativePath),
+      "utf8",
+    );
+    assert.match(originalDraft, /lifecycle_state: DRAFT/);
+    const approvedVersion = await readRequirementVersion(
+      projectPath,
+      activeProjectsRoot,
+      imported.requirementLineageId,
+    );
+    assert.equal(approvedVersion.result.lifecycleState, "APPROVED");
 
     const impact = await createImpactReport(
       projectPath,
@@ -95,11 +115,57 @@ Dịch vụ trả về thông báo khi trạng thái phiếu thay đổi.
     assert.notEqual(secondImpact.relativePath, impact.relativePath);
     assert.notEqual(secondImpact.artifactId, impact.artifactId);
 
+    const successorContent = approvedVersion.content
+      .replace("version: 0.1.0", "version: 0.2.0")
+      .replace("lifecycle_state: DRAFT", "lifecycle_state: DRAFT")
+      .replace("## CÃ¢u há»i cáº§n lÃ m rÃµ", "## TiÃªu chÃ­ Ä‘Ã£ lÃ m rÃµ");
+    const successor = await registerRequirementCandidate({
+      projectPath,
+      activeProjectsRoot,
+      lineageId: imported.requirementLineageId,
+      version: "0.2.0",
+      content: successorContent,
+      projectId: "edumeet",
+      supersedes: imported.requirementVersionId,
+    });
+    const beforeSuccessorApproval = await loadRequirementLineage(
+      projectPath,
+      activeProjectsRoot,
+      imported.requirementLineageId,
+    );
+    await decideRequirementVersion({
+      projectPath,
+      activeProjectsRoot,
+      lineageId: imported.requirementLineageId,
+      candidateVersionId: successor.versionId,
+      decision: "APPROVED",
+      actor: "human",
+      reason: "Approved clarified successor.",
+      transitionId: "requirements-successor-approval",
+      expectedRevision: beforeSuccessorApproval.revision,
+    });
+    const afterSuccessorApproval = await loadRequirementLineage(
+      projectPath,
+      activeProjectsRoot,
+      imported.requirementLineageId,
+    );
+    assert.equal(afterSuccessorApproval.approvedHeadVersionId, successor.versionId);
+    assert.equal(
+      afterSuccessorApproval.versions[imported.requirementVersionId].effectiveLifecycleState,
+      "DEPRECATED",
+    );
+    const successorImpact = await createImpactReport(
+      projectPath,
+      activeProjectsRoot,
+      imported.requirementRelativePath,
+    );
+    assert.ok(successorImpact.matchedArtifacts.includes("design/backend/notification-api.md"));
+
     const events = await fs.readFile(
       path.join(projectPath, "audit", "events.jsonl"),
       "utf8",
     );
-    assert.equal(events.trim().split(/\r?\n/).length, 3);
+    assert.equal(events.trim().split(/\r?\n/).length, 5);
 
     await fs.writeFile(
       path.join(projectPath, "bad-artifact.md"),
