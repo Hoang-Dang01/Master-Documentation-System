@@ -1,16 +1,13 @@
 ---
-
 ownership: mds
 status: canonical
 source: internal
 safe_to_modify: scoped
 canonical_target:
-
-* ./actor-model.md
-* ./actor-registry.yaml
-* ./customer-stakeholder.md
-  update_strategy: extend only through an approved governed workflow
-
+  - ./actor-model.md
+  - ./actor-registry.yaml
+  - ./customer-stakeholder.md
+update_strategy: extend only through an approved governed workflow
 ---
 
 # External Actors
