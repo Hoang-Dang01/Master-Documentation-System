@@ -60,7 +60,10 @@ This standard does not own:
 
 ```text
 Artifact Type semantics
-→ ../schemas/ and applicable canonical artifact model
+→ applicable canonical artifact model
+
+Artifact Type structured representation
+→ ../schemas/
 
 Version-number semantics
 → ./versioning_rules.md

@@ -95,7 +95,7 @@ artifact_truth.md
 → Current Project Truth
 → version lineage
 → approved lineage head
-→ supersession semantics
+→ supersession lineage and truth consequences
 → impact invalidation
 → context-package authority
 
@@ -145,7 +145,7 @@ lineage_id
 
 approved lineage head
 
-supersedes semantics
+supersession lineage and truth consequences
 
 historical lineage
 
@@ -722,4 +722,4 @@ Version Numbering
 ```
 
 This README must not become a competing source for the detailed rules defined
-by those files. 
+by those files.

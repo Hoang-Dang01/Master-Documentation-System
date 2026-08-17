@@ -1,230 +1,541 @@
-# Đặc tả MDS Core — Lược đồ Ngữ cảnh Dự án (project_schema)
-
-> **Vai trò:** Project Context Schema Spec (Lược đồ Ngữ cảnh Dự án)
-> **Sứ mệnh:** Định nghĩa quy chuẩn bắt buộc cho bộ hồ sơ ngữ cảnh nền tảng (Project Profiles) tại thư mục `workspace/projects/active/<project-id>/` nhằm thiết lập ranh giới nghiệp vụ, mục tiêu kinh doanh, ràng buộc tối cao và cấu hình chế độ vận hành cho dự án trước khi vận hành.
-
-> **Liên kết hệ thống:**
-> - Xem phân loại thực thể đầy đủ: [`entity_schema.md`](entity_schema.md)
-> - Xem vòng đời và Quality Gates: [`workflow_schema.md`](workflow_schema.md)
-> - Xem phân định vai trò và RACI: [`role_schema.md`](role_schema.md)
-
+---
+ownership: mds
+status: transitional
+source: internal
+safe_to_modify: scoped
+classification: project_schema
+semantic_owner:
+  - ../standards/naming_convention.md
+  - ../standards/artifact_truth.md
+schema_dependencies:
+  - ./artifact_truth_schema.md
+  - ./entity_schema.md
+canonical_boundary_owners:
+  - ../actors/
+  - ../authorities/
+  - ../roles/
+update_strategy: change only through the applicable governed approval process
 ---
 
-## 1. Bản đồ Hồ sơ Ngữ cảnh Dự án (Project Profiles Matrix)
+# MDS Project Structural Schema
 
-Mọi dự án vận hành trên hệ điều hành MDS bắt buộc phải định nghĩa và duy trì bộ hồ sơ sau ở trạng thái phê duyệt (`APPROVED`) tại thư mục `workspace/projects/active/<project-id>/`:
+## 1. Purpose
+
+This schema defines the common structural contract for MDS project identity,
+context, configuration, and references.
+
+A Project record answers:
 
 ```text
-                           ┌── intake_brief.md      (Yêu cầu thô + Go/No-Go) ──── Phase 00
-                           │
-                           ├── feasibility.md        (FSB — Đánh giá khả thi) ──── Phase 00
-workspace/projects/active/<project-id>/ ──────────┤
-                           ├── project_brief.md      (Mục tiêu, Phạm vi & Nhân sự) Phase 01
-                           ├── business_context.md   (Bối cảnh kinh doanh & ROI) ── Phase 01
-                           └── constraints.md        (Ràng buộc tối cao kỹ thuật) ── Phase 01
+What project is this?
+
+What stable project identity and display information apply?
+
+Which sources and governed context references belong to it?
+
+Which authority assignment or workflow configuration references apply?
+
+Which project-level metadata does MDS need to store or resolve?
 ```
 
-> **Cổng bắt buộc**: Không một luồng phát triển nào (BA/ARCH/BE/FE/QA) được phép khởi động khi toàn bộ bộ hồ sơ này chưa đạt trạng thái `APPROVED` bởi Con người.
+This schema owns:
+
+```text
+project record shape
+
+project identity field representation
+
+project-level reference structure
+
+project configuration extension boundary
+
+structural validation constraints
+
+legacy read compatibility boundary
+```
+
+It does not define a delivery methodology, role contract, approval model,
+workflow engine, or implementation stack.
 
 ---
 
-## 2. Đặc tả Cấu trúc Tài liệu (Document Structures)
+## 2. Semantic Ownership
 
-### 2.1 `intake_brief.md` — Tóm tắt Yêu cầu Thô Ban đầu
+MDS preserves:
 
-Tài liệu đầu tiên ghi nhận tiếng nói của khách hàng ở dạng thô, chưa qua phân tích:
-*   **Nguồn yêu cầu (Request Source)**: Email, chat log, cuộc họp kick-off, RFP — ghi nguyên văn không sửa.
-*   **Mô tả bài toán ban đầu (Raw Problem Statement)**: Khách hàng muốn gì, tại sao, kết quả kỳ vọng là gì.
-*   **Bên liên quan (Stakeholders)**: Danh sách người tham gia quyết định.
-*   **Quyết định Tiếp nhận (Intake Decision)**: `PROCEED` / `REJECT` / `NEED_MORE_INFO` — do PM quyết định.
+```text
+Canonical model or standard
+-> owns semantics
 
----
+This schema
+-> represents project-level structure and validates that representation
+```
 
-### 2.2 `feasibility.md` — Đánh giá Khả thi (Feasibility Study / `FSB`)
+Relevant semantic owners are:
 
-Tài liệu quyết định Go/No-Go trước khi đầu tư vào Discovery:
-*   **Khả thi Kỹ thuật (Technical Feasibility)**: Đội ngũ/Tech Stack hiện tại có đáp ứng được không?
-*   **Khả thi Tài chính (Financial Feasibility)**: Chi phí ước tính so với ngân sách. ROI dự kiến.
-*   **Khả thi Thời gian (Schedule Feasibility)**: Timeline kỳ vọng của khách hàng có thực tế không?
-*   **Verdict**: `GO` / `NO_GO` / `CONDITIONAL_GO` kèm điều kiện ràng buộc nếu là conditional.
-*   **Rủi ro Sơ bộ (Initial Risks)**: Các rủi ro lớn phát hiện ngay từ đầu để lên kế hoạch sớm.
+```text
+Project key and governed artifact identity
+-> ../standards/naming_convention.md
 
----
+Artifact truth, validity, lineage, and Current Project Truth
+-> ../standards/artifact_truth.md
 
-### 2.3 `project_brief.md` — Đặc tả Hồ sơ Dự án & Nhân sự
+Workflow semantics
+-> applicable canonical workflow model or governed workflow contract
 
-Tài liệu xác định mục tiêu vĩ mô, phân bổ nguồn lực và cấu hình chế độ vận hành:
-*   **Mục tiêu Chiến lược (Strategic Goals)**: Mô tả vấn đề dự án cần giải quyết và kết quả kỳ vọng.
-*   **Chế độ Vận hành (Workflow Mode)**: Khai báo `workflow_mode` cho toàn bộ dự án:
-    *   `strict_waterfall` — Gate cứng 100% (Banking, Medical, Regulated).
-    *   `hybrid_agile` — Overlap có kiểm soát (Startup, Product Companies).
-    *   `fast_iteration` — Compress cycle (Solo, AI-driven, PoC).
-*   **Ma trận Phân bổ Nhân sự (RACI Matrix)**: Phân định vai trò giữa Con người và AI Agents (tham chiếu `role_schema.md`).
-*   **Phạm vi nghiệp vụ (In-Scope & Out-of-Scope)**:
-    *   *In-Scope*: Các tính năng bắt buộc phải thực hiện trong phiên bản release hiện tại.
-    *   *Out-of-Scope*: Các tính năng bị loại trừ để tránh phình phạm vi (Scope Creep).
-*   **Mốc thời gian (Milestone Timeline)**: Các dấu mốc bàn giao và phát hành chính.
+Workflow structural representation
+-> ./workflow_schema.md
 
----
+External actor semantics
+-> ../actors/
 
-### 2.4 `business_context.md` — Đặc tả Bối cảnh Kinh doanh & ROI
+Human Approval Authority semantics
+-> ../authorities/
 
-Tài liệu đảm bảo dự án mang lại giá trị thực tế và có thể đo lường được:
-*   **Bối cảnh thị trường (Market Context)**: Lý do dự án cần được thực hiện và phân tích đối thủ cạnh tranh.
-*   **Chân dung người dùng (User Personas)**: Phân tích hành vi, nhu cầu và điểm đau (Pain points) của đối tượng khách hàng mục tiêu.
-*   **Chỉ số Đo lường Hiệu quả (Key Metrics / KPIs)**: Ví dụ: Tốc độ tăng trưởng người dùng, tỷ lệ giữ chân (Retention rate).
-*   **Bài toán Lợi ích đầu tư (ROI Analysis)**: Đánh giá chi phí phát triển so với doanh thu hoặc giá trị kinh doanh mang lại.
+Professional Responsibility semantics
+-> ../roles/
+```
+
+This schema must not redefine those concerns.
 
 ---
 
-### 2.5 `constraints.md` — Đặc tả Ràng buộc Tối cao
+## 3. Project Definition
 
-Tài liệu quan trọng nhất để áp đặt giới hạn (Guardrails) cứng cho toàn bộ hệ thống. Mọi thay đổi ở đây đều là **Major Change**:
-*   **Ràng buộc Kỹ thuật (Technical Constraints)**: Ngăn xếp công nghệ (Tech Stack) bắt buộc được ARCH phê duyệt (ví dụ: PostgreSQL, Next.js, React).
-*   **Ràng buộc Vận hành (Operational Constraints)**:
-    *   *Ngân sách hạ tầng*: Giới hạn chi phí dịch vụ đám mây hàng tháng (ví dụ: dưới $300/tháng).
-    *   *Cam kết dịch vụ (SLA)*: Uptime cam kết (ví dụ: 99.9%) — được sử dụng trực tiếp để tạo `NFR`.
-*   **Ràng buộc Bảo mật & Tuân thủ (Compliance Constraints)**: Quy chuẩn bảo mật phải tuân thủ (GDPR, PCI-DSS, mã hóa dữ liệu tĩnh và truyền đi).
-*   **Ràng buộc NFR Nguồn gốc (NFR Seeds)**: Danh sách các yêu cầu phi chức năng cứng nhất (latency SLA, security baseline) — SA sẽ phát triển thành `NFR-XXX.md` chi tiết ở Phase 02.
+A Project is the project-level namespace and context record through which MDS
+resolves governed artifacts, sources, references, and applicable configuration.
+
+MDS must preserve:
+
+```text
+Project structure
+!=
+Project delivery methodology
+
+Project context
+!=
+Project Truth
+
+Project reference
+!=
+Human Approval Authority
+```
+
+Raw or imported source material remains source material until the applicable
+governed process establishes its status. A reference from the Project record
+does not automatically make its target authoritative Project Truth.
 
 ---
 
-## 3. Hợp đồng Siêu dữ liệu Bắt buộc (Mandatory Metadata Contracts)
+## 4. Project Identity
 
-Tất cả tài liệu trong Project Profiles phải chứa YAML Frontmatter chuẩn tắc để hệ thống Control Plane tự động quét bối cảnh (Context Assembly).
+Every Project must have a stable identity represented by:
 
-### 3.1 Metadata cho `intake_brief.md`
 ```yaml
----
-id: PM-CTX-[PROJECT]-INTAKE
-title: Tóm tắt yêu cầu thô ban đầu
-project: [project-id]
-phase: "00"
-lifecycle_state: DRAFT | REVIEW | APPROVED | DEPRECATED | ARCHIVED
-execution_state: NOT_STARTED | IN_PROGRESS | BLOCKED | COMPLETED | NOT_APPLICABLE
-version: X.Y.Z
-owner: pm_agent
-created_by: pm_agent
-created_at: YYYY-MM-DD
-last_updated: YYYY-MM-DD
-last_synchronized: YYYY-MM-DD
-intake_decision: PROCEED | REJECT | NEED_MORE_INFO
-tags: []
----
+project_id: project-sample
+project_key: SAMPLE
+title: Sample Application
 ```
 
-### 3.2 Metadata cho `feasibility.md`
+| Field | Required | Structural rule |
+| --- | --- | --- |
+| `project_id` | Yes | Opaque stable identity of the Project record within the applicable MDS data root. |
+| `project_key` | Yes | Stable human-manageable namespace token used by governed artifact naming where applicable. |
+| `title` | Yes | Human-readable project title. |
+| `description` | No | Plain-language project summary. |
+
+`project_key` must use the format and stability rules owned by:
+
+```text
+../standards/naming_convention.md
+```
+
+`project_id` identifies the Project object. `project_key` provides the stable
+project namespace used in governed identities such as `ART-SAMPLE-0001`. They
+are separate concepts and must not be treated as aliases.
+
+`project_id` and `project_key` must not encode:
+
+```text
+Professional Responsibility
+Human Approval Authority
+AI agent identity
+Lifecycle State
+Workflow mode
+Artifact Type
+Implementation technology
+```
+
+The example `project-sample` is illustrative only. This schema does not create
+a universal syntax for `project_id` beyond stable, unique representation.
+
+---
+
+## 5. Common Project Shape
+
+The logical project record is:
+
 ```yaml
----
-id: PM-FSB-[PROJECT]-[NUMBER]
-title: Đánh giá khả thi dự án
-project: [project-id]
-phase: "00"
-lifecycle_state: DRAFT | REVIEW | APPROVED | DEPRECATED | ARCHIVED
-execution_state: NOT_STARTED | IN_PROGRESS | BLOCKED | COMPLETED | NOT_APPLICABLE
-version: X.Y.Z
-owner: pm_agent
-created_by: pm_agent
-created_at: YYYY-MM-DD
-last_updated: YYYY-MM-DD
-last_synchronized: YYYY-MM-DD
-verdict: GO | NO_GO | CONDITIONAL_GO
-technical_feasibility: HIGH | MEDIUM | LOW
-financial_feasibility: HIGH | MEDIUM | LOW
-schedule_feasibility: HIGH | MEDIUM | LOW
-conditions: []           # Điều kiện ràng buộc nếu CONDITIONAL_GO
-estimated_budget: ""
-estimated_timeline: ""
-tags: []
----
+project_id: project-sample
+project_key: SAMPLE
+title: Sample Application
+description: Optional project summary
+
+context_refs: []
+source_refs: []
+actor_refs: []
+authority_assignment_refs: []
+responsibility_assignment_refs: []
+workflow_ref: null
+
+configuration: {}
+metadata: {}
 ```
 
-### 3.3 Metadata cho `project_brief.md`
+| Field | Required | Structural rule |
+| --- | --- | --- |
+| `context_refs` | No | References to project context artifacts or records; logical default is `[]`. |
+| `source_refs` | No | References to preserved source material or source records; logical default is `[]`. |
+| `actor_refs` | No | References to External Actors where applicable. |
+| `authority_assignment_refs` | No | References to applicable authority assignments; no approval rule is defined here. |
+| `responsibility_assignment_refs` | No | References to applicable responsibility assignments; no role contract or RACI is defined here. |
+| `workflow_ref` | No | Reference to a workflow configuration or governed workflow contract. |
+| `configuration` | No | Extensible project configuration object; logical default is `{}`. |
+| `metadata` | No | Extension object owned by an applicable specific schema or project contract. |
+
+Fields may be stored across project metadata, structured sidecars, local
+persistence, or other implementation representations, provided MDS can
+reconstruct the logical record without inventing information.
+
+---
+
+## 6. Project Context and Source References
+
+Project context is represented through references rather than a fixed document
+set. No specific filename is universally required.
+
+For example:
+
 ```yaml
----
-id: PM-CTX-[PROJECT]-BRIEF
-title: Hồ sơ dự án và Phân bổ Nhân sự
-project: [project-id]
-phase: "01"
-lifecycle_state: DRAFT | REVIEW | APPROVED | DEPRECATED | ARCHIVED
-execution_state: NOT_STARTED | IN_PROGRESS | BLOCKED | COMPLETED | NOT_APPLICABLE
-version: X.Y.Z
-owner: pm_agent
-created_by: pm_agent
-created_at: YYYY-MM-DD
-last_updated: YYYY-MM-DD
-last_synchronized: YYYY-MM-DD
-workflow_mode: strict_waterfall | hybrid_agile | fast_iteration
-tags: []
----
+context_refs:
+  - lineage_id: ART-SAMPLE-0001
+
+source_refs:
+  - ref: source/sample-intake
 ```
 
-### 3.4 Metadata cho `business_context.md`
+A governed context reference normally identifies a stable lineage. MDS resolves
+an unpinned lineage reference through Artifact Truth; it must not mean “use the
+latest version”.
+
+An exact version may be supplied only when the Project intentionally pins it:
+
 ```yaml
----
-id: BA-CTX-[PROJECT]-BUSINESS
-title: Bối cảnh nghiệp vụ và ROI dự án
-project: [project-id]
-phase: "01"
-lifecycle_state: DRAFT | REVIEW | APPROVED | DEPRECATED | ARCHIVED
-execution_state: NOT_STARTED | IN_PROGRESS | BLOCKED | COMPLETED | NOT_APPLICABLE
-version: X.Y.Z
-owner: ba_agent
-created_by: ba_agent
-created_at: YYYY-MM-DD
-last_updated: YYYY-MM-DD
-last_synchronized: YYYY-MM-DD
-tags: []
----
+context_refs:
+  - lineage_id: ART-SAMPLE-0001
+    version: 1.0.0
 ```
 
-### 3.5 Metadata cho `constraints.md`
+Where supplied, `version` must use the governed version-reference structure
+required by `artifact_truth_schema.md`.
+
+This schema does not require a project to contain any fixed combination of:
+
+```text
+intake_brief.md
+feasibility.md
+project_brief.md
+business_context.md
+constraints.md
+```
+
+Those files may remain historical source material or be referenced by a
+specific workflow, template, or migration contract. They are not a universal
+canonical Project Schema requirement.
+
+### 6.1 Project-Level Constraints
+
+Project-level constraints should normally be represented as governed context
+or constraint references. This schema must not establish universal hard-coded
+fields for technology stacks, budget, uptime targets, or compliance rules.
+
+```text
+Project configuration reference
+!=
+Universal project constraint semantics
+```
+
+---
+
+## 7. Actor, Authority, and Responsibility References
+
+Projects may reference actors, authority assignments, and responsibility
+assignments when an applicable contract requires them.
+
+The schema represents the reference only. It does not assign the referenced
+entity's semantic role, responsibility, or authority.
+
+```text
+External Actor semantics
+-> ../actors/
+
+Human Approval Authority semantics
+-> ../authorities/
+
+Professional Responsibility semantics
+-> ../roles/
+```
+
+MDS must preserve:
+
+```text
+Professional Responsibility
+!=
+Human Approval Authority
+
+AI agent identity
+!=
+Project ownership or Human Approval Authority
+```
+
+This schema must not define fields or rules equivalent to:
+
+```text
+PM Agent owns the project
+
+BA Agent owns requirements
+
+Architecture Agent approves constraints
+
+RACI by human or AI identity
+```
+
+---
+
+## 8. Workflow and Configuration Boundary
+
+`workflow_ref` may identify an applicable project workflow configuration.
+
+Example:
+
 ```yaml
+workflow_ref: workflow/sample
+```
+
+The Project Schema does not define workflow phases, gates, sequencing, or a
+closed methodology enum.
+
+In particular, it does not establish:
+
+```text
+Phase 00 / Phase 01 / Phase 02
+
+strict_waterfall
+
+hybrid_agile
+
+fast_iteration
+```
+
+as universal MDS Project semantics.
+
+`configuration` may contain values required by an applicable project or
+integration contract. It must not silently introduce:
+
+```text
+Human Approval Authority semantics
+
+Professional Responsibility semantics
+
+relationship vocabulary
+
+fixed SDLC methodology
+
+implementation authority
+```
+
+Specific configuration keys must have an applicable semantic owner outside
+this common structural schema.
+
 ---
-id: ARCH-CTX-[PROJECT]-CONSTRAINTS
-title: Ràng buộc Kỹ thuật và Vận hành Tối cao
-project: [project-id]
-phase: "01"
-lifecycle_state: DRAFT | REVIEW | APPROVED | DEPRECATED | ARCHIVED
-execution_state: NOT_STARTED | IN_PROGRESS | BLOCKED | COMPLETED | NOT_APPLICABLE
-version: X.Y.Z
-owner: arch_agent
-created_by: arch_agent
-created_at: YYYY-MM-DD
-last_updated: YYYY-MM-DD
-last_synchronized: YYYY-MM-DD
-tech_stack: []           # Danh sách công nghệ bắt buộc
-sla_uptime: ""           # Ví dụ: "99.9%"
-budget_monthly_usd: 0
-compliance: []           # Ví dụ: ["GDPR", "PCI-DSS"]
-tags: []
----
+
+## 9. Validation Rules
+
+The Validator may evaluate this schema as a structural contract. Validation
+does not grant approval, establish Current Project Truth, or select a delivery
+methodology.
+
+For every canonical Project write, the Validator must check:
+
+```text
+project_id is present and unique within the applicable MDS data root
+
+project_key is present and conforms to the Naming Standard
+
+title is present
+
+all required references resolve or remain explicitly unresolved where allowed
+
+governed context references include a resolvable lineage_id
+
+an explicitly supplied governed context version resolves
+
+an unpinned governed context reference resolves its lineage through Artifact
+Truth and does not select the latest version
+
+authority, responsibility, actor, and workflow references resolve when present
+
+configuration and metadata do not replace required common fields
+```
+
+Validation results do not imply:
+
+```text
+Project approved
+
+Scope approved
+
+Architecture approved
+
+Release approved
 ```
 
 ---
 
-## 4. Quy tắc Kiểm duyệt & Cưỡng chế (Governance Rules)
+## 10. Legacy Compatibility
 
-*   **Rule 1 — Cổng Khởi động Dự án (Project Inception Gate)**:
-    Không một luồng phát triển nào (BA/ARCH/BE/FE/QA/DEVOPS) được phép kích hoạt khi chưa có đủ:
-    1. `feasibility.md` ở trạng thái `APPROVED` với `verdict: GO` hoặc `CONDITIONAL_GO`.
-    2. Bộ ba `project_brief.md`, `business_context.md`, `constraints.md` cùng ở trạng thái `APPROVED` bởi Con người.
+Historical project data may contain:
 
-*   **Rule 2 — Kiểm tra Chênh lệch Ràng buộc (Constraint Drift Validation)**:
-    Bất kỳ thay đổi nào trong `constraints.md` đều bị coi là **Thay đổi Trọng yếu (Major Change)**. Khi `constraints.md` thay đổi:
-    1. Kích hoạt tự động quét đối soát toàn bộ: `ADR`, `NFR`, `API` để phát hiện vi phạm ràng buộc mới.
-    2. Dừng pipeline tự động và gửi cảnh báo đỏ (Critical Warning) đến Con người.
-    3. Mọi Agent bị cấm tạo artifact mới cho đến khi Con người xác nhận lại trạng thái.
+```text
+fixed Project Profile documents
 
-*   **Rule 3 — Ranh giới Sở hữu Tài liệu (Ownership Boundary)**:
-    *   PM Agent sở hữu và duy trì `intake_brief.md`, `feasibility.md`, `project_brief.md`.
-    *   BA Agent sở hữu và duy trì `business_context.md`.
-    *   ARCH Agent sở hữu và duy trì `constraints.md`.
-    *   ORCH Agent (Orchestrator) chỉ có quyền đọc (Read-only) tất cả tài liệu CTX để pack context.
-    *   KC Agent (Knowledge Curator) có quyền gắn tag và cập nhật metadata `last_synchronized`.
+Phase 00 / Phase 01 / Phase 02
 
-*   **Rule 4 — Đồng bộ `workflow_mode` (Mode Consistency)**:
-    Giá trị `workflow_mode` khai báo trong `project_brief.md` là giá trị duy nhất và bắt buộc áp dụng nhất quán cho toàn bộ vòng đời dự án. Thay đổi `workflow_mode` sau khi dự án đã qua Phase 02 bị coi là **Major Change** và yêu cầu phê duyệt của Con người.
+role-coded artifact identifiers
 
-*   **Rule 5 — NFR Seeds phải được Phát triển (NFR Propagation)**:
-    Mọi ràng buộc phi chức năng cứng khai báo trong `constraints.md` (ví dụ: SLA uptime, latency baseline) phải được SA phát triển thành ít nhất 1 tài liệu `NFR-XXX.md` tương ứng trước khi kết thúc Phase 02. Không `API` hay `DB` nào được `APPROVED` nếu thiếu liên kết `NFR`.
+PM, BA, Architecture, or other AI-agent ownership fields
+
+human or AI RACI configuration
+
+strict_waterfall, hybrid_agile, or fast_iteration workflow modes
+
+fixed intake, feasibility, or constraint approval rules
+```
+
+MDS may read, preserve, and explicitly map that data during migration. It is
+not a canonical new-write requirement.
+
+MDS must preserve:
+
+```text
+Legacy Read Compatibility
+!=
+Canonical Write Contract
+```
+
+Ambiguous legacy semantics must not be silently migrated. A migration record
+must retain source provenance and mapping basis where a mapping occurs.
+
+---
+
+## 11. Invariants
+
+### PROJECT-INV-001
+
+Every Project has a stable project identity.
+
+### PROJECT-INV-002
+
+Project identity does not encode Professional Responsibility or methodology.
+
+### PROJECT-INV-003
+
+Project Context is not a mandatory fixed set of five documents.
+
+### PROJECT-INV-004
+
+Project Schema does not define a universal SDLC phase sequence.
+
+### PROJECT-INV-005
+
+Professional Responsibility does not imply Human Approval Authority.
+
+### PROJECT-INV-006
+
+AI agent identity does not grant ownership or approval authority.
+
+### PROJECT-INV-007
+
+Governed project artifacts consume Artifact Truth Schema.
+
+### PROJECT-INV-008
+
+Workflow configuration is separate from Project identity and Project Truth.
+
+### PROJECT-INV-009
+
+Project-level constraints are referenced governed knowledge, not universal
+hard-coded Project fields.
+
+### PROJECT-INV-010
+
+Legacy Project Profile and workflow assumptions remain migration data rather
+than canonical new-write requirements.
+
+---
+
+## 12. Transitional Status
+
+This file remains transitional while focused project configuration, workflow,
+and integration contracts are still being migrated to their canonical owners.
+
+Its project identity, reference structure, and separation rules may be used
+now. It must not become a universal project methodology or approval model.
+
+---
+
+## 13. Source of Truth
+
+This schema owns only:
+
+```text
+project structural shape
+
+project identity field representation
+
+project-level reference representation
+
+project configuration extension boundary
+
+project structural validation constraints
+
+legacy read-compatibility boundary
+```
+
+Detailed semantics route to their canonical owners:
+
+```text
+Project key and governed artifact identity
+-> ../standards/naming_convention.md
+
+Artifact Truth
+-> ../standards/artifact_truth.md
+
+Schema dependencies
+-> ./artifact_truth_schema.md
+-> ./entity_schema.md
+
+Actors, authorities, and Professional Responsibilities
+-> their respective MDS Core boundary directories
+
+Workflow semantics
+-> applicable canonical workflow model or governed workflow contract
+
+Workflow structural representation
+-> ./workflow_schema.md
+```
+
+Principle:
+
+> **Project is the identity, context, and configuration layer for MDS—not a
+> universal SDLC methodology, role contract, or approval model.**

@@ -28,6 +28,10 @@ Master-Documentation-System/
 │   │   │   ├── preload/
 │   │   │   │   └── index.ts
 │   │   │   └── renderer/
+│   │   │       ├── public/
+│   │   │       │   └── assets/
+│   │   │       │       ├── mds-logo-taskbar.png
+│   │   │       │       └── mds-logo.png
 │   │   │       ├── ui/
 │   │   │       │   ├── foundation.css
 │   │   │       │   ├── foundation.tsx
@@ -272,6 +276,7 @@ Master-Documentation-System/
 │   │   ├── artifact_truth_schema.md
 │   │   ├── entity_schema.md
 │   │   ├── project_schema.md
+│   │   ├── README.MD
 │   │   ├── role_schema.md
 │   │   └── workflow_schema.md
 │   ├── standards/
