@@ -1,0 +1,51 @@
+ownership: mds
+status: canonical
+source: internal
+safe_to_modify: scoped
+update_strategy: extend only through the applicable governed approval process
+
+registry:
+  id: mds-system-capability-registry
+  classification: system_capability
+  semantics_ref: ./system-capability-model.md
+
+capability_classes:
+  - id: orchestrator
+    display_name: Orchestrator
+    status: canonical
+    classification: system_capability
+    description: >
+      An internal MDS capability that coordinates governed activities, identifies
+      applicable next steps, routes work to the appropriate responsibility,
+      authority, capability, or external boundary, and surfaces blocked or
+      unresolved workflow conditions.
+
+  - id: knowledge-curator
+    display_name: Knowledge Curator
+    status: canonical
+    classification: system_capability
+    description: >
+      An internal MDS capability that organises, normalises, relates, indexes,
+      and maintains the structural quality, provenance, lineage, and
+      retrievability of project knowledge without silently changing its
+      authoritative meaning.
+
+  - id: validator
+    display_name: Validator
+    status: canonical
+    classification: system_capability
+    description: >
+      An internal MDS capability that evaluates artifacts, metadata, evidence,
+      relationships, and governed states against defined schemas, invariants,
+      standards, constraints, or validation rules and produces explicit
+      validation findings.
+
+  - id: context-builder
+    display_name: Context Builder
+    status: canonical
+    classification: system_capability
+    description: >
+      An internal MDS capability that selects, correlates, and packages bounded
+      Project Truth, evidence, relationships, constraints, and unresolved
+      information for a defined consumer and purpose while preserving source
+      provenance and context freshness.

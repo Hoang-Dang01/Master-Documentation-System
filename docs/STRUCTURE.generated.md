@@ -284,7 +284,9 @@ Master-Documentation-System/
 │   │   ├── relationship_rules.md
 │   │   └── versioning_rules.md
 │   ├── system-capabilities/
-│   │   └── README.md
+│   │   ├── README.md
+│   │   ├── system-capability-model.md
+│   │   └── system-capability-registry.yaml
 │   ├── templates/
 │   │   ├── agent/
 │   │   │   └── agent_spec_template.md

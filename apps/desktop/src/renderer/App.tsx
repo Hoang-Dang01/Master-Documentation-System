@@ -132,9 +132,10 @@ export function App() {
   const [isSelecting, setIsSelecting] = useState(false);
   const [isImporting, setIsImporting] = useState(false);
   const [technicalMode, setTechnicalMode] = useState(false);
-  const [isDark, setIsDark] = useState(
-    () => window.matchMedia?.("(prefers-color-scheme: dark)").matches ?? false,
-  );
+  // MDS uses a light document workspace by default. Dark OS preference must
+  // not invert the control-plane UI; the graph remains the dedicated dark
+  // technical surface. Users can still opt into the alternate theme manually.
+  const [isDark, setIsDark] = useState(false);
   const [query, setQuery] = useState("");
   const [importedDocument, setImportedDocument] =
     useState<MdsImportedDocument | null>(null);
