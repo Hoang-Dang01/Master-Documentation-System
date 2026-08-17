@@ -974,8 +974,8 @@ Artifact lifecycle
 Business artifact schemas
 → ../schemas/
 
-Workflow execution
-→ workflows/
+Workflow behaviour
+→ applicable governance standard or workflow contract
 
 Implementation
 → ../implementation-plane/

@@ -1,5 +1,4 @@
 ---
-
 ownership: mds
 status: canonical
 source: internal
@@ -7,6 +6,8 @@ safe_to_modify: approval-gated
 classification: approval_authority
 update_strategy: change only through the applicable human approval gate
 ---
+
+# Human Approval Authority Model
 
 ## 1. Purpose
 
