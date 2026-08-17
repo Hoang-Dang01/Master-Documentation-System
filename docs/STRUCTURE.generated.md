@@ -28,6 +28,11 @@ Master-Documentation-System/
 │   │   │   ├── preload/
 │   │   │   │   └── index.ts
 │   │   │   └── renderer/
+│   │   │       ├── ui/
+│   │   │       │   ├── foundation.css
+│   │   │       │   ├── foundation.tsx
+│   │   │       │   ├── index.ts
+│   │   │       │   └── README.md
 │   │   │       ├── App.tsx
 │   │   │       ├── global.d.ts
 │   │   │       ├── index.html
@@ -118,9 +123,18 @@ Master-Documentation-System/
 │   └── TO_BE_STRUCTURE.md
 ├── mds-core/
 │   ├── actors/
+│   │   ├── actor-model.md
+│   │   ├── actor-registry.yaml
+│   │   ├── customer-stakeholder.md
 │   │   └── README.md
 │   ├── authorities/
-│   │   └── README.md
+│   │   ├── architecture-authority.md
+│   │   ├── authority-model.md
+│   │   ├── authority-registry.yaml
+│   │   ├── business-authority.md
+│   │   ├── product-authority.md
+│   │   ├── README.md
+│   │   └── release-authority.md
 │   ├── examples/
 │   │   └── pattern-library/
 │   │       ├── architecture/

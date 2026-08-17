@@ -1,5 +1,13 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { KnowledgeGraphView } from "./KnowledgeGraphView";
+import {
+  Button,
+  CountBadge,
+  IconButton,
+  Kbd,
+  StatusBadge,
+  Surface,
+} from "./ui";
 
 type IconName =
   | "activity"
@@ -391,14 +399,13 @@ export function App() {
         </nav>
 
         <div className="sidebar-footer">
-          <button
-            aria-label={isDark ? "Dùng giao diện sáng" : "Dùng giao diện tối"}
+          <IconButton
             className="sidebar-icon-button"
+            label={isDark ? "Dùng giao diện sáng" : "Dùng giao diện tối"}
             onClick={() => setIsDark((current) => !current)}
-            type="button"
           >
             <Icon name={isDark ? "sun" : "moon"} />
-          </button>
+          </IconButton>
           <button
             aria-pressed={technicalMode}
             className={`technical-toggle ${technicalMode ? "is-on" : ""}`}
@@ -436,28 +443,28 @@ export function App() {
               type="search"
               value={query}
             />
-            <kbd>Ctrl K</kbd>
+            <Kbd>Ctrl K</Kbd>
           </label>
 
           <div className="topbar-actions">
-            <button
+            <Button
               className="button button-secondary"
               disabled
               title="Sẽ được mở ở lát cắt workflow tiếp theo"
-              type="button"
+              tone="secondary"
             >
               <Icon name="spark" />
               Phân tích mới
-            </button>
-            <button
+            </Button>
+            <Button
               className="button button-primary"
               disabled={isImporting || !workspacePath}
               onClick={handleImportDocument}
-              type="button"
+              tone="primary"
             >
               <Icon name="import" />
               {isImporting ? "Đang nhập…" : "Nhập tài liệu"}
-            </button>
+            </Button>
           </div>
         </header>
 
@@ -478,15 +485,15 @@ export function App() {
               <h1>Tổng quan</h1>
               <p>Việc cần xử lý và thay đổi mới nhất của {workspaceDisplayName}.</p>
             </div>
-            <button
+            <Button
               className="button button-ghost"
               disabled={!workspacePath}
               onClick={handleOpenWorkspace}
-              type="button"
+              tone="quiet"
             >
               <Icon name="folder" />
               Mở thư mục
-            </button>
+            </Button>
           </div>
 
           {notice ? (
@@ -497,38 +504,38 @@ export function App() {
           ) : null}
 
           <section className="status-grid" aria-label="Trạng thái dự án">
-            <article className="status-card">
+            <Surface as="article" className="status-card" emphasis="raised" tone="review">
               <div className="status-card-icon warning"><Icon name="task" /></div>
               <div>
                 <span>Yêu cầu chờ duyệt</span>
                 <strong>{reviewArtifacts.length}</strong>
                 <small>{reviewArtifacts.length ? "Cần phản hồi" : "Không có hàng chờ"}</small>
               </div>
-            </article>
-            <article className="status-card">
+            </Surface>
+            <Surface as="article" className="status-card" emphasis="raised" tone="info">
               <div className="status-card-icon accent"><Icon name="workflow" /></div>
               <div>
                 <span>Workflow đang chạy</span>
                 <strong>{runningWorkflows}</strong>
                 <small>{runningWorkflows ? "Đang chờ duyệt bản nháp" : "Chưa có phiên chạy"}</small>
               </div>
-            </article>
-            <article className="status-card">
+            </Surface>
+            <Surface as="article" className="status-card" emphasis="raised" tone="conflict">
               <div className="status-card-icon success"><Icon name="alert" /></div>
               <div>
                 <span>Blocker đã ghi nhận</span>
                 <strong>0</strong>
                 <small>Từ metadata hiện có</small>
               </div>
-            </article>
-            <article className="status-card">
+            </Surface>
+            <Surface as="article" className="status-card" emphasis="raised" tone="neutral">
               <div className="status-card-icon neutral"><Icon name="document" /></div>
               <div>
                 <span>Tài liệu gần đây</span>
                 <strong>{recentArtifacts.length}</strong>
                 <small>Trong danh sách hiện tại</small>
               </div>
-            </article>
+            </Surface>
           </section>
 
           <section className="responsibility-map" aria-labelledby="responsibility-map-title">
@@ -604,7 +611,7 @@ export function App() {
                   <h2>Cần xử lý</h2>
                   <p>Bản nháp và tài liệu đang chờ quyết định.</p>
                 </div>
-                <span className="count-chip">{attentionArtifacts.length}</span>
+                <CountBadge tone="review">{attentionArtifacts.length}</CountBadge>
               </div>
 
               {attentionArtifacts.length ? (
@@ -644,9 +651,10 @@ export function App() {
                   <h2>Workflow hiện tại</h2>
                   <p>Customer Change Analysis</p>
                 </div>
-                <span className={`workflow-state ${runningWorkflows ? "is-running" : ""}`}>
-                  {runningWorkflows ? "Đang chạy" : "Chưa chạy"}
-                </span>
+                <StatusBadge
+                  label={runningWorkflows ? "Đang chạy" : "Chưa chạy"}
+                  tone={runningWorkflows ? "info" : "neutral"}
+                />
               </div>
 
               {runningWorkflows ? (
@@ -677,15 +685,16 @@ export function App() {
                   <div className="workflow-illustration"><Icon name="workflow" size={22} /></div>
                   <strong>Chưa có workflow đang chạy</strong>
                   <span>Nhập DOCX, Markdown hoặc TXT để tạo bản nháp đầu tiên.</span>
-                  <button
+                  <Button
                     className="button button-primary compact-button"
                     disabled={isImporting || !workspacePath}
                     onClick={handleImportDocument}
-                    type="button"
+                    size="sm"
+                    tone="primary"
                   >
                     <Icon name="import" />
                     Nhập tài liệu
-                  </button>
+                  </Button>
                 </div>
               )}
             </article>

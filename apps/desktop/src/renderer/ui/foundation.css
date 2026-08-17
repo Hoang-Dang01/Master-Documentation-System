@@ -54,6 +54,39 @@
   --mds-semantic-neutral: #716c62;
 }
 
+/* Compatibility bridge while legacy renderer views migrate incrementally. */
+:root {
+  --accent: #b68d16;
+  --accent-hover: #95730f;
+  --accent-soft: #fff0b8;
+  --app-bg: var(--mds-color-background);
+  --border: color-mix(in srgb, var(--mds-color-border) 45%, transparent);
+  --border-strong: var(--mds-color-border);
+  --danger: #bd526b;
+  --focus: color-mix(in srgb, var(--mds-semantic-info) 75%, transparent);
+  --panel: var(--mds-color-surface);
+  --panel-hover: var(--mds-color-surface-muted);
+  --sidebar: #eee8d9;
+  --sidebar-active: var(--mds-semantic-action);
+  --status-blue: #317697;
+  --status-blue-soft: var(--mds-semantic-info);
+  --status-green: #386b37;
+  --status-green-soft: var(--mds-semantic-approved);
+  --status-yellow: #855119;
+  --status-yellow-soft: var(--mds-semantic-review);
+  --text: var(--mds-color-ink);
+  --text-muted: var(--mds-color-ink-muted);
+  --text-soft: var(--mds-color-ink-subtle);
+}
+
+:root[data-theme="dark"] {
+  --accent: #f2ca4f;
+  --accent-hover: #ffe07a;
+  --accent-soft: #584a1b;
+  --sidebar: #25231e;
+  --sidebar-active: #4e421c;
+}
+
 .mds-button,
 .mds-icon-button {
   display: inline-flex;

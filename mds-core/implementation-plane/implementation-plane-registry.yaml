@@ -1,0 +1,50 @@
+ownership: mds
+status: canonical
+source: internal
+safe_to_modify: scoped
+update_strategy: extend only through the applicable governed approval process
+
+registry:
+  id: mds-implementation-plane-registry
+  classification: implementation_plane
+  semantics_ref: ./implementation-plane-model.md
+
+participant_classes:
+  - id: human-implementer
+    display_name: Human Implementer
+    status: canonical
+    classification: implementation_plane_participant
+    description: >
+      A human participant who directly performs implementation work within a
+      managed project, including changes to source code, tests, configuration,
+      migrations, infrastructure definitions, scripts, or other implementation
+      artifacts.
+
+  - id: coding-agent
+    display_name: Coding Agent
+    status: canonical
+    classification: implementation_plane_participant
+    description: >
+      An AI-enabled implementation executor capable of inspecting, creating,
+      or modifying managed-project implementation artifacts and returning
+      implementation evidence such as diffs, commits, build results, or test
+      results.
+
+  - id: development-tool-environment
+    display_name: Development Tool / Environment
+    status: canonical
+    classification: implementation_plane_participant
+    description: >
+      A tool or environment that provides capabilities through which
+      implementation work is performed, including editors, IDEs, shells,
+      debuggers, repository clients, build tools, or local development
+      environments.
+
+  - id: delivery-automation
+    display_name: Delivery Automation
+    status: canonical
+    classification: implementation_plane_participant
+    description: >
+      Automated infrastructure that builds, verifies, packages, promotes, or
+      deploys implementation artifacts and produces implementation, delivery,
+      or deployment evidence.
