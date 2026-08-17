@@ -5,7 +5,7 @@ status: canonical
 source: internal
 safe_to_modify: scoped
 update_strategy: extend only through an approved governed workflow
-------------------------------------------------------------------
+---
 
 # External Actor Model
 

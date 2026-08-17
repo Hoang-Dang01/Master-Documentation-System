@@ -9,108 +9,106 @@ classification: external_actor
 model_ref: ./actor-model.md
 registry_ref: ./actor-registry.yaml
 update_strategy: extend only through an approved governed workflow
-------------------------------------------------------------------
+---
 
 # Customer / Stakeholder
 
 ## 1. Mục đích
 
-`Customer / Stakeholder` là External Actor chuẩn hiện tại của MDS.
+`Customer / Stakeholder` là External Actor Type chuẩn hiện tại của MDS.
 
-Actor type này đại diện cho một con người hoặc tổ chức nằm ngoài professional responsibility model của MDS nhưng có quan hệ thực tế với project thông qua một hoặc nhiều hình thức:
+Actor type này đại diện cho một con người hoặc tổ chức nằm ngoài professional responsibility model của MDS nhưng có quan hệ thực tế với project thông qua:
 
-* có nhu cầu hoặc mục tiêu liên quan đến sản phẩm;
-* có kiến thức về nghiệp vụ hoặc quy trình thực tế;
-* chịu ảnh hưởng bởi sản phẩm hoặc thay đổi của sản phẩm;
-* cung cấp phản hồi;
-* cung cấp yêu cầu thay đổi;
-* tham gia làm rõ hoặc xác nhận thông tin;
-* có thể đồng thời giữ một approval authority nếu được governance model gán riêng.
+* nhu cầu;
+* mục tiêu;
+* vấn đề;
+* kiến thức nghiệp vụ;
+* ràng buộc;
+* xác nhận;
+* phản hồi;
+* yêu cầu thay đổi.
 
-`Customer / Stakeholder` không phải một professional role và không phải một AI agent.
+`Customer / Stakeholder` phải tuân theo toàn bộ semantics và invariants được định nghĩa trong `actor-model.md`.
+
+File này chỉ định nghĩa những đặc điểm riêng của Actor Type `customer-stakeholder`.
 
 ---
 
-# 2. Phạm vi của actor type
+# 2. Phạm vi của Actor Type
 
-`Customer / Stakeholder` là một classification cấp cao.
+MDS sử dụng `Customer / Stakeholder` như một classification cấp cao để biểu diễn các bên bên ngoài có liên quan đến project.
 
-MDS không yêu cầu ngay từ đầu phải chia External Actor thành nhiều loại nhỏ như:
+Một project thực tế có thể có nhiều dạng stakeholder khác nhau, chẳng hạn:
 
-* customer;
-* end user;
-* business owner;
-* domain expert;
-* sponsor;
-* partner;
-* operator.
+* khách hàng;
+* người sử dụng;
+* người sở hữu nghiệp vụ;
+* chuyên gia nghiệp vụ;
+* đơn vị vận hành;
+* đơn vị tài trợ;
+* đối tác;
+* bên chịu ảnh hưởng.
 
-Những khác biệt này có thể được biểu diễn ở project data khi cần.
+Các khác biệt này không tự động tạo Actor Type canonical mới.
 
-Chỉ tạo Actor Type canonical mới nếu classification hiện tại không còn đủ để biểu diễn semantic cần thiết của MDS.
+Trong đa số trường hợp, chúng nên được biểu diễn bằng metadata của Actor Instance trong project data.
 
 Nguyên tắc:
 
-> Không mô hình hóa cơ cấu tổ chức chi tiết hơn mức cần thiết để MDS hiểu project.
+> MDS chỉ tách Actor Type mới khi sự khác biệt đó làm thay đổi semantic hoặc cách hệ thống xử lý knowledge.
 
 ---
 
-# 3. Customer và Stakeholder
+# 3. Vai trò của Customer / Stakeholder đối với project
 
-Trong actor type này:
+Customer / Stakeholder là một trong những nguồn kết nối quan trọng giữa:
 
-## Customer
+```text
+THẾ GIỚI THỰC
+      │
+      ▼
+Customer / Stakeholder
+      │
+      ▼
+Source Information
+      │
+      ▼
+MDS Professional Responsibilities
+```
 
-Là người hoặc tổ chức có nhu cầu trực tiếp đối với sản phẩm, dịch vụ hoặc kết quả của project.
+Actor này không có nhiệm vụ tạo specification kỹ thuật.
 
-Customer có thể là bên:
+Vai trò chính là cung cấp thông tin về:
 
-* yêu cầu sản phẩm;
-* tài trợ;
-* sử dụng kết quả;
-* đại diện cho nhu cầu business.
-
-## Stakeholder
-
-Là khái niệm rộng hơn.
-
-Stakeholder có thể là bất kỳ người hoặc tổ chức nào:
-
-* có kiến thức quan trọng đối với project;
-* ảnh hưởng đến project;
-* bị project ảnh hưởng;
-* cần được tham vấn;
-* cung cấp feedback;
-* có trách nhiệm xác nhận một số thông tin;
-* hoặc có lợi ích liên quan đến kết quả project.
-
-MDS sử dụng `Customer / Stakeholder` như một actor type chung để tránh tạo taxonomy quá sớm.
+* điều đang xảy ra trong thực tế;
+* điều cần thay đổi;
+* điều được mong muốn;
+* điều đang gây vấn đề;
+* điều cần được giữ lại;
+* điều chưa đáp ứng;
+* điều đã thay đổi so với trước.
 
 ---
 
-# 4. Customer / Stakeholder có thể cung cấp gì?
-
-Một Customer / Stakeholder có thể cung cấp các loại source input sau.
+# 4. Các loại thông tin có thể cung cấp
 
 ## 4.1. Intent
 
-Ý định, mục tiêu hoặc kết quả mà actor muốn đạt được.
+Mục tiêu hoặc kết quả mà actor muốn đạt được.
 
-Intent trả lời những câu hỏi như:
+Intent mô tả:
 
-* actor muốn thay đổi điều gì;
-* actor đang cố đạt kết quả nào;
-* tại sao project hoặc thay đổi này cần tồn tại.
+> Actor muốn điều gì thay đổi trong thế giới thực?
 
-Intent không tự động trở thành requirement.
+Intent chưa phải Requirement.
 
 ---
 
 ## 4.2. Problem
 
-Vấn đề hoặc khó khăn thực tế mà actor đang gặp.
+Vấn đề, khó khăn hoặc kết quả không mong muốn hiện đang tồn tại.
 
-MDS phải phân biệt:
+MDS phải giữ rõ sự khác biệt:
 
 ```text
 Problem
@@ -118,33 +116,53 @@ Problem
 Proposed Solution
 ```
 
-Một actor có thể đề xuất một giải pháp, nhưng MDS không được mặc định coi giải pháp đó là requirement cuối cùng.
+Customer / Stakeholder có thể đề xuất giải pháp, nhưng giải pháp đó phải tiếp tục được đánh giá bởi professional responsibilities phù hợp.
 
 ---
 
-## 4.3. Process Knowledge
+## 4.3. Need
 
-Kiến thức về cách công việc, nghiệp vụ hoặc quy trình thực tế đang diễn ra.
+Khả năng hoặc kết quả mà actor cần để giải quyết một vấn đề hoặc đạt một mục tiêu.
 
-Process Knowledge có thể bao gồm:
+Need thường nằm giữa:
 
-* actor tham gia nào;
-* trình tự công việc;
-* quyết định nghiệp vụ;
-* ngoại lệ;
-* quy tắc hiện tại;
-* các bước thủ công;
-* điểm gây khó khăn.
+```text
+Problem
+   ↓
+Need
+   ↓
+Requirement
+```
 
-Kiến thức này là source input để professional roles tiếp tục phân tích.
+Việc chuyển Need thành Requirement thuộc professional analysis.
 
 ---
 
-## 4.4. Constraint
+## 4.4. Process Knowledge
 
-Ràng buộc từ thực tế mà project cần xem xét.
+Thông tin về cách nghiệp vụ hoặc công việc thực tế đang diễn ra.
 
-Constraint có thể liên quan đến:
+Có thể bao gồm:
+
+* ai tham gia;
+* công việc diễn ra theo trình tự nào;
+* điều kiện để chuyển bước;
+* trường hợp ngoại lệ;
+* quy tắc đang được áp dụng;
+* cách xử lý thủ công;
+* vấn đề trong quy trình hiện tại.
+
+Process Knowledge là source input.
+
+Nó chưa phải System Specification.
+
+---
+
+## 4.5. Constraint
+
+Ràng buộc thực tế mà project cần biết.
+
+Ví dụ về loại constraint:
 
 * nghiệp vụ;
 * tổ chức;
@@ -154,580 +172,434 @@ Constraint có thể liên quan đến:
 * dữ liệu;
 * chính sách.
 
-Một constraint từ actor không tự động quyết định technical implementation.
+Constraint mô tả điều project phải xem xét.
+
+Nó không tự quyết định cách kỹ thuật sẽ đáp ứng constraint đó.
 
 ---
 
-## 4.5. Confirmation
+## 4.6. Clarification
 
-Actor có thể xác nhận rằng một interpretation, mô tả quy trình hoặc thông tin nghiệp vụ phản ánh đúng hiểu biết của họ.
+Thông tin bổ sung được cung cấp để làm rõ một điểm chưa xác định.
 
-Confirmation phải được hiểu trong phạm vi:
+Clarification có thể xuất hiện khi một professional role phát hiện:
 
-* knowledge của actor;
-* context;
-* authority nếu có.
-
-Confirmation không đồng nghĩa với universal approval authority.
+* ambiguity;
+* missing information;
+* conflict;
+* assumption cần kiểm chứng.
 
 ---
 
-## 4.6. Feedback
+## 4.7. Confirmation
 
-Actor có thể phản hồi về:
+Customer / Stakeholder có thể xác nhận rằng một mô tả hoặc interpretation phản ánh đúng hiểu biết của họ.
+
+Confirmation chỉ có giá trị trong context và phạm vi phù hợp.
+
+Việc confirmation có trở thành approval hay authoritative decision hay không được quyết định bởi governance và authority model.
+
+---
+
+## 4.8. Feedback
+
+Feedback có thể liên quan đến:
 
 * proposal;
 * requirement;
-* thiết kế;
 * prototype;
+* thiết kế;
 * implementation;
-* sản phẩm đang vận hành;
 * trải nghiệm sử dụng;
-* kết quả đạt được.
+* hệ thống đang vận hành;
+* kết quả thực tế.
 
-Feedback là source input mới và phải giữ provenance.
+Feedback là source information mới và có thể kích hoạt phân tích tiếp theo.
 
 ---
 
-## 4.7. Change Request
+## 4.9. Change Request
 
-Actor có thể cho biết rằng:
+Change Request cho biết một phần của nhu cầu, mục tiêu, quy trình, rule hoặc mong muốn đã thay đổi.
 
-* nhu cầu đã thay đổi;
-* quy trình đã thay đổi;
-* rule đã thay đổi;
-* sản phẩm hiện tại chưa đáp ứng;
-* cần bổ sung hoặc loại bỏ capability.
+Ví dụ conceptual:
+
+```text
+Current understanding
+        │
+        ▼
+New stakeholder information
+        │
+        ▼
+Potential Change
+        │
+        ▼
+Governed Change Analysis
+```
 
 Change Request không trực tiếp sửa Project Truth.
 
-Nó phải đi qua workflow phân tích và governance phù hợp.
-
 ---
 
-# 5. Customer / Stakeholder có thể nhận gì từ MDS?
+# 5. Customer và Stakeholder
 
-MDS và các professional roles có thể quay lại External Actor để yêu cầu:
+MDS hiện gom hai khái niệm này vào cùng một Actor Type.
 
-* clarification;
-* confirmation;
-* missing information;
-* conflict resolution input;
-* phản hồi về proposal;
-* phản hồi về outcome;
-* thông tin bổ sung sau khi phát hiện impact hoặc ambiguity.
+## Customer
 
-MDS không nên xem External Actor như một nguồn input một chiều.
+Thường có quan hệ trực tiếp với nhu cầu hoặc kết quả mà product/project phải tạo ra.
 
-Quan hệ đúng là:
+Có thể:
 
-```text
-External Actor
-      │
-      ▼
-     MDS
-      │
-      ▼
-Analysis
-      │
-      └─────────────► Clarification / Confirmation
-                           │
-                           ▼
-                     External Actor
-```
+* yêu cầu sản phẩm;
+* tài trợ sản phẩm;
+* đại diện cho nhu cầu business;
+* nhận kết quả từ project.
 
----
+## Stakeholder
 
-# 6. Customer / Stakeholder không phải Requirement
+Là khái niệm rộng hơn.
 
-Một Customer / Stakeholder có thể phát biểu:
+Một Stakeholder có thể:
+
+* có kiến thức quan trọng;
+* chịu ảnh hưởng;
+* ảnh hưởng đến quyết định;
+* cần được tham vấn;
+* cung cấp feedback;
+* tham gia xác nhận.
+
+MDS không mặc định:
 
 ```text
-Statement
-```
-
-Nhưng statement đó không tự động trở thành:
-
-```text
-Requirement
-```
-
-Luồng chuẩn là:
-
-```text
-Actor Statement
-      ↓
-Preserved Source
-      ↓
-Professional Analysis
-      ↓
-Clarification if required
-      ↓
-Structured Proposal
-      ↓
-Governed confirmation / approval
-      ↓
-Project Truth
-```
-
-Nguyên tắc:
-
-> MDS phải bảo tồn điều actor thực sự nói trước khi lưu cách MDS hoặc AI diễn giải điều đó.
-
----
-
-# 7. Customer / Stakeholder không phải Product Decision
-
-Actor có thể yêu cầu một capability hoặc đưa ra một ý tưởng.
-
-Điều đó không tự động quyết định:
-
-* feature có thuộc Product Boundary hay không;
-* feature có được ưu tiên hay không;
-* feature có được triển khai ở milestone hiện tại hay không;
-* giải pháp được đề xuất có phải giải pháp phù hợp hay không.
-
-Những quyết định này thuộc professional responsibility và approval authority phù hợp.
-
-```text
-Actor
-"I want X."
-      ↓
-Product responsibility
-"Should the product solve this?"
-      ↓
-Business analysis
-"What does this actually mean?"
-```
-
----
-
-# 8. Customer / Stakeholder không phải Technical Authority
-
-Việc một actor đề xuất một công nghệ, kiến trúc hoặc cách triển khai không tự động biến đề xuất đó thành technical decision.
-
-External Actor có thể cung cấp:
-
-```text
-Need
-Constraint
-Expected Outcome
-```
-
-Professional roles chịu trách nhiệm chuyển các đầu vào đó thành technical decisions phù hợp.
-
-Ví dụ khái niệm:
-
-```text
-Actor Constraint
-      ↓
-System / Architecture Analysis
-      ↓
-Technical Decision
-```
-
-Không được:
-
-```text
-Actor Technical Suggestion
-      ↓
-Automatic Architecture Truth
-```
-
----
-
-# 9. Customer / Stakeholder và Approval Authority
-
-`Customer / Stakeholder` không tự động có quyền approval.
-
-Một Actor Instance có thể đồng thời được gán một Approval Authority.
-
-Hai classification phải được giữ độc lập:
-
-```text
-Actor Instance
-      │
-      ├── actor type
-      │      Customer / Stakeholder
-      │
-      └── authority reference
-             Business Approval Authority
-```
-
-Việc gán authority phải được định nghĩa và kiểm soát trong `authorities/`.
-
-Nguyên tắc:
-
-> Actor identity không quyết định approval rights.
-
----
-
-# 10. Customer / Stakeholder và Professional Role
-
-Một con người thật có thể đồng thời:
-
-* được model như Customer / Stakeholder;
-* đảm nhiệm một professional responsibility;
-* giữ một approval authority.
-
-MDS không được gộp ba chiều này thành một.
-
-```text
-Person / Organisation
-│
-├── Actor relationship
-├── Professional responsibility
-└── Approval authority
-```
-
-Điều MDS quan tâm là **ngữ cảnh và trách nhiệm**, không phải chỉ chức danh của con người.
-
----
-
-# 11. Knowledge và Authority
-
-Customer / Stakeholder có thể có kiến thức rất sâu về một chủ đề nhưng không có quyền quyết định chủ đề đó.
-
-Ngược lại, một actor có authority cao có thể không phải người hiểu chi tiết vận hành nhất.
-
-MDS phải giữ độc lập ít nhất các chiều:
-
-```text
-Knowledge
-Influence
-Impact
-Authority
-```
-
-Không được suy luận:
-
-```text
-High Knowledge
-→ High Authority
+Customer
+=
+Stakeholder có authority cao nhất
 ```
 
 hoặc:
 
 ```text
-High Impact
-→ Approval Rights
+Stakeholder
+=
+Customer
 ```
+
+Chi tiết quan hệ phải được biểu diễn ở Actor Instance hoặc authority model tương ứng.
 
 ---
 
-# 12. Mâu thuẫn giữa các Stakeholder
+# 6. Quan hệ với Quản lý sản phẩm
 
-Các stakeholder có thể cung cấp thông tin khác nhau hoặc mâu thuẫn trực tiếp.
+Các input như:
 
-Ví dụ khái niệm:
+* problem;
+* need;
+* intent;
+* product feedback;
+* feature request;
+* product-level change request;
+
+thường được chuyển tới trách nhiệm `product-management`.
+
+Mục tiêu của bước này là đánh giá:
+
+* vấn đề có thuộc sản phẩm không;
+* vấn đề có đáng giải quyết không;
+* giá trị kỳ vọng là gì;
+* mức độ ưu tiên;
+* phạm vi sơ bộ.
+
+Luồng khái niệm:
 
 ```text
-Stakeholder A
-→ Statement X
-
-Stakeholder B
-→ Statement Y
-
-X conflicts with Y
+Customer / Stakeholder
+        │
+        │ problem / intent / need
+        ▼
+Product Management
 ```
 
-MDS phải:
-
-1. giữ nguyên cả hai nguồn;
-2. giữ provenance;
-3. xác định conflict;
-4. xác định chủ đề conflict;
-5. xác định actor knowledge và authority liên quan nếu biết;
-6. yêu cầu clarification hoặc decision khi cần.
-
-MDS không được:
-
-* chọn nguồn có vẻ hợp lý hơn;
-* lấy majority làm truth nếu governance không quy định;
-* để AI tự hòa giải bằng assumption;
-* xóa nguồn cũ khi có nguồn mới.
-
-Conflict chưa được giải quyết phải được biểu diễn là unresolved.
+Customer / Stakeholder không tự quyết định Product Boundary hoặc priority chỉ bằng việc đưa ra yêu cầu.
 
 ---
 
-# 13. Thông tin chưa chắc chắn
+# 7. Quan hệ với Phân tích nghiệp vụ
 
-Không phải mọi thông tin từ Stakeholder đều có cùng độ chắc chắn.
+Các input như:
 
-Professional analysis có thể xác định thông tin là:
+* process knowledge;
+* business information;
+* rule description;
+* clarification;
+* exception;
+* business feedback;
 
-* explicit statement;
-* confirmed information;
-* observation;
-* assumption;
-* unclear;
-* conflicting.
+thường được chuyển tới `business-analysis`.
 
-MDS phải tránh biến:
+BA chịu trách nhiệm:
 
-```text
-"có lẽ"
-"thường"
-"đa số"
-"tùy trường hợp"
-```
-
-thành rule chính thức nếu chưa được làm rõ.
-
----
-
-# 14. Provenance
-
-Mọi source contribution quan trọng từ Customer / Stakeholder phải có khả năng truy ngược.
-
-MDS phải có khả năng trả lời:
-
-```text
-Ai cung cấp?
-
-Khi nào?
-
-Trong ngữ cảnh nào?
-
-Qua nguồn nào?
-
-Nội dung gốc là gì?
-
-Nội dung đó đã được phân tích thành gì?
-
-Có quyết định nào dựa trên nó?
-```
-
-Source contribution phải được bảo tồn độc lập với interpretation.
-
----
-
-# 15. Customer / Stakeholder trong vòng đời project
-
-Customer / Stakeholder có thể tương tác với project xuyên suốt vòng đời.
-
-```text
-Khám phá
-→ cung cấp problem / intent
-
-Product analysis
-→ làm rõ value / scope
-
-Business analysis
-→ cung cấp process knowledge
-
-Clarification
-→ trả lời câu hỏi
-
-Confirmation
-→ xác nhận business understanding
-
-Evaluation
-→ phản hồi proposal
-
-Acceptance
-→ phản hồi kết quả
-
-Runtime
-→ feedback / incident context
-
-Change
-→ change request
-```
-
-Actor không phải một bước tuyến tính chỉ xuất hiện ở đầu project.
-
----
-
-# 16. Handoff vào Professional Responsibility Model
-
-Thông tin từ External Actor được professional roles tiếp nhận tùy loại.
-
-Ví dụ ở mức khái niệm:
-
-```text
-Intent / Problem / Product Feedback
-            ↓
-    Product Management
-
-Process Knowledge / Business Rule
-            ↓
-     Business Analysis
-
-Clarification Request
-            ↓
-    Relevant Professional Role
-```
-
-MDS không yêu cầu mọi input từ actor phải đi qua cùng một role.
-
-Routing cụ thể thuộc workflow và responsibility model tương ứng.
-
----
-
-# 17. External Actor không được thực hiện implementation
-
-Customer / Stakeholder classification không thuộc Implementation Plane.
-
-Actor type này không tạo quyền:
-
-* sửa source code;
-* commit;
-* merge;
-* deploy;
-* chạy CI/CD với tư cách implementation authority;
-* thay đổi implementation evidence.
-
-Implementation thuộc `implementation-plane/`.
-
----
-
-# 18. External Actor không phải Runtime Environment
-
-Customer / Stakeholder có thể cung cấp feedback về hệ thống đang chạy.
-
-Nhưng actor không đại diện cho Production.
-
-```text
-Stakeholder Feedback
-≠
-Runtime Evidence
-```
-
-Ví dụ:
-
-```text
-Actor says:
-"Hệ thống đang chậm."
-```
-
-là feedback.
-
-Telemetry cho thấy latency cụ thể là runtime evidence.
-
-Hai nguồn có thể liên kết với nhau nhưng không được đồng nhất.
-
----
-
-# 19. Vai trò của AI
-
-AI trong MDS có thể hỗ trợ xử lý actor input bằng cách:
-
-* trích xuất statement;
-* phân loại thông tin;
+* làm rõ;
+* cấu trúc hóa;
 * phát hiện ambiguity;
 * phát hiện conflict;
-* tìm missing information;
-* đề xuất clarification questions;
-* liên kết source với artifact liên quan;
-* so sánh thông tin mới với Project Truth hiện tại.
+* xác định business rule;
+* tạo requirement proposal.
 
-AI không được:
+Luồng khái niệm:
 
-* giả lập actor rồi coi output là source;
-* tạo confirmation thay actor;
-* tạo approval authority;
-* tự giải quyết conflict bằng assumption;
-* biến statement trực tiếp thành authoritative truth.
+```text
+Customer / Stakeholder
+        │
+        │ process knowledge
+        │ business information
+        ▼
+Business Analysis
+```
+
+Customer / Stakeholder không phải Requirement Author.
 
 ---
 
-# 20. Các nguyên tắc bất biến
+# 8. Yêu cầu kỹ thuật do Stakeholder đề xuất
+
+Customer / Stakeholder có thể đề xuất một giải pháp kỹ thuật.
+
+MDS phải giữ đề xuất đó như một source statement hoặc constraint candidate.
+
+Ví dụ conceptual:
+
+```text
+Stakeholder says:
+"Use technology X."
+        │
+        ▼
+Preserved Source
+        │
+        ▼
+Relevant Technical Analysis
+        │
+        ▼
+Technical Decision
+```
+
+Không được chuyển trực tiếp:
+
+```text
+Stakeholder suggestion
+        ↓
+Architecture Truth
+```
+
+trừ khi governance model xác định rõ actor đó đồng thời giữ authority phù hợp.
+
+---
+
+# 9. Tương tác hai chiều
+
+Customer / Stakeholder không chỉ là nguồn input một chiều.
+
+Professional responsibilities có thể quay lại actor để:
+
+* hỏi thêm thông tin;
+* xác minh interpretation;
+* giải quyết ambiguity;
+* làm rõ conflict;
+* yêu cầu phản hồi;
+* xác nhận outcome.
+
+```text
+Customer / Stakeholder
+        ↓
+       MDS
+        ↓
+Professional Analysis
+        ↓
+Question / Clarification Request
+        ↓
+Customer / Stakeholder
+```
+
+MDS phải hỗ trợ việc giữ liên kết giữa câu hỏi và câu trả lời tương ứng.
+
+---
+
+# 10. Mâu thuẫn giữa Stakeholder
+
+Nhiều Customer / Stakeholder có thể cung cấp thông tin khác nhau về cùng một chủ đề.
+
+Trong trường hợp đó, MDS phải áp dụng conflict semantics từ `actor-model.md`.
+
+Riêng đối với Customer / Stakeholder, professional analysis nên xác định khi có thể:
+
+* chủ đề đang mâu thuẫn;
+* stakeholder nào cung cấp từng statement;
+* knowledge context của từng stakeholder;
+* authority reference nếu tồn tại;
+* câu hỏi cần làm rõ;
+* quyết định nào đang bị block.
+
+Không được suy luận rằng stakeholder có chức danh cao hơn luôn đúng.
+
+Authority phải được xác định riêng.
+
+---
+
+# 11. Feedback và Change Loop
+
+Customer / Stakeholder có thể tạo ra vòng lặp thay đổi trong suốt vòng đời project.
+
+```text
+Need / Problem
+     ↓
+Product & Business Analysis
+     ↓
+Project Truth
+     ↓
+Implementation
+     ↓
+Runtime / Usage
+     ↓
+Feedback
+     ↓
+Customer / Stakeholder
+     ↓
+New Change Input
+     ↺
+```
+
+Vì vậy `Customer / Stakeholder` không chỉ thuộc giai đoạn khởi đầu của project.
+
+Actor type này có thể tiếp tục tương tác trong toàn bộ vòng đời.
+
+---
+
+# 12. Customer / Stakeholder không sở hữu các concern sau
+
+File này không trao cho Customer / Stakeholder quyền sở hữu mặc định đối với:
+
+```text
+Product priority
+→ product-management/
+
+Business requirement analysis
+→ business-analysis/
+
+System behaviour
+→ system-analysis/
+
+Architecture
+→ architecture-tech-lead/
+
+Implementation
+→ implementation-plane/
+
+Approval authority
+→ authorities/
+
+Runtime evidence
+→ runtime/
+```
+
+Một Actor Instance có thể đồng thời giữ professional responsibility hoặc approval authority khác, nhưng các classification phải được mô hình hóa độc lập.
+
+---
+
+# 13. Type-specific invariants
+
+Các invariant chung của External Actor được kế thừa từ `actor-model.md`.
+
+`Customer / Stakeholder` bổ sung các invariant đặc thù sau.
 
 ### CUSTOMER-STAKEHOLDER-INV-001
 
-Customer / Stakeholder là External Actor, không phải Professional Role.
+Một yêu cầu hoặc đề xuất từ Customer / Stakeholder không tự động trở thành Product Decision.
 
 ### CUSTOMER-STAKEHOLDER-INV-002
 
-Customer / Stakeholder không tự tạo AI agent.
+Một phát biểu về nghiệp vụ không tự động trở thành Requirement.
 
 ### CUSTOMER-STAKEHOLDER-INV-003
 
-Customer / Stakeholder không tự động có Approval Authority.
+Một đề xuất kỹ thuật từ Customer / Stakeholder không tự động trở thành Technical Decision.
 
 ### CUSTOMER-STAKEHOLDER-INV-004
 
-Customer / Stakeholder không tự động có Technical hoặc Implementation Authority.
+Customer / Stakeholder phải có thể tham gia clarification và feedback loop sau lần cung cấp input ban đầu.
 
 ### CUSTOMER-STAKEHOLDER-INV-005
 
-Actor Statement không tự động trở thành Requirement hoặc Project Truth.
-
-### CUSTOMER-STAKEHOLDER-INV-006
-
-Source contribution phải giữ provenance.
-
-### CUSTOMER-STAKEHOLDER-INV-007
-
-Source và interpretation phải được giữ riêng.
-
-### CUSTOMER-STAKEHOLDER-INV-008
-
-Conflicting stakeholder statements phải được giữ lại cho đến khi được giải quyết theo governance phù hợp.
-
-### CUSTOMER-STAKEHOLDER-INV-009
-
-Knowledge, Influence, Impact và Authority là các chiều độc lập.
-
-### CUSTOMER-STAKEHOLDER-INV-010
-
-Actor Instance là project data và không được lưu như canonical actor knowledge trong `mds-core`.
+Sự khác biệt giữa các loại stakeholder trong một project nên được biểu diễn bằng project metadata trước khi tạo thêm Actor Type canonical.
 
 ---
 
-# 21. Ownership Boundary
+# 14. Ownership Boundary
 
-File này sở hữu semantic definition của Actor Type:
+File này sở hữu semantic đặc thù của Actor Type:
 
 ```text
 customer-stakeholder
 ```
 
+Nó kế thừa External Actor semantics từ:
+
+```text
+actor-model.md
+```
+
 Nó không sở hữu:
 
 ```text
-Actor schema
-→ schemas/
+External Actor general invariants
+→ actor-model.md
 
-Approval rights
-→ authorities/
+Canonical Actor Type list
+→ actor-registry.yaml
 
 Professional responsibilities
 → roles/
 
-Implementation behavior
+Approval authority
+→ authorities/
+
+Actor data schema
+→ schemas/
+
+Governance rules
+→ standards/
+
+Workflow behaviour
+→ workflows/
+
+Implementation
 → implementation-plane/
 
-Runtime evidence semantics
+Runtime evidence
 → runtime/
-
-AI prompt behavior
-→ prompts/
-
-Workflow routing
-→ governed workflows
-
-Usage examples
-→ examples/
 ```
-
-Không được sao chép canonical rules của các vùng trên vào file này.
-
----
-
-# 22. Nguyên tắc mở rộng
-
-Không tách `Customer / Stakeholder` thành nhiều Actor Type canonical chỉ vì project thực tế có nhiều chức danh khác nhau.
-
-Chỉ xem xét Actor Type mới khi:
-
-1. semantic hiện tại không thể biểu diễn đúng loại tương tác;
-2. sự khác biệt ảnh hưởng trực tiếp đến cách MDS xử lý knowledge;
-3. project-level metadata không đủ để biểu diễn khác biệt;
-4. thay đổi được phê duyệt qua governed workflow.
 
 Nguyên tắc:
 
-> MDS mô hình hóa external reality đủ để hiểu project, không mô phỏng toàn bộ cơ cấu tổ chức.
+> Type definition chỉ định nghĩa điều làm Actor Type đó khác biệt; luật chung phải được kế thừa từ Actor Model thay vì sao chép lại.
+
+---
+
+# 15. Nguyên tắc mở rộng
+
+Không chia `Customer / Stakeholder` thành nhiều Actor Type canonical chỉ vì ngoài đời tồn tại nhiều chức danh hoặc bộ phận khác nhau.
+
+Ưu tiên:
+
+```text
+Một Actor Type
++
+Project-specific metadata
+```
+
+trước:
+
+```text
+Nhiều Actor Type canonical
+```
+
+Chỉ mở rộng khi semantic thực sự khác và thay đổi đó đã đi qua governed workflow.

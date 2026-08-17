@@ -1,4 +1,3 @@
-```yaml
 ownership: mds
 status: canonical
 source: internal
@@ -20,4 +19,3 @@ actor_types:
       A person or organisation outside the MDS professional responsibility
       model that may provide intent, process knowledge, confirmation,
       feedback, or change requests to a project.
-```
