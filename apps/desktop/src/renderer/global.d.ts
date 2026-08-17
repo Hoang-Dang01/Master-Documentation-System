@@ -142,6 +142,14 @@ type MdsGraphNodeDetail = MdsGraphNode & {
   issues: MdsGraphIssue[];
 };
 
+type MdsEvidenceBundleSummary = {
+  bundleId: string; projectId: string; acceptedAt: string; contextPackageId: string;
+  producerType: string; producerId: string; repository: string; commit: string;
+  artifactVersionIds: string[];
+  results: Array<{ kind: string; status: string; command_label: string; evidence_file: string }>;
+  submittedManifestSha256: string; relativePath: string;
+};
+
 interface Window {
   mds: {
     getAppInfo(): Promise<MdsAppInfo>;
@@ -149,6 +157,7 @@ interface Window {
     chooseDataRoot(): Promise<MdsDataRootSelection>;
     openWorkspace(workspacePath: string): Promise<MdsOpenWorkspaceResult>;
     listArtifacts(projectPath: string): Promise<MdsArtifactSummary[]>;
+    listEvidenceBundles(projectPath: string): Promise<MdsEvidenceBundleSummary[]>;
     importDocument(projectPath: string): Promise<MdsImportDocumentResult>;
     reviewRequirement(
       projectPath: string,

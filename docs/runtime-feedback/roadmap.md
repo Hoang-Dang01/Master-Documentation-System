@@ -65,6 +65,7 @@ Scope/requirement approval
 ## Decisions required
 
 - [x] Scope and requirement approval — human project authority, 2026-08-17.
-- [ ] Evidence bundle/finding ADR approval — human architect.
-- [ ] Executable backlog approval — human PM/project authority.
-- [ ] Milestone release approval — human release authority.
+- [x] Evidence bundle/finding ADR Option A approval — human architect, 2026-08-17.
+- [x] Executable backlog approval — human PM/project authority, 2026-08-17.
+- [x] Local milestone release approval — human release authority, 2026-08-17;
+  deployment and packaged release distribution not authorized.

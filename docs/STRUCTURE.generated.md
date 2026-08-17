@@ -43,6 +43,12 @@ Master-Documentation-System/
 ├── docs/
 │   ├── archive/
 │   │   └── .gitkeep
+│   ├── daily-usable-desktop/
+│   │   ├── delivery-board.json
+│   │   ├── packaging-adr.md
+│   │   ├── README.md
+│   │   ├── requirement.md
+│   │   └── roadmap.md
 │   ├── foundation/
 │   │   ├── architecture-decision.md
 │   │   ├── artifact-truth-model.md
@@ -82,12 +88,18 @@ Master-Documentation-System/
 │   ├── runtime-feedback/
 │   │   ├── delivery-board.json
 │   │   ├── evidence-bundle-adr.md
+│   │   ├── feedback-003-004-evidence.md
+│   │   ├── feedback-005-006-evidence.md
+│   │   ├── feedback-007-evidence.md
+│   │   ├── feedback-008-definition-of-done-evidence.md
 │   │   ├── README.md
 │   │   ├── requirement.md
 │   │   └── roadmap.md
 │   ├── superpowers/
 │   │   └── plans/
-│   │       └── 2026-08-16-found-009-immutable-lineage.md
+│   │       ├── 2026-08-16-found-009-immutable-lineage.md
+│   │       ├── 2026-08-17-runtime-feedback-correlation-findings.md
+│   │       └── 2026-08-17-runtime-feedback-evidence-intake.md
 │   ├── views/
 │   │   ├── project_view.md
 │   │   ├── role_view.md
@@ -310,11 +322,14 @@ Master-Documentation-System/
 │   │   │   │   │   └── ports/
 │   │   │   │   │       ├── graph-index-repository.ts
 │   │   │   │   │       └── index.ts
+│   │   │   │   ├── evidence-correlation.ts
+│   │   │   │   ├── evidence.ts
 │   │   │   │   ├── graph.ts
 │   │   │   │   ├── impact.ts
 │   │   │   │   ├── index.ts
 │   │   │   │   ├── lineage.ts
-│   │   │   │   └── truth.ts
+│   │   │   │   ├── truth.ts
+│   │   │   │   └── verification-findings.ts
 │   │   │   ├── .gitkeep
 │   │   │   ├── package.json
 │   │   │   └── tsconfig.json
@@ -328,6 +343,7 @@ Master-Documentation-System/
 │   │   ├── domain/
 │   │   │   ├── dist/  [generated contents omitted]
 │   │   │   ├── src/
+│   │   │   │   ├── evidence.ts
 │   │   │   │   ├── index.ts
 │   │   │   │   └── lineage.ts
 │   │   │   ├── .gitkeep
@@ -348,6 +364,7 @@ Master-Documentation-System/
 │   │   │   ├── src/
 │   │   │   │   ├── graph/
 │   │   │   │   │   └── sqlite-graph-index-repository.ts
+│   │   │   │   ├── evidence-filesystem.ts
 │   │   │   │   └── index.ts
 │   │   │   ├── .gitkeep
 │   │   │   ├── package.json
@@ -1016,6 +1033,9 @@ Master-Documentation-System/
 │   ├── integration/
 │   │   ├── .gitkeep
 │   │   ├── document-import.cjs
+│   │   ├── evidence-correlation.cjs
+│   │   ├── evidence-intake.cjs
+│   │   ├── evidence-security.cjs
 │   │   ├── foundation-dod.cjs
 │   │   ├── graph-index.cjs
 │   │   ├── graph-sqlite-benchmark.cjs
@@ -1023,7 +1043,9 @@ Master-Documentation-System/
 │   │   ├── impact-traversal.cjs
 │   │   ├── lineage-runtime.cjs
 │   │   ├── requirements-review.cjs
+│   │   ├── runtime-feedback-dod.cjs
 │   │   ├── truth-context.cjs
+│   │   ├── verification-findings.cjs
 │   │   └── workflow-runtime.cjs
 │   └── README.md
 ├── workflows/

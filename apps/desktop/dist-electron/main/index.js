@@ -177,6 +177,9 @@ function registerIpcHandlers() {
         }
         return (0, document_ingestion_1.listProjectArtifacts)(projectPath, activeProjectsRoot);
     });
+    electron_1.ipcMain.handle("evidence:list", async (_event, projectPath) => {
+        return (0, persistence_1.listFilesystemEvidenceBundles)(assertActiveProjectPath(projectPath));
+    });
     electron_1.ipcMain.handle("graph:build-index", async (_event, projectPath) => {
         const safeProject = assertActiveProjectPath(projectPath);
         const result = await (0, requirements_1.buildGraphIndex)({
@@ -395,6 +398,7 @@ function createMainWindow() {
           bridgeReady: Boolean(
             window.mds?.getAppInfo &&
             window.mds?.listArtifacts &&
+            window.mds?.listEvidenceBundles &&
             window.mds?.importDocument &&
             window.mds?.reviewRequirement &&
             window.mds?.createImpactReport &&
@@ -413,6 +417,11 @@ function createMainWindow() {
             document.querySelector(".impact-panel") &&
             document.querySelector(".context-authority")
           ),
+          evidenceViewReady: Boolean(
+            document.querySelector(".evidence-ledger") &&
+            document.querySelector(".evidence-inspector") &&
+            document.querySelector(".evidence-authority-notice")
+          ),
           graphViewReady: ${smokeGraphView ? "Boolean(document.querySelector('.graph-workbench') && document.querySelector('.graph-canvas'))" : "true"},
           graphReady: Boolean(
             builtGraph.indexedNodes === 5 &&
@@ -423,8 +432,8 @@ function createMainWindow() {
           });
         })()
       `));
-            console.log(`[MDS] Smoke test: bridge=${result.bridgeReady}, root=${result.rootReady}, workbench=${result.workbenchReady}, graph=${result.graphReady}, graphView=${result.graphViewReady}`);
-            if (!result.bridgeReady || !result.rootReady || !result.workbenchReady || !result.graphReady || !result.graphViewReady) {
+            console.log(`[MDS] Smoke test: bridge=${result.bridgeReady}, root=${result.rootReady}, workbench=${result.workbenchReady}, evidenceView=${result.evidenceViewReady}, graph=${result.graphReady}, graphView=${result.graphViewReady}`);
+            if (!result.bridgeReady || !result.rootReady || !result.workbenchReady || !result.evidenceViewReady || !result.graphReady || !result.graphViewReady) {
                 process.exitCode = 1;
             }
             if (smokeScreenshotPath) {

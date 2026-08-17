@@ -3,14 +3,17 @@ id: ARCH-ADR-MDS-FEEDBACK-001
 title: Immutable external evidence bundle and verification finding storage
 project: mds
 phase: "03"
-lifecycle_state: DRAFT
+lifecycle_state: APPROVED
 execution_state: NOT_APPLICABLE
-decision_status: PROPOSED
+decision_status: ACCEPTED
 version: 0.1.0
 owner: arch_agent
 created_by: codex
 created_at: 2026-08-17
 last_updated: 2026-08-17
+approved_at: 2026-08-17
+approved_by: human-architect
+approval_reason: User authorized continuing with the recommended Option A architecture.
 tags: [adr, evidence, feedback, security, local-first]
 source_refs:
   - BA-REQ-MDS-FEEDBACK-001@0.1.0
@@ -27,7 +30,7 @@ links:
 
 ## Decision summary
 
-Proposed choice: **Option A — signed-envelope-shaped JSON manifest plus
+Accepted choice: **Option A — signed-envelope-shaped JSON manifest plus
 content-addressed immutable files under the MDS runtime project**.
 
 The first version does not require public-key signatures. It reserves signature
@@ -209,6 +212,6 @@ Negative:
 
 ## Approval gate
 
-This ADR is `PROPOSED`. Human architect must choose Option A, B, C or request a
-revision. Approval of this ADR does not approve the executable delivery board,
-deployment, or any managed-project mutation.
+The human architect accepted Option A on 2026-08-17. This approval does not
+approve the executable delivery board, deployment, or any managed-project
+mutation.

@@ -18,6 +18,9 @@ import { proposeImpactFromGraph } from "./impact.js";
 export * from "./lineage.js";
 export * from "./impact.js";
 export * from "./truth.js";
+export * from "./evidence.js";
+export * from "./evidence-correlation.js";
+export * from "./verification-findings.js";
 
 export * from "./graph.js";
 export * from "./graph/ports/index.js";

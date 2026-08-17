@@ -19,7 +19,7 @@ import {
   queryGraphProjection,
   reviewRequirement,
 } from "@mds/requirements";
-import { SqliteGraphIndexRepository } from "@mds/persistence";
+import { listFilesystemEvidenceBundles, SqliteGraphIndexRepository } from "@mds/persistence";
 import type { GraphQuery } from "@mds/domain";
 import {
   advanceWorkflow,
@@ -226,6 +226,10 @@ function registerIpcHandlers(): void {
       throw new Error("Project path không hợp lệ.");
     }
     return listProjectArtifacts(projectPath, activeProjectsRoot);
+  });
+
+  ipcMain.handle("evidence:list", async (_event, projectPath: unknown) => {
+    return listFilesystemEvidenceBundles(assertActiveProjectPath(projectPath));
   });
 
   ipcMain.handle("graph:build-index", async (_event, projectPath: unknown) => {
@@ -544,6 +548,7 @@ function createMainWindow(): BrowserWindow {
           bridgeReady: Boolean(
             window.mds?.getAppInfo &&
             window.mds?.listArtifacts &&
+            window.mds?.listEvidenceBundles &&
             window.mds?.importDocument &&
             window.mds?.reviewRequirement &&
             window.mds?.createImpactReport &&
@@ -562,6 +567,11 @@ function createMainWindow(): BrowserWindow {
             document.querySelector(".impact-panel") &&
             document.querySelector(".context-authority")
           ),
+          evidenceViewReady: Boolean(
+            document.querySelector(".evidence-ledger") &&
+            document.querySelector(".evidence-inspector") &&
+            document.querySelector(".evidence-authority-notice")
+          ),
           graphViewReady: ${smokeGraphView ? "Boolean(document.querySelector('.graph-workbench') && document.querySelector('.graph-canvas'))" : "true"},
           graphReady: Boolean(
             builtGraph.indexedNodes === 5 &&
@@ -571,13 +581,13 @@ function createMainWindow(): BrowserWindow {
           )
           });
         })()
-      `)) as { bridgeReady: boolean; rootReady: boolean; workbenchReady: boolean; graphReady: boolean; graphViewReady: boolean };
+      `)) as { bridgeReady: boolean; rootReady: boolean; workbenchReady: boolean; evidenceViewReady: boolean; graphReady: boolean; graphViewReady: boolean };
 
       console.log(
-        `[MDS] Smoke test: bridge=${result.bridgeReady}, root=${result.rootReady}, workbench=${result.workbenchReady}, graph=${result.graphReady}, graphView=${result.graphViewReady}`
+        `[MDS] Smoke test: bridge=${result.bridgeReady}, root=${result.rootReady}, workbench=${result.workbenchReady}, evidenceView=${result.evidenceViewReady}, graph=${result.graphReady}, graphView=${result.graphViewReady}`
       );
 
-      if (!result.bridgeReady || !result.rootReady || !result.workbenchReady || !result.graphReady || !result.graphViewReady) {
+      if (!result.bridgeReady || !result.rootReady || !result.workbenchReady || !result.evidenceViewReady || !result.graphReady || !result.graphViewReady) {
         process.exitCode = 1;
       }
 

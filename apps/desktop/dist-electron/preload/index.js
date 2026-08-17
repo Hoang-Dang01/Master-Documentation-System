@@ -7,6 +7,7 @@ const desktopApi = {
     chooseDataRoot: () => electron_1.ipcRenderer.invoke("workspace:choose-data-root"),
     openWorkspace: (workspacePath) => electron_1.ipcRenderer.invoke("workspace:open", workspacePath),
     listArtifacts: (projectPath) => electron_1.ipcRenderer.invoke("artifacts:list", projectPath),
+    listEvidenceBundles: (projectPath) => electron_1.ipcRenderer.invoke("evidence:list", projectPath),
     importDocument: (projectPath) => electron_1.ipcRenderer.invoke("document:import", projectPath),
     reviewRequirement: (projectPath, relativePath, decision, actor, reason) => electron_1.ipcRenderer.invoke("requirement:review", projectPath, relativePath, decision, actor, reason),
     createImpactReport: (projectPath, requirementPath) => electron_1.ipcRenderer.invoke("impact:create", projectPath, requirementPath),

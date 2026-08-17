@@ -144,6 +144,14 @@ export type GraphNodeDetail = GraphNode & {
   issues: GraphIssue[];
 };
 
+export type EvidenceBundleSummary = {
+  bundleId: string; projectId: string; acceptedAt: string; contextPackageId: string;
+  producerType: string; producerId: string; repository: string; commit: string;
+  artifactVersionIds: string[];
+  results: Array<{ kind: string; status: string; command_label: string; evidence_file: string }>;
+  submittedManifestSha256: string; relativePath: string;
+};
+
 const desktopApi = {
   getAppInfo: (): Promise<AppInfo> => ipcRenderer.invoke("app:get-info"),
   selectWorkspace: (): Promise<WorkspaceSelection> =>
@@ -154,6 +162,8 @@ const desktopApi = {
     ipcRenderer.invoke("workspace:open", workspacePath),
   listArtifacts: (projectPath: string): Promise<ArtifactSummary[]> =>
     ipcRenderer.invoke("artifacts:list", projectPath),
+  listEvidenceBundles: (projectPath: string): Promise<EvidenceBundleSummary[]> =>
+    ipcRenderer.invoke("evidence:list", projectPath),
   importDocument: (projectPath: string): Promise<ImportDocumentResult> =>
     ipcRenderer.invoke("document:import", projectPath),
   reviewRequirement: (

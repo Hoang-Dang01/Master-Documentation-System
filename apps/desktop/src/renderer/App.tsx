@@ -133,6 +133,8 @@ export function App() {
   const [selectedReview, setSelectedReview] = useState<MdsArtifactSummary | null>(null);
   const [impactResult, setImpactResult] = useState<MdsImpactReportResult | null>(null);
   const [reviewBusy, setReviewBusy] = useState(false);
+  const [evidenceBundles, setEvidenceBundles] = useState<MdsEvidenceBundleSummary[]>([]);
+  const [selectedEvidence, setSelectedEvidence] = useState<MdsEvidenceBundleSummary | null>(null);
   const searchRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
@@ -155,13 +157,15 @@ export function App() {
     window.mds
       .getAppInfo()
       .then(async (info) => {
-        const projectArtifacts = await window.mds.listArtifacts(
-          info.defaultWorkspacePath,
-        );
+        const [projectArtifacts, projectEvidence] = await Promise.all([
+          window.mds.listArtifacts(info.defaultWorkspacePath),
+          window.mds.listEvidenceBundles(info.defaultWorkspacePath),
+        ]);
         if (canceled) return;
         setAppInfo(info);
         setWorkspacePath(info.defaultWorkspacePath);
         setArtifacts(projectArtifacts);
+        setEvidenceBundles(projectEvidence);
       })
       .catch(() => {
         if (!canceled) {
@@ -241,8 +245,12 @@ export function App() {
   ];
 
   async function refreshArtifacts(projectPath: string) {
-    const projectArtifacts = await window.mds.listArtifacts(projectPath);
+    const [projectArtifacts, projectEvidence] = await Promise.all([
+      window.mds.listArtifacts(projectPath),
+      window.mds.listEvidenceBundles(projectPath),
+    ]);
     setArtifacts(projectArtifacts);
+    setEvidenceBundles(projectEvidence);
   }
 
   async function handleSelectWorkspace() {
@@ -698,6 +706,43 @@ export function App() {
               </> : <div className="compact-empty"><Icon name="analysis" /><div><strong>Chua co impact report</strong><span>Chon Impact tren requirement de xem duong dan anh huong.</span></div></div>}
               <div className="context-authority"><span className="authority-dot" /> Context package: bounded read-only evidence · khong uy quyen sua source/test/Git/deploy.</div>
             </article>
+          </section>
+
+          <section className="evidence-ledger" aria-labelledby="evidence-ledger-title">
+            <article className="panel evidence-list-panel">
+              <div className="panel-heading">
+                <div><h2 id="evidence-ledger-title">Implementation evidence</h2><p>Read-only proof returned by the external implementation plane.</p></div>
+                <span className="count-chip">{evidenceBundles.length}</span>
+              </div>
+              {evidenceBundles.length ? <div className="evidence-bundle-list">
+                {evidenceBundles.slice(0, 8).map((bundle) => {
+                  const failed = bundle.results.some((result) => result.status === "FAILED");
+                  const incomplete = bundle.results.some((result) => result.status === "NOT_RUN" || result.status === "INCOMPLETE");
+                  const label = failed ? "BLOCKER" : incomplete ? "WARNING" : "EVIDENCE";
+                  return <button className={`evidence-bundle-row ${selectedEvidence?.bundleId === bundle.bundleId ? "is-selected" : ""}`} key={bundle.bundleId} onClick={() => setSelectedEvidence(bundle)} type="button">
+                    <span className={`evidence-seal ${failed ? "is-blocker" : incomplete ? "is-warning" : "is-pass"}`}>{label}</span>
+                    <span><strong>{bundle.bundleId}</strong><small>{bundle.producerType}:{bundle.producerId} · {bundle.results.length} result(s)</small></span>
+                    <code>{bundle.commit.slice(0, 10)}</code>
+                  </button>;
+                })}
+              </div> : <div className="compact-empty"><Icon name="archive" /><div><strong>Chua co implementation evidence</strong><span>Evidence bundle da duoc MDS chap nhan se xuat hien tai day.</span></div></div>}
+            </article>
+            <aside className="panel evidence-inspector" aria-live="polite">
+              <div className="panel-heading"><div><h2>Evidence inspector</h2><p>Identity, authority and result references</p></div></div>
+              {selectedEvidence ? <>
+                <dl className="evidence-facts">
+                  <div><dt>Context</dt><dd>{selectedEvidence.contextPackageId}</dd></div>
+                  <div><dt>Source</dt><dd>{selectedEvidence.repository}@{selectedEvidence.commit}</dd></div>
+                  <div><dt>Producer</dt><dd>{selectedEvidence.producerType}:{selectedEvidence.producerId}</dd></div>
+                  <div><dt>Manifest</dt><dd>{selectedEvidence.submittedManifestSha256}</dd></div>
+                </dl>
+                <h3>Linked versions</h3>
+                <ul className="evidence-reference-list">{selectedEvidence.artifactVersionIds.map((id) => <li key={id}><code>{id}</code></li>)}</ul>
+                <h3>Findings preview</h3>
+                <ul className="evidence-result-list">{selectedEvidence.results.map((result, index) => <li key={`${result.kind}-${index}`}><span className={`result-state is-${result.status.toLowerCase()}`}>{result.status}</span><strong>{result.command_label}</strong><code>{result.evidence_file}</code></li>)}</ul>
+              </> : <div className="inspector-guidance"><span>↗</span><strong>Chon mot evidence bundle</strong><p>MDS chi hien thi bang chung da duoc validate. PASS khong tu dong duyet release.</p></div>}
+              <div className="evidence-authority-notice"><span className="authority-dot" /> Read-only evidence · không cho phép sửa source/test, Git, PR hoặc deploy.</div>
+            </aside>
           </section>
 
           <section className="lower-grid">
