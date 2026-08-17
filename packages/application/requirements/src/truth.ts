@@ -67,8 +67,13 @@ function nodeIsApprovedHead(node: ArtifactNode, options: TruthProjectionOptions)
   return node.lifecycleState === "APPROVED";
 }
 
-function item(node: ArtifactNode, authority: TruthAuthority, warnings: string[] = []): TruthItem {
-  const state = validity(node);
+function item(
+  node: ArtifactNode,
+  authority: TruthAuthority,
+  warnings: string[] = [],
+  validityOverride?: TruthItem["validityState"],
+): TruthItem {
+  const state = validityOverride ?? validity(node);
   const refs = [node.sourcePath];
   const sourceRefs = node.metadata.source_refs;
   if (Array.isArray(sourceRefs)) refs.push(...sourceRefs.map(String));
@@ -94,29 +99,32 @@ export function projectCurrentTruth(
   const warnings: TruthItem[] = [];
   const excluded: TruthItem[] = [];
   const conflicts: TruthItem[] = [];
+  const proposalByArtifactId = new Map(
+    (options.validityProposals ?? []).map((proposal) => [proposal.artifactId, proposal]),
+  );
   for (const node of [...graph.nodes].sort((a, b) => a.id.localeCompare(b.id))) {
-    const state = validity(node);
+    const proposal = proposalByArtifactId.get(node.id);
+    const state = proposal && validity(node) === "CURRENT" ? proposal.to : validity(node);
     const head = nodeIsApprovedHead(node, options);
     let target: TruthItem;
     if (!head || node.lifecycleState !== "APPROVED") {
-      target = item(node, "EXCLUDED", ["Not an approved lineage head"]);
+      target = item(node, "EXCLUDED", ["Not an approved lineage head"], state);
       excluded.push(target);
     } else if (state === "CURRENT") {
-      target = item(node, "AUTHORITATIVE");
+      target = item(node, "AUTHORITATIVE", [], state);
       authoritative.push(target);
     } else if (state === "NEEDS_REVIEW") {
-      target = item(node, "WARNING", ["Approved head has evidence-backed downstream impact and needs review"]);
+      target = item(
+        node,
+        "WARNING",
+        [proposal?.reason ?? "Approved head has evidence-backed downstream impact and needs review"],
+        state,
+      );
       warnings.push(target);
     } else {
-      target = item(node, "EXCLUDED", [`Validity state ${state} is not authoritative`]);
+      target = item(node, "EXCLUDED", [`Validity state ${state} is not authoritative`], state);
       excluded.push(target);
       if (state === "CONFLICTED") conflicts.push(target);
-    }
-  }
-  for (const proposal of options.validityProposals ?? []) {
-    const found = [...authoritative, ...warnings].find((candidate) => candidate.artifactId === proposal.artifactId);
-    if (found && found.authority === "AUTHORITATIVE") {
-      found.warnings.push(proposal.reason);
     }
   }
   return {

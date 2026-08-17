@@ -34,4 +34,17 @@ assert.equal(context.instructions[0].content, "approved instructions");
 assert.equal(context.warnings[0].instructionsEligible, false);
 assert.match(context.authorityNotice, /does not authorize source/);
 assert.equal(context.excludedCount, 3);
+
+const impactedTruth = projectCurrentTruth(graph, {
+  generatedAt: "2026-08-16T00:02:00.000Z",
+  validityProposals: [{
+    artifactId: "BA-REQ-TRU-CORE-001", version: "1.0.0", from: "CURRENT", to: "NEEDS_REVIEW",
+    reason: "Evidence-backed change path", sourceReferences: ["source.md:links:4"], path: [],
+  }],
+});
+assert.equal(impactedTruth.authoritative.some((item) => item.artifactId === "BA-REQ-TRU-CORE-001"), false);
+assert.equal(impactedTruth.warnings.some((item) => item.artifactId === "BA-REQ-TRU-CORE-001"), true);
+const impactedContext = buildImplementationContext(impactedTruth, new Map([["BA-REQ-TRU-CORE-001", "must not become instructions"]]));
+assert.equal(impactedContext.instructions.some((item) => item.artifactId === "BA-REQ-TRU-CORE-001"), false);
+assert.equal(impactedContext.warnings.find((item) => item.artifactId === "BA-REQ-TRU-CORE-001").instructionsEligible, false);
 console.log("[TRUTH] Deterministic authoritative/warning/excluded projection and safe context authority labels passed.");

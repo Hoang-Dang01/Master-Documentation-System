@@ -65,7 +65,7 @@
     {
       "id": "PM-TSK-MDS-FOUND-001",
       "title": "Preserve and document the current repository baseline",
-      "lifecycle_state": "DRAFT",
+      "lifecycle_state": "APPROVED",
       "execution_state": "COMPLETED",
       "owner_role": "PM",
       "effort": 1,
@@ -324,7 +324,7 @@
       "id": "PM-TSK-MDS-FOUND-013",
       "title": "Produce fresh Foundation Definition of Done evidence",
       "lifecycle_state": "DRAFT",
-      "execution_state": "NOT_STARTED",
+      "execution_state": "COMPLETED",
       "owner_role": "QA",
       "effort": 3,
       "blocked_by": ["PM-TSK-MDS-FOUND-002", "PM-TSK-MDS-FOUND-003", "PM-TSK-MDS-FOUND-012"],
@@ -348,11 +348,19 @@
           "npm.cmd run test:workflow",
           "npm.cmd run test:graph",
           "npm.cmd run test:graph-sqlite",
-          "npm.cmd run smoke"
+          "npm.cmd run smoke",
+          "npm.cmd run test:foundation-dod"
         ],
-        "evidence": ["docs/foundation/"]
+        "evidence": ["docs/foundation/found-013-definition-of-done-evidence.md", "tests/integration/foundation-dod.cjs"]
       },
-      "risks": ["Release remains human approval-gated even when all technical checks pass."]
+      "risks": ["Foundation milestone approved locally; packaged-app and browser click-through automation remain unverified and deployment is not authorized."],
+      "approval": {
+        "decision": "APPROVED",
+        "approver": "human-release-authority",
+        "approved_at": "2026-08-16",
+        "reason": "Human accepted fresh Foundation Definition of Done evidence with residual risks explicitly recorded.",
+        "deployment_authorized": false
+      }
     }
   ]
 }

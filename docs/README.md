@@ -18,7 +18,7 @@ Human-readable architecture, migration, roadmap, views, and onboarding.
 - `MIGRATION_MAP.md`: AS-IS to TO-BE decisions and state.
 - `CANONICAL_SOURCES.md`: source-of-truth registry.
 - `TO_BE_STRUCTURE.md`: target structure implemented on 2026-07-24.
-- `foundation/`: approval-gated DRAFT review pack for the proposed MDS product
-  boundary, artifact truth model, architecture decision, roadmap, delivery
-  board, and repository baseline. It is transitional until approved and merged
-  into the canonical sources.
+- `foundation/`: approved MDS Foundation v1 evidence and transitional
+  consolidation pack; deployment remains separately gated.
+- `runtime-feedback/`: approval-gated DRAFT next-milestone pack for read-only
+  external implementation evidence, correlation, findings, and human review.

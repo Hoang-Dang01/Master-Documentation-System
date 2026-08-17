@@ -1,0 +1,142 @@
+{
+  "schema_version": "1.0.0",
+  "project_id": "MDS",
+  "board_version": "0.1.0",
+  "updated_at": "2026-08-17",
+  "approval_state": "SCOPE_APPROVED",
+  "scope_approved_by": "human-project-authority",
+  "scope_approved_at": "2026-08-17",
+  "scope_approval_reason": "User accepted BA-REQ-MDS-FEEDBACK-001@0.1.0 and its evidence-only boundary.",
+  "scope": {
+    "requirement_ids": ["BA-REQ-MDS-FEEDBACK-001"],
+    "design_ids": ["ARCH-ADR-MDS-FOUND-001"],
+    "excluded": [
+      "Managed-project source or test mutation",
+      "Git write operations and pull-request mutation",
+      "Managed-project build or test execution",
+      "Deployment and release approval",
+      "Autonomous implementation adapters"
+    ]
+  },
+  "milestones": [
+    {"id": "MDS-FEEDBACK-RF0", "name": "Approved evidence contract", "target_date": null, "task_ids": ["PM-TSK-MDS-FEEDBACK-001", "PM-TSK-MDS-FEEDBACK-002"]},
+    {"id": "MDS-FEEDBACK-RF1", "name": "Read-only evidence intake", "target_date": null, "task_ids": ["PM-TSK-MDS-FEEDBACK-003", "PM-TSK-MDS-FEEDBACK-004"]},
+    {"id": "MDS-FEEDBACK-RF2", "name": "Verification feedback", "target_date": null, "task_ids": ["PM-TSK-MDS-FEEDBACK-005", "PM-TSK-MDS-FEEDBACK-006", "PM-TSK-MDS-FEEDBACK-007"]},
+    {"id": "MDS-FEEDBACK-RF3", "name": "Fresh proving slice", "target_date": null, "task_ids": ["PM-TSK-MDS-FEEDBACK-008"]}
+  ],
+  "tasks": [
+    {
+      "id": "PM-TSK-MDS-FEEDBACK-001",
+      "title": "Approve the read-only feedback scope and requirement",
+      "lifecycle_state": "APPROVED",
+      "execution_state": "COMPLETED",
+      "owner_role": "BA",
+      "effort": 2,
+      "blocked_by": [],
+      "linked_requirements": ["BA-REQ-MDS-FEEDBACK-001"],
+      "linked_designs": ["ARCH-ADR-MDS-FOUND-001"],
+      "acceptance_criteria": ["Human authority accepts the evidence-only boundary, acceptance criteria and explicit exclusions.", "The approved version preserves the MDS/Implementation Plane separation."],
+      "verification": {"commands": ["npm.cmd run validate:docs"], "evidence": ["docs/runtime-feedback/requirement.md"]},
+      "risks": ["Scope is approved; implementation remains blocked by the architecture and backlog gates."],
+      "approval": {"decision": "APPROVED", "approver": "human-project-authority", "approved_at": "2026-08-17"}
+    },
+    {
+      "id": "PM-TSK-MDS-FEEDBACK-002",
+      "title": "Approve the evidence bundle and finding architecture contract",
+      "lifecycle_state": "DRAFT",
+      "execution_state": "NOT_STARTED",
+      "owner_role": "ARCH",
+      "effort": 3,
+      "blocked_by": ["PM-TSK-MDS-FEEDBACK-001"],
+      "linked_requirements": ["BA-REQ-MDS-FEEDBACK-001"],
+      "linked_designs": ["ARCH-ADR-MDS-FOUND-001", "ARCH-ADR-MDS-FEEDBACK-001"],
+      "acceptance_criteria": ["The ADR defines bundle identity, hashes, source references, storage, audit and replay behavior.", "Path traversal, tampering, staleness and producer mismatch fail closed."],
+      "verification": {"commands": ["npm.cmd run validate:docs"], "evidence": ["docs/runtime-feedback/evidence-bundle-adr.md"]},
+      "risks": ["No real producer sample has been approved yet; the contract may require a versioned successor."]
+    },
+    {
+      "id": "PM-TSK-MDS-FEEDBACK-003",
+      "title": "Import and preserve one bounded evidence bundle",
+      "lifecycle_state": "DRAFT",
+      "execution_state": "NOT_STARTED",
+      "owner_role": "BE",
+      "effort": 5,
+      "blocked_by": ["PM-TSK-MDS-FEEDBACK-002"],
+      "linked_requirements": ["BA-REQ-MDS-FEEDBACK-001"],
+      "linked_designs": ["ARCH-ADR-MDS-FOUND-001"],
+      "acceptance_criteria": ["A valid bundle is copied byte-for-byte, checksummed, registered and auditable under the runtime project.", "Import is idempotent and never writes to the managed project."],
+      "verification": {"commands": ["npm.cmd run typecheck", "npm.cmd run test:evidence-intake"], "evidence": ["tests/integration/"]},
+      "risks": ["Unbounded bundle parsing could create path, archive or memory vulnerabilities."]
+    },
+    {
+      "id": "PM-TSK-MDS-FEEDBACK-004",
+      "title": "Reject unsafe, tampered, stale and mismatched evidence",
+      "lifecycle_state": "DRAFT",
+      "execution_state": "NOT_STARTED",
+      "owner_role": "QA",
+      "effort": 3,
+      "blocked_by": ["PM-TSK-MDS-FEEDBACK-003"],
+      "linked_requirements": ["BA-REQ-MDS-FEEDBACK-001"],
+      "linked_designs": ["ARCH-ADR-MDS-FOUND-001"],
+      "acceptance_criteria": ["Traversal, checksum mismatch, oversized input, stale identity and unknown context fixtures fail closed.", "Failures retain bounded audit evidence without accepting the bundle."],
+      "verification": {"commands": ["npm.cmd run test:evidence-security"], "evidence": ["tests/integration/"]},
+      "risks": ["Filesystem and timestamp semantics differ across platforms."]
+    },
+    {
+      "id": "PM-TSK-MDS-FEEDBACK-005",
+      "title": "Correlate evidence with truth and implementation context",
+      "lifecycle_state": "DRAFT",
+      "execution_state": "NOT_STARTED",
+      "owner_role": "BE",
+      "effort": 5,
+      "blocked_by": ["PM-TSK-MDS-FEEDBACK-003", "PM-TSK-MDS-FEEDBACK-004"],
+      "linked_requirements": ["BA-REQ-MDS-FEEDBACK-001"],
+      "linked_designs": ["ARCH-ADR-MDS-FOUND-001"],
+      "acceptance_criteria": ["Correlation retains artifact, version, context package, producer and commit/build identity.", "Missing or non-authoritative references cannot become trusted findings."],
+      "verification": {"commands": ["npm.cmd run typecheck", "npm.cmd run test:evidence-correlation"], "evidence": ["tests/integration/"]},
+      "risks": ["Loose identity mapping could attach evidence to the wrong approved head."]
+    },
+    {
+      "id": "PM-TSK-MDS-FEEDBACK-006",
+      "title": "Project deterministic verification findings for human review",
+      "lifecycle_state": "DRAFT",
+      "execution_state": "NOT_STARTED",
+      "owner_role": "BE",
+      "effort": 5,
+      "blocked_by": ["PM-TSK-MDS-FEEDBACK-005"],
+      "linked_requirements": ["BA-REQ-MDS-FEEDBACK-001"],
+      "linked_designs": ["ARCH-ADR-MDS-FOUND-001"],
+      "acceptance_criteria": ["Passing, missing, stale and mismatch outcomes are deterministic and evidence-backed.", "Findings start DRAFT and do not auto-promote truth or release state."],
+      "verification": {"commands": ["npm.cmd run test:verification-findings", "npm.cmd run test:truth"], "evidence": ["tests/integration/"]},
+      "risks": ["A misleading pass classification could create false confidence."]
+    },
+    {
+      "id": "PM-TSK-MDS-FEEDBACK-007",
+      "title": "Deliver desktop evidence and finding review interactions",
+      "lifecycle_state": "DRAFT",
+      "execution_state": "NOT_STARTED",
+      "owner_role": "FE",
+      "effort": 4,
+      "blocked_by": ["PM-TSK-MDS-FEEDBACK-006"],
+      "linked_requirements": ["BA-REQ-MDS-FEEDBACK-001"],
+      "linked_designs": ["ARCH-ADR-MDS-FOUND-001"],
+      "acceptance_criteria": ["A human can inspect evidence identity, source references, linked artifact/version and finding status.", "Renderer consumes typed application operations; authority and security policy remain outside React."],
+      "verification": {"commands": ["npm.cmd run typecheck", "npm.cmd run build", "npm.cmd run smoke"], "evidence": ["apps/desktop/", "tests/integration/"]},
+      "risks": ["Browser click-through automation availability is not yet confirmed."]
+    },
+    {
+      "id": "PM-TSK-MDS-FEEDBACK-008",
+      "title": "Produce fresh Runtime Feedback Definition of Done evidence",
+      "lifecycle_state": "DRAFT",
+      "execution_state": "NOT_STARTED",
+      "owner_role": "QA",
+      "effort": 3,
+      "blocked_by": ["PM-TSK-MDS-FEEDBACK-007"],
+      "linked_requirements": ["BA-REQ-MDS-FEEDBACK-001"],
+      "linked_designs": ["ARCH-ADR-MDS-FOUND-001"],
+      "acceptance_criteria": ["One external evidence bundle completes intake, correlation, finding and human review without managed-source mutation.", "Fresh build, validators, security tests, integration tests, smoke, residual risks and release gate are recorded."],
+      "verification": {"commands": ["npm.cmd run typecheck", "npm.cmd run build", "npm.cmd run validate:docs", "npm.cmd run validate:structure", "npm.cmd run validate:skills", "npm.cmd run smoke"], "evidence": ["docs/runtime-feedback/", "tests/integration/"]},
+      "risks": ["Milestone release remains human approval-gated."]
+    }
+  ]
+}

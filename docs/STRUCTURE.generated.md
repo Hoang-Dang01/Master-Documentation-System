@@ -56,6 +56,7 @@ Master-Documentation-System/
 │   │   ├── found-010-evidence.md
 │   │   ├── found-011-evidence.md
 │   │   ├── found-012-evidence.md
+│   │   ├── found-013-definition-of-done-evidence.md
 │   │   ├── product-boundary.md
 │   │   ├── README.md
 │   │   ├── repository-baseline.md
@@ -78,6 +79,12 @@ Master-Documentation-System/
 │   │       └── slice-4-evidence.md
 │   ├── migrations/
 │   │   └── CUSTOMER_CHANGE_ANALYSIS.md
+│   ├── runtime-feedback/
+│   │   ├── delivery-board.json
+│   │   ├── evidence-bundle-adr.md
+│   │   ├── README.md
+│   │   ├── requirement.md
+│   │   └── roadmap.md
 │   ├── superpowers/
 │   │   └── plans/
 │   │       └── 2026-08-16-found-009-immutable-lineage.md
@@ -1009,6 +1016,7 @@ Master-Documentation-System/
 │   ├── integration/
 │   │   ├── .gitkeep
 │   │   ├── document-import.cjs
+│   │   ├── foundation-dod.cjs
 │   │   ├── graph-index.cjs
 │   │   ├── graph-sqlite-benchmark.cjs
 │   │   ├── graph-sqlite.cjs

@@ -8,11 +8,12 @@ canonical_target: mds-core/standards/ and docs/ARCHITECTURE.md
 
 # MDS Foundation v1
 
-This directory contains the approval and delivery pack for the next MDS
-foundation milestone. The product boundary, artifact truth model, and
-control-plane architecture decision were approved by the human project
-authority on 2026-08-14. Roadmap and delivery artifacts remain independently
-gated as marked.
+This directory contains the approval and delivery pack for MDS Foundation v1.
+The product boundary, artifact truth model, and control-plane architecture
+decision were approved by the human project authority on 2026-08-14. The
+Foundation Definition of Done and local milestone release gate were approved
+by the human release authority on 2026-08-16. Deployment and packaged release
+distribution remain out of scope.
 
 ## Review order
 
@@ -42,6 +43,12 @@ gated as marked.
 12. [`found-011-evidence.md`](found-011-evidence.md) — deterministic Current
     Project Truth classification and safe authority-labeled context package.
 
+13. [`found-012-evidence.md`](found-012-evidence.md) — desktop review, truth,
+    impact, and context-authority interaction evidence.
+14. [`found-013-definition-of-done-evidence.md`](found-013-definition-of-done-evidence.md)
+    — fresh end-to-end proving slice, verification matrix, source immutability
+    evidence, residual risks, and the human release gate.
+
 ## Current authority
 
 - `BA-REQ-MDS-FOUND-001`, `BA-REQ-MDS-TRUTH-001`, and
@@ -49,9 +56,10 @@ gated as marked.
 - Existing canonical sources continue to govern their current concern under
   [`../CANONICAL_SOURCES.md`](../CANONICAL_SOURCES.md) until a versioned
   migration replaces or redirects them through the applicable artifact gate.
-- The approved Foundation artifacts authorize migration planning. They do not
-  independently approve the DRAFT delivery board, implementation work,
-  replacement of another approved artifact, or a release.
+- The approved Foundation artifacts authorize migration planning. The local
+  Foundation milestone is now approved with residual risks recorded in
+  `found-013-definition-of-done-evidence.md`; this does not authorize deployment
+  or replacement of another approved artifact.
 - Runtime project data remains under
   `MDS_DATA_DIR/projects/active/<project-id>/`; repository `workspace/` remains
   a seed/fixture.

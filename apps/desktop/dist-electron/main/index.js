@@ -407,6 +407,12 @@ function createMainWindow() {
             && window.mds?.validateGraph
           ),
           rootReady: Boolean(document.querySelector("#root")?.children.length),
+          workbenchReady: Boolean(
+            document.querySelector(".review-workbench") &&
+            document.querySelector(".truth-panel") &&
+            document.querySelector(".impact-panel") &&
+            document.querySelector(".context-authority")
+          ),
           graphViewReady: ${smokeGraphView ? "Boolean(document.querySelector('.graph-workbench') && document.querySelector('.graph-canvas'))" : "true"},
           graphReady: Boolean(
             builtGraph.indexedNodes === 5 &&
@@ -417,8 +423,8 @@ function createMainWindow() {
           });
         })()
       `));
-            console.log(`[MDS] Smoke test: bridge=${result.bridgeReady}, root=${result.rootReady}, graph=${result.graphReady}, graphView=${result.graphViewReady}`);
-            if (!result.bridgeReady || !result.rootReady || !result.graphReady || !result.graphViewReady) {
+            console.log(`[MDS] Smoke test: bridge=${result.bridgeReady}, root=${result.rootReady}, workbench=${result.workbenchReady}, graph=${result.graphReady}, graphView=${result.graphViewReady}`);
+            if (!result.bridgeReady || !result.rootReady || !result.workbenchReady || !result.graphReady || !result.graphViewReady) {
                 process.exitCode = 1;
             }
             if (smokeScreenshotPath) {

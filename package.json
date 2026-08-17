@@ -19,6 +19,7 @@
     "test:lineage": "npm run build --silent && node tests/integration/lineage-runtime.cjs",
     "test:impact": "npm run build --silent && node tests/integration/impact-traversal.cjs",
     "test:truth": "npm run build --silent && node tests/integration/truth-context.cjs",
+    "test:foundation-dod": "npm run build --silent && node tests/integration/foundation-dod.cjs",
     "test:workflow": "npm run build --silent && node tests/integration/workflow-runtime.cjs",
     "test:graph": "npm run build --silent && node tests/integration/graph-index.cjs",
     "test:graph-sqlite": "npm run build --silent && node tests/integration/graph-sqlite.cjs",

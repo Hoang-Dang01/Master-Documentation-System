@@ -1,144 +1,956 @@
-# MDS — Personal Engineering Operating System
+# MDS — Master Documentation System
 
-MDS là ứng dụng desktop local-first giúp bạn biến tài liệu, ý tưởng, ticket và lỗi thành requirement có cấu trúc, phân tích tác động, thiết kế nháp, kế hoạch triển khai và context package cho coding agent.
+> **A local-first Technical Project Brain and Engineering Control Plane for software projects.**
 
-Mục tiêu không phải để AI tự quyết định mọi thứ. Hệ thống tự động phần có quy tắc rõ, dùng AI để đề xuất bản nháp và giữ các quyết định quan trọng sau approval gate của con người.
+MDS là ứng dụng desktop **local-first** giúp biến ý tưởng, tài liệu, yêu cầu khách hàng, thay đổi kỹ thuật và bằng chứng implementation thành một hệ thống **Project Truth có cấu trúc, version, traceability và human approval**.
 
-Luồng ưu tiên đầu tiên:
+MDS không phải IDE.
+MDS không phải coding agent.
+MDS không tự sửa source code của dự án mà nó quản lý.
+
+MDS đứng ở lớp phía trên implementation:
 
 ```text
-Tài liệu hoặc ý tưởng khách hàng
-→ Requirement được duyệt
-→ Impact analysis
-→ Design DRAFT
-→ Implementation plan
-→ Agent context package
+Customer / Documents / Requirements / Repository / Tests
+                         │
+                         ▼
+┌───────────────────────────────────────────────────────┐
+│                       MDS                             │
+│                                                       │
+│ Capture → Structure → Analyze → Approve → Trace       │
+│                                     → Present         │
+│                                                       │
+│         Governed Project Truth + Context              │
+└──────────────────────────┬────────────────────────────┘
+                           │
+                           │ bounded handoff
+                           ▼
+┌───────────────────────────────────────────────────────┐
+│                Implementation Plane                   │
+│                                                       │
+│ Developer / Codex / Claude Code / IDE / CI/CD         │
+└──────────────────────────┬────────────────────────────┘
+                           │
+                           │ read-only evidence
+                           └──────────────────► MDS
 ```
 
-## Chạy desktop app
+---
 
-```powershell
-npm.cmd install
-npm.cmd run dev
+## Why MDS?
+
+Một dự án phần mềm càng lớn thì knowledge của dự án càng dễ bị phân tán:
+
+```text
+Customer messages
+Requirements
+Meeting notes
+Markdown
+Database design
+API contracts
+Architecture decisions
+Git commits
+Code changes
+Test results
+Bug reports
+AI conversations
 ```
 
-Mặc định, dữ liệu người dùng được lưu ngoài source repository tại:
+Sau một thời gian, rất khó trả lời chắc chắn những câu hỏi như:
+
+* Requirement nào hiện đang có hiệu lực?
+* Quyết định này đến từ đâu?
+* Tại sao hệ thống được thiết kế như vậy?
+* Requirement vừa thay đổi sẽ ảnh hưởng đến API, DB hay test nào?
+* Tài liệu nào đã cũ?
+* Code hiện tại có đang lệch khỏi specification không?
+* AI coding agent cần được cung cấp context nào?
+* Phiên bản trước của quyết định này là gì?
+* Ai đã approve thay đổi?
+* Nếu rollback một quyết định thì những phần nào bị ảnh hưởng?
+
+MDS được xây dựng để giữ những câu trả lời đó trong một hệ thống có thể kiểm chứng.
+
+---
+
+# Core idea
+
+MDS quản lý **Project Truth**.
+
+```text
+Raw Information
+      │
+      ▼
+Structured Artifacts
+      │
+      ▼
+Human Review
+      │
+      ▼
+Approved Project Truth
+      │
+      ├── Traceability
+      ├── Impact Analysis
+      ├── Knowledge Graph
+      ├── Version History
+      ├── Drift Detection
+      ├── Verification Evidence
+      └── Context Package
+```
+
+MDS không coi mọi thông tin nó đọc được là sự thật.
+
+Một artifact có thể là:
+
+```text
+DRAFT
+REVIEW
+APPROVED
+DEPRECATED
+ARCHIVED
+```
+
+và đồng thời có validity riêng:
+
+```text
+CURRENT
+NEEDS_REVIEW
+STALE
+CONFLICTED
+```
+
+Ví dụ:
+
+```text
+APPROVED + CURRENT
+```
+
+có thể được sử dụng làm authoritative Project Truth.
+
+Trong khi:
+
+```text
+DRAFT
+STALE
+CONFLICTED
+```
+
+không được âm thầm đưa cho developer hoặc AI như một instruction chính thức.
+
+---
+
+# Product principles
+
+## Local-first
+
+MDS chạy trực tiếp trên máy người dùng.
+
+Không yêu cầu:
+
+* MDS cloud account
+* central MDS server
+* cloud database bắt buộc
+
+Project workspace thuộc quyền kiểm soát của người dùng.
+
+---
+
+## User-owned data
+
+Runtime project data được lưu ngoài source repository của MDS.
+
+Mặc định:
 
 ```text
 %USERPROFILE%\Documents\MDS-Workspace
 ```
 
-Muốn dùng ổ đĩa hoặc thư mục khác:
+Có thể override trong development:
+
+```powershell
+$env:MDS_DATA_DIR = "D:\MDS-Workspace"
+```
+
+Điều này giúp việc update, clone hoặc build lại MDS không làm mất project workspace.
+
+---
+
+## Human authority
+
+AI có thể:
+
+* đọc
+* phân tích
+* phát hiện vấn đề
+* đề xuất
+* tạo DRAFT
+* hỗ trợ impact analysis
+
+Nhưng AI không được tự biến một đề xuất thành Project Truth.
+
+```text
+AI Proposal
+     ↓
+   DRAFT
+     ↓
+Human Review
+     ↓
+ APPROVED
+```
+
+Các quyết định quan trọng phải đi qua explicit approval gate.
+
+---
+
+## Traceability first
+
+MDS cố gắng trả lời được:
+
+```text
+Thông tin này đến từ đâu?
+        │
+        ▼
+Artifact nào được tạo từ nó?
+        │
+        ▼
+Artifact nào phụ thuộc vào artifact đó?
+        │
+        ▼
+Nếu thay đổi thì cái gì bị ảnh hưởng?
+```
+
+Các relationship và lineage tạo nền tảng cho:
+
+* Knowledge Graph
+* Impact Analysis
+* Drift Detection
+* Change Propagation
+* Context Generation
+* Rollback Knowledge
+
+---
+
+## One Truth, multiple views
+
+MDS không tạo một bộ tài liệu riêng cho mỗi role.
+
+Thay vào đó:
+
+```text
+                 Project Truth
+                      │
+       ┌──────────────┼──────────────┐
+       ▼              ▼              ▼
+   Owner View     Manager View   Developer View
+       │              │              │
+       └──────────────┼──────────────┘
+                      ▼
+                  QA / AI View
+```
+
+Các view chỉ thay đổi cách trình bày.
+
+Chúng không được tự định nghĩa một version sự thật khác.
+
+---
+
+# MDS does NOT write managed-project code
+
+Đây là product boundary quan trọng nhất.
+
+MDS có thể đọc evidence từ implementation như:
+
+* repository paths
+* commits
+* diffs
+* build results
+* test results
+* coverage
+* verification evidence
+
+để xác định:
+
+* implementation có đúng specification không;
+* artifact nào có thể đã stale;
+* thay đổi nào cần review;
+* context nào cần giao cho coding agent.
+
+Nhưng MDS không:
+
+* sửa source code của managed project;
+* viết implementation thay developer;
+* commit code;
+* merge pull request;
+* deploy managed project;
+* thay thế Git;
+* thay thế IDE;
+* thay thế Codex hoặc Claude Code.
+
+Implementation thuộc về:
+
+```text
+Developer
+Codex
+Claude Code
+IDE
+CI/CD
+other coding systems
+```
+
+MDS là **control plane**, không phải implementation engine.
+
+---
+
+# Main value chain
+
+MDS được định nghĩa bằng sáu capability chính.
+
+| Capability    | Responsibility                                                                                  |
+| ------------- | ----------------------------------------------------------------------------------------------- |
+| **Capture**   | Thu nhận input, tài liệu, requirement, change request và implementation evidence với provenance |
+| **Structure** | Chuyển knowledge thành artifact theo canonical schema và standard                               |
+| **Analyze**   | Phát hiện ambiguity, conflict, dependency, impact, drift và missing information                 |
+| **Approve**   | Đưa quyết định authoritative qua human approval gate                                            |
+| **Trace**     | Quản lý relationship, lineage, history và impact propagation                                    |
+| **Present**   | Hiển thị cùng Project Truth cho các audience khác nhau                                          |
+
+Một feature chỉ thuộc MDS nếu nó cải thiện đáng kể ít nhất một trong sáu capability này.
+
+---
+
+# Primary workflow
+
+Vertical workflow quan trọng đầu tiên của MDS là **Customer Change Analysis**.
+
+```text
+Customer change
+      │
+      ▼
+Preserve source
+      │
+      ▼
+Requirement DRAFT
+      │
+      ▼
+Human review
+      │
+      ▼
+Approved Requirement
+      │
+      ▼
+New version / lineage
+      │
+      ▼
+Knowledge Graph traversal
+      │
+      ▼
+Impact Analysis
+      │
+      ▼
+Affected artifacts
+      │
+      ▼
+Validity updates
+      │
+      ▼
+Current Project Truth
+      │
+      ▼
+Context Package
+      │
+      ▼
+Implementation Plane
+```
+
+Sau khi developer hoặc coding agent implementation:
+
+```text
+Implementation Evidence
+        │
+        ▼
+Commit / Diff / Tests
+        │
+        ▼
+       MDS
+        │
+        ▼
+Verification / Drift Analysis
+```
+
+Tạo thành một feedback loop giữa **intent** và **implementation evidence**.
+
+---
+
+# Artifact model
+
+MDS quản lý technical knowledge dưới dạng structured artifact.
+
+Ví dụ:
+
+```text
+Requirement
+Business Rule
+Architecture Decision
+API Specification
+Database Specification
+UI Specification
+Test Case
+Decision
+Issue
+Evidence
+Release information
+```
+
+Artifact được lưu dưới dạng Markdown + structured metadata.
+
+Ví dụ:
+
+```yaml
+---
+id: BA-REQ-PROJECT-001
+version: 1.0.0
+lifecycle_state: APPROVED
+validity: CURRENT
+lineage_id: req-project-001
+source_refs:
+  - customer-request-001
+links:
+  - type: depends_on
+    target: ARCH-ADR-PROJECT-001
+---
+```
+
+Markdown và structured runtime artifacts giữ vai trò authoritative input.
+
+SQLite và Knowledge Graph là **derived state có thể rebuild**, không phải nguồn sự thật độc lập.
+
+---
+
+# Knowledge Graph
+
+Knowledge Graph cho phép MDS biểu diễn relationship giữa các artifact.
+
+Ví dụ:
+
+```text
+Requirement
+     │
+     ├── implements ──► API
+     │                    │
+     │                    └── depends_on ──► Database
+     │
+     └── verified_by ──► Test Case
+```
+
+Khi một upstream artifact thay đổi:
+
+```text
+Requirement v1
+      │
+      ▼
+Requirement v2 APPROVED
+      │
+      ▼
+Graph traversal
+      │
+      ├── API → NEEDS_REVIEW
+      ├── DB  → potentially affected
+      └── TC  → verification may be stale
+```
+
+Graph không tự quyết định sự thật.
+
+Nó là projection giúp MDS trace và analyze Project Truth.
+
+---
+
+# Current implementation
+
+MDS hiện đang được phát triển dưới dạng desktop application:
+
+```text
+Electron
+React
+TypeScript
+Node.js
+```
+
+Vertical slice ingestion hiện đã hỗ trợ:
+
+```text
+DOCX
+Markdown
+TXT
+   │
+   ▼
+Preserve source
+   │
+   ▼
+SHA-256 checksum
+   │
+   ▼
+Normalize content
+   │
+   ▼
+Requirement DRAFT
+   │
+   ▼
+Desktop application
+```
+
+Các thành phần nền tảng hiện có bao gồm:
+
+* Electron main process
+* preload typed bridge
+* React renderer
+* local project workspace
+* document ingestion
+* source preservation
+* SHA-256 provenance
+* artifact metadata
+* canonical standards
+* artifact schemas
+* artifact templates
+* role contracts
+* agent prompts
+* versioned workflow definitions
+* deterministic validation
+* deterministic impact foundation
+* Knowledge Graph foundation
+* build/typecheck/document validation
+* ingestion tests
+
+MDS vẫn đang trong **active development**.
+
+Một số capability vẫn đang được hoàn thiện, bao gồm:
+
+* complete requirement review UI
+* approval persistence/UI
+* full artifact version lineage
+* Current Project Truth projection
+* complete Knowledge Graph workflow
+* graph-based impact propagation
+* SQLite runtime index
+* AI provider adapters
+* workspace/provider settings UI
+* implementation evidence adapters
+* drift detection
+* production packaging
+
+Không nên hiểu các capability trong roadmap là đã hoàn thành chỉ vì structure hoặc contract của chúng đã tồn tại trong repository.
+
+---
+
+# Repository architecture
+
+```text
+Master-Documentation-System/
+│
+├── apps/
+│   └── desktop/
+│       └── Electron + React desktop application
+│
+├── packages/
+│   ├── core/
+│   ├── application/
+│   ├── workflow-engine/
+│   └── infrastructure/
+│
+├── mds-core/
+│   ├── standards/
+│   ├── schemas/
+│   ├── templates/
+│   ├── roles/
+│   ├── prompts/
+│   ├── guides/
+│   └── glossary/
+│
+├── skills/
+│   ├── mds/
+│   └── vendor/
+│
+├── workflows/
+│   └── versioned workflow definitions
+│
+├── workspace/
+│   └── development seeds / fixtures
+│
+├── scripts/
+│
+├── tests/
+│
+├── docs/
+│
+├── package.json
+└── README.md
+```
+
+### `apps/desktop`
+
+Desktop application:
+
+```text
+Electron Main
+     ↓
+Preload Bridge
+     ↓
+React Renderer
+```
+
+Renderer không được truy cập filesystem trực tiếp.
+
+---
+
+### `packages/core`
+
+Runtime contracts và domain invariants.
+
+Hướng tới quản lý:
+
+* entities
+* validation
+* approval
+* audit
+* lifecycle
+* validity
+* lineage
+
+---
+
+### `packages/application`
+
+Các use case mà MDS thực hiện cho người dùng.
+
+Ví dụ:
+
+* ingestion
+* requirement processing
+* impact analysis
+* project operations
+
+---
+
+### `packages/workflow-engine`
+
+Runtime dành cho versioned workflows.
+
+Workflow policy không được hard-code trong UI.
+
+---
+
+### `packages/infrastructure`
+
+Adapter boundary cho:
+
+* filesystem
+* persistence
+* repository evidence
+* AI providers
+* external integration
+
+---
+
+### `mds-core`
+
+Knowledge & Governance Core.
+
+Chứa:
+
+```text
+Standards
+Schemas
+Templates
+Role Contracts
+Prompts
+Lifecycle Guides
+Glossary
+```
+
+Đây là nơi định nghĩa cách Project Truth phải được cấu trúc và quản trị.
+
+---
+
+### `skills`
+
+```text
+skills/mds/
+```
+
+chứa capability do MDS sở hữu.
+
+```text
+skills/vendor/
+```
+
+chứa third-party/vendor skills.
+
+Vendor content không được chỉnh sửa để tạo ra một canonical rule cạnh tranh với `mds-core`.
+
+---
+
+### `workspace`
+
+`workspace/` trong repository chỉ dành cho:
+
+* development
+* fixtures
+* seed projects
+* tests
+
+Không phải vị trí canonical dành cho dữ liệu project thật của người dùng.
+
+---
+
+# Source of Truth
+
+MDS áp dụng nguyên tắc:
+
+> **One concern → one canonical source.**
+
+Ví dụ:
+
+| Concern                  | Canonical source                       |
+| ------------------------ | -------------------------------------- |
+| Artifact standards       | `mds-core/standards/`                  |
+| Artifact Truth / lineage | `mds-core/standards/artifact_truth.md` |
+| Artifact schemas         | `mds-core/schemas/`                    |
+| Templates                | `mds-core/templates/`                  |
+| Roles                    | `mds-core/roles/`                      |
+| Agent prompts            | `mds-core/prompts/`                    |
+| Workflow definitions     | `workflows/definitions/`               |
+| Runtime use cases        | `packages/application/`                |
+| Architecture             | `docs/ARCHITECTURE.md`                 |
+| Product boundary         | `docs/foundation/product-boundary.md`  |
+| Canonical registry       | `docs/CANONICAL_SOURCES.md`            |
+
+Nếu hai nơi định nghĩa cùng một rule nhưng khác nhau, canonical source thắng.
+
+Không giải quyết documentation drift bằng cách copy thêm rule sang vị trí thứ ba.
+
+---
+
+# Running MDS
+
+## Requirements
+
+* Node.js
+* npm
+* Windows development environment hiện là môi trường chính được sử dụng cho project
+
+Clone repository:
+
+```bash
+git clone https://github.com/Hoang-Dang01/Master-Documentation-System.git
+cd Master-Documentation-System
+```
+
+Install dependencies:
+
+```powershell
+npm.cmd install
+```
+
+Run desktop application:
+
+```powershell
+npm.cmd run dev
+```
+
+---
+
+# Workspace
+
+Mặc định:
+
+```text
+%USERPROFILE%\Documents\MDS-Workspace
+```
+
+Override:
 
 ```powershell
 $env:MDS_DATA_DIR = "D:\MDS-Workspace"
 npm.cmd run dev
 ```
 
-Thư mục [`workspace/`](workspace/) trong repository chỉ là seed EduMeet dành
-cho phát triển và lần chạy đầu; không đặt dữ liệu khách hàng hoặc API key vào
-đó. Xem [ranh giới dữ liệu local](docs/DATA_LAYOUT.md).
+Runtime project data nằm dưới:
 
-Kiểm tra và chạy bản production:
+```text
+MDS_DATA_DIR/
+└── projects/
+    ├── index.yaml
+    ├── active/
+    │   └── <project-id>/
+    └── archived/
+```
+
+Không lưu:
+
+* customer production data
+* API keys
+* secrets
+
+trực tiếp trong repository `workspace/`.
+
+---
+
+# Build & verification
+
+Build:
 
 ```powershell
 npm.cmd run build
+```
+
+Smoke test:
+
+```powershell
 npm.cmd run smoke
+```
+
+Run production build:
+
+```powershell
 npm.cmd start
 ```
 
----
+Repository còn có các script validation và testing phục vụ kiểm tra:
 
-## 💡 Tại sao bạn cần MDS? (Why MDS?)
+* TypeScript
+* documents
+* repository structure
+* ingestion behavior
 
-Khi làm dự án phần mềm một mình hoặc cùng AI, bạn sẽ luôn gặp 3 vấn đề lớn:
-1.  **Human Memory Limits**: Bạn không thể nhớ hết mọi ngóc ngách, logic và cấu trúc database của hệ thống khi dự án phình to.
-2.  **AI Context Limits**: AI viết code rất nhanh nhưng sẽ "bốc phét" (hallucinate) hoặc phá vỡ cấu trúc cũ nếu không được cung cấp đúng và đủ ngữ cảnh (context).
-3.  **Knowledge Drift**: Tài liệu thiết kế, sơ đồ database và code thực tế luôn bị lệch pha (drift) theo thời gian khi dự án cập nhật liên tục.
-
-MDS được tạo ra để giải quyết triệt để 3 nỗi đau này.
+Xem `package.json` để biết danh sách command hiện tại.
 
 ---
 
-## 🎯 MDS giúp bạn làm gì? (Concrete Example)
+# Roadmap
 
-Ví dụ, khi khách hàng nhắn một câu:
-> *“Tôi muốn xây dựng một hệ thống học trực tuyến (LMS) giống như Zoom.”*
+Roadmap hiện tại được tổ chức theo hướng phát triển capability thay vì biến MDS thành coding agent.
 
-MDS sẽ hướng dẫn bạn và AI biến câu nói mơ hồ đó thành chuỗi tài liệu kỹ nghệ chuẩn xác:
-*   **Requirements (BA)**: Phân rã thành các tài liệu tính năng phòng học, quản lý học viên.
-*   **Delivery Planning (PM)**: Chốt phạm vi, ưu tiên, roadmap, dependency, milestone và bằng chứng hoàn thành.
-*   **Architecture Decisions (ARCH)**: Ghi nhận quyết định dùng công nghệ gì (ADR), ví dụ: WebRTC hay LiveKit.
-*   **Database Schema (BE/DBA)**: Thiết kế chi tiết các bảng dữ liệu bằng mã nguồn SQL DDL.
-*   **API Contracts (BE/FE)**: Thiết kế hợp đồng API để Backend và Frontend tích hợp không bị lệch pha.
-*   **Verification (QA)**: Viết kịch bản kiểm thử (Test Cases) để tự động chạy kiểm tra chất lượng.
+### 0.1 — Work faster
 
-Mọi tài liệu trên đều được liên kết chặt chẽ với nhau. Nếu bạn sửa Database, hệ thống tự động cảnh báo những API hay Test Case nào đang bị ảnh hưởng.
+* Project workspace
+* document import
+* structured requirement extraction
+* human review
+* impact analysis
+* design draft
 
----
+### 0.2 — Prepare work for implementation
 
-## 📍 Trạng thái dự án hiện tại (Current State)
+* implementation plan
+* task decomposition
+* acceptance criteria
+* verification plan
+* bounded context packages
 
-*   **Development seed**: [EduMeet](workspace/projects/active/edumeet/)
-*   **Current Phase**: `Phase 03: Design` ➔ [mds-core/guides/lifecycle/03_design](mds-core/guides/lifecycle/03_design/)
-*   **Current Focus**: Thiết kế kiến trúc tổng thể, cơ sở dữ liệu, API Contracts và các quyết định ADR.
+### 0.3 — Observe implementation
 
----
+* read-only repository adapters
+* Git diff evidence
+* execution evidence
+* completion verification
 
-## 🧭 Bản đồ kiến trúc mới
+### 0.4 — Synchronize Project Truth
 
-*   [`apps/desktop`](apps/desktop/) — Electron shell, preload bridge và React UI.
-*   [`packages`](packages/) — Domain, application workflows và các adapter.
-*   [`mds-core`](mds-core/) — Toàn bộ tiêu chuẩn, schema, template, glossary và hướng dẫn cũ đã được bảo toàn.
-*   [`skills`](skills/) — Skill AI‑EOS của MDS và thư viện vendor đã gộp vào cùng repo.
-*   [`skills/mds/PM_WORKFLOW.md`](skills/mds/PM_WORKFLOW.md) — Luồng Project/Delivery Management từ scope đến release và handoff.
-*   [`workflows`](workflows/) — Automation definitions có version và approval gate.
-*   [`docs/DATA_LAYOUT.md`](docs/DATA_LAYOUT.md) — Ranh giới giữa source repo và dữ liệu runtime local.
-*   [`docs/SYSTEM_OVERVIEW.md`](docs/SYSTEM_OVERVIEW.md) — Tổng quan mục tiêu, kiến trúc logic, trạng thái hiện tại và hướng phát triển.
-*   [`workspace/projects`](workspace/projects/) — Seed/fixture EduMeet cho development; dữ liệu thật nằm trong `MDS_DATA_DIR`.
-*   [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) — Ranh giới kiến trúc và vertical slice đầu tiên.
-*   [`docs/STRUCTURE.md`](docs/STRUCTURE.md) — Cây thư mục hiện tại.
-*   [`docs/STRUCTURE.generated.md`](docs/STRUCTURE.generated.md) — Cây vật lý tự sinh bằng `npm run docs:structure`.
-*   [`docs/MIGRATION_MAP.md`](docs/MIGRATION_MAP.md) — Bản ghi di chuyển, ownership và trạng thái consolidation.
-*   [`docs/CANONICAL_SOURCES.md`](docs/CANONICAL_SOURCES.md) — Source of truth cho từng loại nội dung.
-*   [`docs/ROADMAP.md`](docs/ROADMAP.md) — Lộ trình từ 0.1 đến Personal Engineering OS.
+* documentation drift
+* API / database change detection
+* artifact versioning
+* release readiness
+* engineering status views
 
----
+### 1.0 — Engineering Control Plane
 
-## 🚀 Cổng điều hướng nhanh (MDS Portal)
+* mature Project Truth engine
+* workflow system
+* multiple projects
+* local knowledge search
+* human approval center
+* reusable workflows
+* evidence-backed reporting
 
-### 1. Tôi Là Ai? (Who Am I?)
-*Xem chi tiết trách nhiệm, tài liệu đầu vào/đầu ra của từng vai trò:*
-*   [PM (Project/Delivery Manager)](mds-core/roles/pm) — Phạm vi, ưu tiên, roadmap, dependency, tiến độ, risk và release gate.
-*   [BA (Business Analyst)](mds-core/roles/ba) — Quy tắc nghiệp vụ, quy trình và yêu cầu.
-*   [SA (System Analyst)](mds-core/roles/sa) — Đặc tả hệ thống (SRS) và thiết kế logic.
-*   [ARCH (Architect)](mds-core/roles/arch) — Quyết định kiến trúc (ADR) và tiêu chuẩn bảo mật.
-*   [BE (Backend Dev)](mds-core/roles/be) — Cơ sở dữ liệu (DDL), API Contracts và logic backend.
-*   [FE (Frontend Dev)](mds-core/roles/fe) — Giao diện (UI Specs), components và trạng thái client.
-*   [QA (Quality Assurance)](mds-core/roles/qa) — Kịch bản kiểm thử (Test Cases) và báo cáo lỗi.
-*   [DEVOPS (Platform Ops)](mds-core/roles/devops) — Triển khai (IaC), CI/CD và giám sát SRE.
+Principle:
 
-### 2. Tôi Đang Ở Phase Nào? (What Phase Am I In?)
-*Theo dõi tài liệu cần bàn giao theo tiến độ dự án:*
-*   [Phase 0: Intake](mds-core/guides/lifecycle/00_intake) ➔ [Phase 1: Discovery](mds-core/guides/lifecycle/01_discovery) ➔ [Phase 2: Analysis](mds-core/guides/lifecycle/02_analysis)
-*   [Phase 3: Design](mds-core/guides/lifecycle/03_design) ➔ [Phase 4: Planning](mds-core/guides/lifecycle/04_planning) ➔ [Phase 5: Implementation](mds-core/guides/lifecycle/05_implementation)
-*   [Phase 6: Testing](mds-core/guides/lifecycle/06_testing) ➔ [Phase 7: Deployment](mds-core/guides/lifecycle/07_deployment) ➔ [Phase 8: Operations](mds-core/guides/lifecycle/08_operations)
-*   [Phase 9: Evolution](mds-core/guides/lifecycle/09_evolution)
-
-### 3. Tôi Nên Vào Đâu? (Virtual Views)
-*Góc nhìn ảo tối ưu hóa luồng công việc:*
-*   👉 **[Góc Nhìn Solo (Solo View)](docs/views/solo_view.md) [Khuyên dùng]**: Bàn làm việc tinh gọn hàng ngày của bạn.
-*   👉 **[Góc Nhìn Dự Án Active (Project View)](docs/views/project_view.md)**: Không gian làm việc của dự án hiện tại.
+> **Complete one vertical workflow before expanding horizontally.**
 
 ---
 
-## 📖 Hướng dẫn đọc (Reading Order)
+# Important documents
 
-### Cho người mới bắt đầu (Onboarding)
-1.  **[README.md](README.md)**: Bản đồ tổng quan này.
-2.  **[QUICK_START.md](docs/QUICK_START.md)**: Hướng dẫn setup nhanh dự án mới và AI trong 5 phút.
-3.  **[DOCUMENT_STANDARDS.md](mds-core/standards/document_standards.md)**: 5 Quy tắc chuẩn tắc bắt buộc của hệ thống.
+Nếu mới đọc project, nên bắt đầu theo thứ tự:
 
-### Cho vận hành hàng ngày (Daily Operations)
-1.  **[SOLO_VIEW.md](docs/views/solo_view.md)**: Nhận nhiệm vụ và bắt đầu làm việc.
-2.  **[PROJECT_VIEW.md](docs/views/project_view.md)**: Xem toàn bộ hồ sơ thiết kế của dự án active.
+1. [`README.md`](README.md)
+2. [`docs/SYSTEM_OVERVIEW.md`](docs/SYSTEM_OVERVIEW.md)
+3. [`docs/foundation/product-boundary.md`](docs/foundation/product-boundary.md)
+4. [`docs/foundation/architecture-decision.md`](docs/foundation/architecture-decision.md)
+5. [`docs/CANONICAL_SOURCES.md`](docs/CANONICAL_SOURCES.md)
+6. [`mds-core/standards/artifact_truth.md`](mds-core/standards/artifact_truth.md)
+7. [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md)
+8. [`docs/ROADMAP.md`](docs/ROADMAP.md)
+9. [`docs/STRUCTURE.md`](docs/STRUCTURE.md)
+
+---
+
+# Development philosophy
+
+MDS ưu tiên:
+
+```text
+Deterministic rules
+        before
+AI inference
+```
+
+```text
+Evidence
+   before
+assumption
+```
+
+```text
+Human approval
+      before
+authority
+```
+
+```text
+Traceability
+     before
+automation
+```
+
+```text
+Project Truth
+     before
+agent convenience
+```
+
+Mục tiêu cuối cùng không phải tạo thêm một AI biết viết code.
+
+Mục tiêu là tạo ra một hệ thống biết:
+
+> **Dự án đang thực sự yêu cầu điều gì, tại sao nó như vậy, điều gì đang có hiệu lực, điều gì đã thay đổi, thay đổi đó ảnh hưởng đến đâu và context nào an toàn để con người hoặc AI tiếp tục implementation.**
+
+---
+
+## Project status
+
+**Status:** Active Development
+
+MDS đang được xây dựng theo từng vertical slice nhỏ, có thể kiểm chứng.
+
+Canonical product boundary hiện tại:
+
+> **MDS = Technical Project Brain + Engineering Control Plane**
+
+Implementation vẫn thuộc:
+
+> **Developer + IDE + Coding Agent + Git + CI/CD**
+
+---
+
+**Master Documentation System**
+
+*Build the truth before building from it.*
