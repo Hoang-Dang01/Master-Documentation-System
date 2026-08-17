@@ -1,15 +1,12 @@
 ---
-
 ownership: mds
 status: canonical
 source: internal
 safe_to_modify: scoped
 canonical_target:
-
-* ./implementation-plane-model.md
-* ./implementation-plane-registry.yaml
-  update_strategy: change only through the applicable governed approval process
-
+  - ./implementation-plane-model.md
+  - ./implementation-plane-registry.yaml
+update_strategy: change only through the applicable governed approval process
 ---
 
 # External Implementation Plane

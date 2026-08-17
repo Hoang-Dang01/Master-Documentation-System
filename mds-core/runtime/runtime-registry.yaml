@@ -1,0 +1,56 @@
+ownership: mds
+status: canonical
+source: internal
+safe_to_modify: scoped
+update_strategy: extend only through the applicable governed approval process
+
+registry:
+  id: mds-runtime-registry
+  classification: runtime_environment
+  semantics_ref: ./runtime-model.md
+
+runtime_classes:
+  - id: runtime-observation
+    display_name: Runtime Observation
+    status: canonical
+    classification: runtime_evidence
+    description: >
+      A recorded observation about runtime state or behaviour, including what
+      was observed, where and when it was observed, the applicable runtime
+      context, and available provenance.
+
+  - id: telemetry-evidence
+    display_name: Telemetry Evidence
+    status: canonical
+    classification: runtime_evidence
+    description: >
+      Machine-generated operational evidence such as metrics, traces, logs,
+      counters, timing information, resource measurements, availability
+      measurements, or throughput measurements.
+
+  - id: health-evidence
+    display_name: Health Evidence
+    status: canonical
+    classification: runtime_evidence
+    description: >
+      Runtime evidence describing whether a component, service, or system is
+      operating within defined health expectations, including healthy,
+      degraded, unhealthy, or unknown observations where applicable.
+
+  - id: incident-evidence
+    display_name: Incident Evidence
+    status: canonical
+    classification: runtime_evidence
+    description: >
+      Evidence describing an operational condition that caused or indicated
+      meaningful degradation, failure, risk, or unexpected runtime impact,
+      together with its observable context and provenance.
+
+  - id: operational-event
+    display_name: Operational Event
+    status: canonical
+    classification: runtime_evidence
+    description: >
+      A runtime-relevant operational event useful for traceability or analysis,
+      such as restart, dependency failure, recovery, failover, scaling,
+      configuration reload, threshold breach, or runtime verification activity.

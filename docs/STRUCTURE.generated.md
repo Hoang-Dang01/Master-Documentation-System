@@ -193,6 +193,8 @@ Master-Documentation-System/
 │   │   │       └── workflow.md
 │   │   └── README.md
 │   ├── implementation-plane/
+│   │   ├── implementation-plane-model.md
+│   │   ├── implementation-plane-registry.yaml
 │   │   └── README.md
 │   ├── prompts/
 │   │   ├── agents/
@@ -262,7 +264,9 @@ Master-Documentation-System/
 │   │   ├── role-model.md
 │   │   └── role-registry.yaml
 │   ├── runtime/
-│   │   └── README.md
+│   │   ├── README.md
+│   │   ├── runtime-model.md
+│   │   └── runtime-registry.yaml
 │   ├── schemas/
 │   │   ├── artifact_truth_schema.md
 │   │   ├── entity_schema.md

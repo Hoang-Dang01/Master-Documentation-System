@@ -195,6 +195,7 @@ export function App() {
   const attentionArtifacts = artifacts.filter((artifact) =>
     ["DRAFT", "REVIEW"].includes(artifact.lifecycleState),
   );
+  const blockerCount = 0;
   const runningWorkflows = importedDocument ? 1 : 0;
   const recentArtifacts = artifacts.slice(0, 5);
   const normalizedQuery = query.trim().toLocaleLowerCase("vi");
@@ -520,12 +521,17 @@ export function App() {
                 <small>{runningWorkflows ? "Đang chờ duyệt bản nháp" : "Chưa có phiên chạy"}</small>
               </div>
             </Surface>
-            <Surface as="article" className="status-card" emphasis="raised" tone="conflict">
+            <Surface
+              as="article"
+              className="status-card"
+              emphasis="raised"
+              tone={blockerCount ? "conflict" : "neutral"}
+            >
               <div className="status-card-icon success"><Icon name="alert" /></div>
               <div>
                 <span>Blocker đã ghi nhận</span>
-                <strong>0</strong>
-                <small>Từ metadata hiện có</small>
+                <strong>{blockerCount}</strong>
+                <small>{blockerCount ? "Cần xử lý trước khi tiếp tục" : "Không có blocker đang mở"}</small>
               </div>
             </Surface>
             <Surface as="article" className="status-card" emphasis="raised" tone="neutral">
