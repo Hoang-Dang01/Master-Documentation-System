@@ -38,6 +38,7 @@ Master-Documentation-System/
 │   │   │       ├── index.html
 │   │   │       ├── KnowledgeGraphView.tsx
 │   │   │       ├── main.tsx
+│   │   │       ├── SettingsView.tsx
 │   │   │       └── styles.css
 │   │   ├── package.json
 │   │   ├── README.md
@@ -1109,6 +1110,7 @@ Master-Documentation-System/
 │   └── README.md
 ├── .gitignore
 ├── AGENTS.md
+├── Icon logo.png
 ├── package-lock.json
 ├── package.json
 └── README.md

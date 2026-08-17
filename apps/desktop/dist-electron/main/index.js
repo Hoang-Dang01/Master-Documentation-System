@@ -12,6 +12,7 @@ const persistence_1 = require("@mds/persistence");
 const workflow_engine_1 = require("@mds/workflow-engine");
 const repositoryRoot = node_path_1.default.resolve(__dirname, "..", "..", "..", "..");
 const seedWorkspaceRoot = node_path_1.default.join(repositoryRoot, "workspace");
+const desktopIconPath = node_path_1.default.join(repositoryRoot, "apps", "desktop", "src", "renderer", "public", "assets", "mds-logo-taskbar.png");
 const isSmokeTest = process.env.MDS_SMOKE_TEST === "1";
 const smokeScreenshotPath = process.env.MDS_SMOKE_SCREENSHOT;
 const smokeGraphView = process.env.MDS_SMOKE_GRAPH_VIEW === "1";
@@ -344,6 +345,7 @@ function createMainWindow() {
         minHeight: 720,
         show: !isSmokeTest || Boolean(smokeScreenshotPath),
         backgroundColor: "#f4f2ec",
+        icon: desktopIconPath,
         title: "MDS — Engineering OS",
         autoHideMenuBar: true,
         webPreferences: {

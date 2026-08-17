@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { KnowledgeGraphView } from "./KnowledgeGraphView";
+import { SettingsView, type InterfacePreferences } from "./SettingsView";
 import {
   Button,
   CountBadge,
@@ -35,7 +36,8 @@ type NavigationItem = {
     | "attention-panel"
     | "workflow-panel"
     | "documents-panel"
-    | "activity-panel";
+    | "activity-panel"
+    | "settings";
   disabled?: boolean;
   badge?: number;
 };
@@ -60,6 +62,28 @@ const ownerLabels: Record<string, string> = {
   PM: "Quản lý dự án",
   system: "Hệ thống",
 };
+
+const defaultInterfacePreferences: InterfacePreferences = {
+  accent: "yellow",
+  density: "comfortable",
+  fontScale: 1,
+  language: "vi",
+  reduceMotion: false,
+  typography: "standard",
+};
+
+const interfacePreferencesKey = "mds.interface-preferences.v1";
+
+function loadInterfacePreferences(): InterfacePreferences {
+  try {
+    const stored = window.localStorage.getItem(interfacePreferencesKey);
+    return stored
+      ? { ...defaultInterfacePreferences, ...JSON.parse(stored) } as InterfacePreferences
+      : defaultInterfacePreferences;
+  } catch {
+    return defaultInterfacePreferences;
+  }
+}
 
 function Icon({ name, size = 16 }: { name: IconName; size?: number }) {
   const paths: Record<IconName, React.ReactNode> = {
@@ -124,7 +148,7 @@ function relativeTime(value: string): string {
 }
 
 export function App() {
-  const [activeView, setActiveView] = useState<"overview" | "graph">("overview");
+  const [activeView, setActiveView] = useState<"overview" | "graph" | "settings">("overview");
   const [appInfo, setAppInfo] = useState<MdsAppInfo | null>(null);
   const [workspacePath, setWorkspacePath] = useState("");
   const [artifacts, setArtifacts] = useState<MdsArtifactSummary[]>([]);
@@ -132,10 +156,10 @@ export function App() {
   const [isSelecting, setIsSelecting] = useState(false);
   const [isImporting, setIsImporting] = useState(false);
   const [technicalMode, setTechnicalMode] = useState(false);
-  // MDS uses a light document workspace by default. Dark OS preference must
-  // not invert the control-plane UI; the graph remains the dedicated dark
-  // technical surface. Users can still opt into the alternate theme manually.
+  // MDS starts in light mode and only changes theme through this explicit
+  // desktop control; it never follows the operating-system color scheme.
   const [isDark, setIsDark] = useState(false);
+  const [interfacePreferences, setInterfacePreferences] = useState(loadInterfacePreferences);
   const [query, setQuery] = useState("");
   const [importedDocument, setImportedDocument] =
     useState<MdsImportedDocument | null>(null);
@@ -149,6 +173,16 @@ export function App() {
   useEffect(() => {
     document.documentElement.dataset.theme = isDark ? "dark" : "light";
   }, [isDark]);
+
+  useEffect(() => {
+    document.documentElement.dataset.accent = interfacePreferences.accent;
+    document.documentElement.dataset.density = interfacePreferences.density;
+    document.documentElement.dataset.typography = interfacePreferences.typography;
+    document.documentElement.dataset.reduceMotion = String(interfacePreferences.reduceMotion);
+    document.documentElement.lang = interfacePreferences.language;
+    document.documentElement.style.setProperty("--mds-user-font-scale", String(interfacePreferences.fontScale));
+    window.localStorage.setItem(interfacePreferencesKey, JSON.stringify(interfacePreferences));
+  }, [interfacePreferences]);
 
   useEffect(() => {
     const handleShortcut = (event: KeyboardEvent) => {
@@ -249,7 +283,7 @@ export function App() {
       label: "Hệ thống",
       items: [
         { label: "Hoạt động", icon: "activity", target: "activity-panel" },
-        { label: "Cài đặt", icon: "settings", disabled: true },
+        { label: "Cài đặt nâng cao", icon: "settings", target: "settings" },
       ],
     },
   ];
@@ -354,6 +388,12 @@ export function App() {
     });
   }
 
+  function isNavigationItemActive(item: NavigationItem): boolean {
+    if (item.label === "Bản đồ tri thức") return activeView === "graph";
+    if (item.target === "settings") return activeView === "settings";
+    return item.target === "main-content" && activeView === "overview";
+  }
+
   return (
     <div className="app-shell">
       <a className="skip-link" href="#main-content">
@@ -362,10 +402,14 @@ export function App() {
 
       <aside className="sidebar">
         <div className="brand">
-          <div className="brand-mark">M</div>
+          <img
+            alt="Master Documentation System"
+            className="brand-mark"
+            src="./assets/mds-logo.png"
+          />
           <div className="brand-copy">
-            <strong>MDS</strong>
-            <span>Documentation workspace</span>
+            <strong>Master Documentation<br />System</strong>
+            <span>Engineering workspace</span>
           </div>
         </div>
 
@@ -375,13 +419,16 @@ export function App() {
               <p className="nav-label">{group.label}</p>
               {group.items.map((item) => (
                 <button
-                  aria-current={(item.label === "Bản đồ tri thức" ? activeView === "graph" : item.target === "main-content" && activeView === "overview") ? "page" : undefined}
-                  className={`nav-item ${(item.label === "Bản đồ tri thức" ? activeView === "graph" : item.target === "main-content" && activeView === "overview") ? "is-active" : ""}`}
+                  aria-current={isNavigationItemActive(item) ? "page" : undefined}
+                  className={`nav-item ${isNavigationItemActive(item) ? "is-active" : ""}`}
                   disabled={item.disabled}
                   key={item.label}
                   onClick={() => {
                     if (item.label === "Bản đồ tri thức") {
                       setActiveView("graph");
+                      window.scrollTo({ top: 0, behavior: "smooth" });
+                    } else if (item.target === "settings") {
+                      setActiveView("settings");
                       window.scrollTo({ top: 0, behavior: "smooth" });
                     } else {
                       setActiveView("overview");
@@ -480,6 +527,14 @@ export function App() {
               projectPath={workspacePath}
             />
           </main>
+        ) : activeView === "settings" ? (
+          <SettingsView
+            onReset={() => setInterfacePreferences(defaultInterfacePreferences)}
+            onUpdate={(next) =>
+              setInterfacePreferences((current) => ({ ...current, ...next }))
+            }
+            preferences={interfacePreferences}
+          />
         ) : (
         <main className="main-content" id="main-content">
           <div className="page-heading">

@@ -1,241 +1,916 @@
-# MDS vNext — Tiêu Chuẩn Tài Liệu Cốt Lõi (Document Standards)
+---
+ownership: mds
+status: transitional
+source: internal
+safe_to_modify: scoped
+classification: compatibility_index
+canonical_target:
+  - ./artifact_truth.md
+  - ./naming_convention.md
+  - ./lifecycle_rules.md
+  - ./relationship_rules.md
+  - ./versioning_rules.md
+update_strategy: retire after all legacy references have been migrated
+---
 
-> **MDS — Master Documentation System**
-> *The 5 Canonical Rules for Human-AI Engineering Collaboration*
+# Document Standards Compatibility Index
 
-Tài liệu này định nghĩa chi tiết 5 quy tắc chuẩn tắc bắt buộc (Machine-Enforceable Specification) nhằm đảm bảo tính nhất quán của tri thức toàn dự án.
-
-> **Authority**: Đây là tài liệu **meta-governance** cấp cao nhất của MDS. Mọi schema khác (`workflow_schema`, `entity_schema`, `role_schema`) tham chiếu và tuân thủ các quy tắc được định nghĩa tại đây.
+> **Transitional document**
+>
+> This file is retained only to preserve compatibility with legacy references.
+> It is not a universal MDS governance authority and must not define competing
+> canonical rules.
 
 ---
 
-## RULE 1: Human-first Naming (Quy ước đặt tên ưu tiên con người)
+## 1. Purpose
 
-MDS tách tên artifact thành ba lớp:
+Earlier versions of MDS used `document_standards.md` as a broad document
+governance source covering several unrelated concerns.
 
-```text
-title    → tên tự nhiên dành cho người đọc
-id       → khóa kỹ thuật dành cho hệ thống và traceability
-filename → slug lưu trữ ngắn, ổn định và dễ đọc
-```
+That model is no longer canonical.
 
-Filename của project artifact dùng:
+Those concerns now belong to focused canonical owners.
 
-```text
-<human-readable-slug>.<extension>
-```
+This file exists only to:
 
-Slug phải viết thường, chỉ dùng `a-z`, `0-9`, dấu `-`, tối đa 80 ký tự và
-không chứa lifecycle state, version, role code, `FINAL`, `LATEST` hoặc
-`UPDATED`.
-
-```text
-dao-tao-mo-hinh-phat-hien-url.md
-thiet-ke-api-chi-tiet-phieu.md
-phan-quyen-tai-xe.md
-kiem-thu-chuc-nang-qr.md
-```
-
-Thông tin kỹ thuật nằm trong YAML Frontmatter:
-
-```yaml
-id: BE-SRV-EDU-AI-001
-title: Đào tạo mô hình phát hiện URL
-project: edumeet
-lifecycle_state: APPROVED
-version: 1.0.0
-owner: dev_agent
-```
-
-`title` không mang tiền tố kỹ thuật như `REQ:`, `SRV:` hoặc ID. Quan hệ giữa
-artifact tham chiếu bằng `id`, không tham chiếu bằng filename. Các file hệ
-thống ổn định như `project_brief.md`, `business_context.md`, `constraints.md`
-và `status.md` là ngoại lệ có chủ đích.
-
-Quy tắc chi tiết và ví dụ UI nằm tại
-[`naming_convention.md`](naming_convention.md).
+- preserve legacy references during migration;
+- route old references to the correct canonical owner;
+- identify deprecated assumptions from the previous governance model;
+- prevent historical references from silently becoming broken;
+- provide a controlled path toward eventual retirement of this file.
 
 ---
 
-## RULE 2: ID Convention (Quy chuẩn định dạng ID thực thể)
+## 2. Canonical Replacement Map
 
-ID là khóa định danh độc nhất toàn cầu của mỗi thực thể trong Đồ thị Tri thức. Định dạng bắt buộc:
+Legacy concerns previously associated with this document must now be resolved
+through the following canonical sources:
 
 ```text
-ROLE-TYPE-PROJECT-COMPONENT-NUMBER
+Artifact Truth
+→ ./artifact_truth.md
+
+Naming and Identifier Rules
+→ ./naming_convention.md
+
+Lifecycle and Execution State
+→ ./lifecycle_rules.md
+
+Relationship Vocabulary and Graph Integrity
+→ ./relationship_rules.md
+
+Version Numbering
+→ ./versioning_rules.md
 ```
 
-*   `ROLE`: Prefix vai trò sở hữu (ví dụ: `PM`, `BA`, `SA`, `ARCH`, `BE`, `FE`, `QA`, `OPS`).
-*   `TYPE`: Mã thực thể viết hoa đầy đủ danh sách 24 loại:
+This file does not override any of those sources.
 
-| TYPE | Mô tả | Owner Prefix |
-| :--- | :--- | :--- |
-| `CTX` | Project Context | `PM-`, `BA-`, `ARCH-` |
-| `FSB` | Feasibility Study | `PM-` |
-| `BRD` | Business Requirements Document | `BA-` |
-| `FLOW` | Process Flow | `BA-` |
-| `UC` | Use Case | `BA-` |
-| `REQ` | Requirement | `BA-` |
-| `BR` | Business Rule | `BA-` |
-| `NFR` | Non-Functional Requirement | `SA-` |
-| `ADR` | Architecture Decision | `ARCH-` |
-| `HLD` | High-Level Design | `ARCH-` |
-| `SEC` | Security Specification | `ARCH-` |
-| `API` | API Contract | `SA-` / `BE-` |
-| `DB` | Database Schema | `SA-` / `BE-` |
-| `SRV` | Service/Component | `ARCH-` |
-| `UI` | UI Spec/Wireframe | `FE-` |
-| `DEC` | Decision Log | `ARCH-` |
-| `TSK` | Task | `PM-` |
-| `TC` | Test Case | `QA-` |
-| `BUG` | Bug Report | `QA-` |
-| `REL` | Release | `PM-` |
-| `INC` | Incident Report | `DEVOPS-` |
-| `RUN` | Runbook | `DEVOPS-` |
-| `FIN` | Financial Cost | `PM-` |
-| `RSK` | Risk Register | `PM-` |
+---
 
-*   `PROJECT`: Mã dự án viết tắt 3-5 ký tự viết hoa (ví dụ: `EDU`, `MED`, `MDS`).
-*   `COMPONENT`: Tên phân hệ viết tắt 3-10 ký tự viết hoa (ví dụ: `AUTH`, `MEET`, `BILL`).
-*   `NUMBER`: 3 chữ số tăng dần (ví dụ: `001`, `002`).
+## 3. No Meta-Governance Authority
 
-*Ví dụ hợp lệ*:
+This document must not be interpreted as:
+
 ```text
-BA-REQ-EDU-AUTH-001    →  Requirement #1 của module Authentication trong dự án EduMeet
-SA-NFR-MED-SYS-002     →  Non-Functional Req #2 của phân hệ System trong dự án Medstand
-ARCH-ADR-MDS-INFRA-003 →  Architecture Decision #3 về Infrastructure trong dự án MDS Core
-QA-TC-EDU-AUTH-044     →  Test Case #44 của module Auth trong dự án EduMeet
-PM-RSK-MDS-PROJ-001    →  Risk #1 của toàn dự án MDS Core
+the MDS constitution
+
+the highest MDS governance layer
+
+a universal standard above all schemas
+
+a universal standard above all role contracts
+
+a universal standard above all domain models
+```
+
+MDS now follows:
+
+```text
+Concern
+   ↓
+Canonical Owner
+   ↓
+Consumers
+```
+
+not:
+
+```text
+document_standards.md
+        ↓
+Everything Else
 ```
 
 ---
 
-## RULE 3: Document Lifecycle — Hybrid Layered State Model
+## 4. Canonical Ownership by Concern
 
-MDS áp dụng mô hình **2 lớp trạng thái** tách biệt để phân biệt rõ **độ trưởng thành** và **trạng thái vận hành** của một artifact. Cả hai phải được khai báo trong YAML Frontmatter.
+### Artifact Truth
 
-### 3.1 Layer 1 — Lifecycle State (Trạng thái Trưởng thành)
+Questions concerning:
 
-Đo lường mức độ hoàn chỉnh và phê duyệt của nội dung tài liệu:
+```text
+Current Project Truth
 
-```yaml
-lifecycle_state: DRAFT | REVIEW | APPROVED | DEPRECATED | ARCHIVED
+validity
+
+approved lineage head
+
+supersession
+
+historical lineage
+
+impact invalidation
+
+truth projection
 ```
 
-```yaml
-lifecycle_state_machine:
-  transitions:
-    DRAFT:      [REVIEW]
-    REVIEW:     [APPROVED, DRAFT]   # Reject quay về DRAFT
-    APPROVED:   [DEPRECATED]        # Thay đổi nội dung → tạo version mới, không edit trực tiếp
-    DEPRECATED: [ARCHIVED]
-    ARCHIVED:   []                  # Terminal state
+belong to:
+
+```text
+./artifact_truth.md
 ```
 
-| State | Ý nghĩa | Quyền chỉnh sửa |
-| :--- | :--- | :--- |
-| `DRAFT` | Đang soạn thảo | Agent tự do chỉnh sửa |
-| `REVIEW` | Đang chờ phê duyệt | Cấm thay đổi nội dung |
-| `APPROVED` | Có hiệu lực pháp lý | Chỉ được tạo version mới |
-| `DEPRECATED` | Lỗi thời, bị thay thế | Read-only |
-| `ARCHIVED` | Lưu trữ lịch sử | Read-only, không dùng ra quyết định |
+This document must not redefine those semantics.
 
-### 3.2 Layer 2 — Execution State (Trạng thái Vận hành)
+---
 
-Đo lường trạng thái hoạt động thực tế của artifact trong pipeline:
+### Naming
 
-```yaml
-execution_state: NOT_STARTED | IN_PROGRESS | BLOCKED | COMPLETED | NOT_APPLICABLE
+Questions concerning:
+
+```text
+artifact identifiers
+
+human-readable names
+
+filenames
+
+identifier format
+
+naming consistency
 ```
 
-```yaml
-execution_state_machine:
-  transitions:
-    NOT_STARTED:    [IN_PROGRESS, NOT_APPLICABLE]
-    IN_PROGRESS:    [COMPLETED, BLOCKED]
-    BLOCKED:        [IN_PROGRESS]           # Sau khi unblock
-    COMPLETED:      [IN_PROGRESS]           # Nếu cần rework
-    NOT_APPLICABLE: []                      # Terminal state
+belong to:
+
+```text
+./naming_convention.md
 ```
 
-| State | Ý nghĩa | Dùng cho |
-| :--- | :--- | :--- |
-| `NOT_STARTED` | Chưa bắt đầu xử lý | TSK, TC, INC mới tạo |
-| `IN_PROGRESS` | Đang thực hiện | TSK đang code, TC đang chạy |
-| `BLOCKED` | Bị chặn bởi dependency | TSK chờ decision, ADR chờ stakeholder |
-| `COMPLETED` | Đã hoàn tất xử lý | TSK merged, TC passed |
-| `NOT_APPLICABLE` | Không áp dụng cho loại artifact này | CTX, FSB (dùng lifecycle_state là đủ) |
+Naming rules must not encode Professional Responsibility ownership unless such
+ownership is independently required by a canonical model.
 
-### 3.3 Ví dụ kết hợp 2 lớp
+---
 
-```yaml
-# Task đang bị kẹt dependency
-lifecycle_state: APPROVED        # Nội dung TSK đã được PM duyệt
-execution_state: BLOCKED         # Nhưng đang chờ ARCH decision
-blocked_reason: "Waiting for ARCH-ADR-INFRA-003 to be APPROVED"
+### Lifecycle and Execution
 
-# API đang được implement
-lifecycle_state: APPROVED        # Contract đã được SA phê duyệt
-execution_state: IN_PROGRESS     # BE Agent đang viết code
+Questions concerning:
 
-# Risk không còn liên quan
-lifecycle_state: DEPRECATED      # Đã có RSK mới thay thế
-execution_state: NOT_APPLICABLE
+```text
+lifecycle states
+
+lifecycle transitions
+
+execution states
+
+execution transitions
+
+state-transition requirements
+```
+
+belong to:
+
+```text
+./lifecycle_rules.md
+```
+
+Lifecycle state must remain separate from Artifact Truth validity and execution
+progress.
+
+---
+
+### Relationships
+
+Questions concerning:
+
+```text
+relationship vocabulary
+
+relationship direction
+
+reference integrity
+
+broken references
+
+graph constraints
+
+relationship validity
+```
+
+belong to:
+
+```text
+./relationship_rules.md
+```
+
+Relationships must not silently create Human Approval Authority or Project
+Truth.
+
+---
+
+### Version Numbering
+
+Questions concerning:
+
+```text
+version syntax
+
+version-number increments
+
+MAJOR / MINOR / PATCH semantics
+```
+
+belong to:
+
+```text
+./versioning_rules.md
+```
+
+Version numbering is not the same concern as Artifact Truth lineage.
+
+---
+
+## 5. Domain Semantics Belong Outside This File
+
+Some concepts referenced by legacy Document Standards now have dedicated
+canonical boundaries.
+
+They must not be defined here.
+
+```text
+External Actor semantics
+→ ../actors/
+
+Human Approval Authority
+→ ../authorities/
+
+Professional Responsibilities
+→ ../roles/
+
+Implementation execution
+→ ../implementation-plane/
+
+Runtime Environment and Evidence
+→ ../runtime/
+
+MDS System Capabilities
+→ ../system-capabilities/
+
+Structured contracts
+→ ../schemas/
+```
+
+This document may route to those boundaries.
+
+It must not redefine them.
+
+---
+
+## 6. Deprecated Approval Assumptions
+
+Legacy rules may have associated approval authority directly with role names,
+role abbreviations, AI agents, or system capabilities.
+
+Such assumptions are no longer canonical.
+
+MDS must preserve:
+
+```text
+Professional Responsibility
+≠
+Human Approval Authority
+
+System Capability
+≠
+Human Approval Authority
+
+AI
+≠
+Human Approval Authority
+```
+
+Approval requirements must resolve through:
+
+```text
+../authorities/
+```
+
+A legacy statement such as:
+
+```text
+PM approves this artifact
+```
+
+must not be interpreted as canonical merely because it appears in an older
+document.
+
+The governed question is instead:
+
+```text
+Which Authority Type governs this decision?
+
+Who currently holds that Authority within the applicable scope?
 ```
 
 ---
 
-## RULE 4: Relationship Rules (Quy định liên kết đồ thị)
+## 7. Deprecated Agent Authority Assumptions
 
-Để thực hiện phân tích tác động (Change Impact Analysis) và duy trì chuỗi truy vết toàn diện (End-to-End Traceability):
-1. **Chuỗi truy vết cốt lõi (Primary Forward Traceability Chain)** bắt buộc phải là đồ thị hướng không vòng lặp (DAG). 
-2. Các liên kết chẩn đoán phụ trợ (như `broken_by`, `resolves`, v.v.) có thể tạo ra các cạnh phản hồi (feedback edges / loops) để phục vụ cho việc vận hành nhưng tuyệt đối không được phá vỡ tính phân cấp cốt lõi của chuỗi lineage.
+Legacy MDS documents may refer to autonomous agents as owners, approvers, or
+governance authorities.
 
-Mọi loại link khai báo trực tiếp trong YAML Frontmatter đều tuân theo hướng đi từ nguồn (Outbound).
+Those assumptions are not canonical.
 
-| Loại link | Hướng khai báo | Ý nghĩa | Ví dụ |
-| :--- | :--- | :--- | :--- |
-| `depends_on` | Outbound | Phụ thuộc vào thực thể khác cùng cấp | `PM-TSK-EDU-AUTH-015` trỏ tới `PM-TSK-EDU-AUTH-014` |
-| `implements` | Outbound | Hiện thực hóa yêu cầu/thiết kế cấp trên | `BE-API-EDU-AUTH-001` trỏ tới `BA-REQ-EDU-AUTH-001` |
-| `adheres_to` | Outbound | Tuân thủ quyết định kiến trúc/ràng buộc | `BE-API-EDU-AUTH-001` trỏ tới `ARCH-ADR-EDU-INFRA-001` |
-| `verifies` | Outbound | Xác thực/kiểm thử thực thể khác | `QA-TC-EDU-AUTH-044` trỏ tới `BA-REQ-EDU-AUTH-001` |
-| `validates_nfr` | Outbound | Kiểm thử và xác thực phi chức năng | `QA-TC-EDU-SYS-010` trỏ tới `SA-NFR-EDU-SYS-001` |
-| `tested_by` | Outbound | Được kiểm chứng/test bởi TC nào | `SA-NFR-EDU-SYS-001` trỏ tới `QA-TC-EDU-SYS-010` |
-| `broken_by` | Outbound | Bị lỗi bởi BUG/INC nào | `BE-API-EDU-AUTH-001` trỏ tới `QA-BUG-EDU-AUTH-002` |
-| `impacts_cost` | Outbound | Ảnh hưởng đến chi phí tài chính | `ARCH-SRV-MDS-CORE-002` trỏ tới `PM-FIN-MDS-INFRA-001` |
-| `resolves` | Outbound | Giải quyết lỗi/sự cố | `commit` hoặc `PR` trỏ tới `QA-BUG-EDU-AUTH-002` |
-| `linked_tsk` | Outbound | Code/PR liên kết với Task | `commit` trỏ tới `PM-TSK-EDU-AUTH-014` |
-| `produces` | Outbound | Sinh ra tài liệu thiết kế/task con | `ARCH-HLD-EDU-SYS-001` trỏ tới `BE-API-EDU-AUTH-001` |
-| `synthesizes` | Outbound | Tổng hợp các quyết định kiến trúc đơn lẻ | `ARCH-HLD-EDU-SYS-001` trỏ tới `ARCH-ADR-EDU-INFRA-001` |
-| `references` | Outbound | Tham chiếu tài liệu/tiêu chuẩn bên ngoài | `ARCH-SEC-EDU-AUTH-001` trỏ tới `EXT-REF-OWASP-ASVS` |
-| `supersedes` | Outbound | Thay thế quyết định/tài liệu cũ hơn | `ARCH-ADR-EDU-AUTH-002` trỏ tới `ARCH-ADR-EDU-AUTH-001` |
-| `elaborates` | Outbound | Chi tiết hóa / làm rõ cho yêu cầu khác | `BA-FLOW-EDU-AUTH-001` trỏ tới `BA-REQ-EDU-AUTH-001` |
-| `includes` | Outbound | Nhúng hành vi của Use Case con bắt buộc | `BA-UC-EDU-BILL-001` trỏ tới `BA-UC-EDU-AUTH-001` |
-| `extends` | Outbound | Mở rộng hành vi của Use Case cơ sở dưới điều kiện | `BA-UC-EDU-BILL-002` trỏ tới `BA-UC-EDU-BILL-001` |
+MDS must preserve:
 
-**Orphan Rule (Định nghĩa mạnh mẽ)**: Một thực thể bị coi là **Orphan Entity (Mồ côi)** khi thỏa mãn bất kỳ điều kiện nào sau đây:
-- **Trường hợp A (Missing Link)**: Thiếu liên kết ngược (upstream link) bắt buộc hướng tới thực thể cấp trên (ví dụ: `API` không có `implements` hoặc `adheres_to`).
-- **Trường hợp B (Broken Reference)**: Link trỏ tới một thực thể không tồn tại hoặc viết sai ID.
-- **Trường hợp C (Invalid Target)**: Upstream link trỏ tới thực thể có trạng thái `lifecycle_state` không hợp lệ:
-  - Trỏ tới target đã bị `DEPRECATED`.
-  - *Lưu ý về `ARCHIVED`*: Cho phép liên kết với target `ARCHIVED` cho mục đích truy vết lịch sử (historical traceability), nhưng cấm dùng làm cơ sở cho chuỗi lineage phát triển/vận hành active mới.
+```text
+AI Analysis
+≠
+Human Approval
 
-KC Agent (Knowledge Curator) chạy quét đồ thị định kỳ, phát hiện và **block** không cho phép duyệt `APPROVED` đối với bất kỳ thực thể mồ côi nào.
+AI Recommendation
+≠
+Governed Decision
+
+AI Validation
+≠
+Approval
+
+AI Output
+≠
+Project Truth
+```
+
+AI behaviour belongs to governed capability and prompt boundaries.
+
+AI must not gain authority merely because a legacy document uses words such as:
+
+```text
+agent owner
+
+agent approver
+
+agent authority
+
+AI judge
+```
 
 ---
 
-## RULE 5: Template-Guide Separation (Phân tách Biểu mẫu & Hướng dẫn)
+## 8. Deprecated Knowledge Curator Authority Assumptions
 
-Tách biệt tri thức để tối ưu hóa hiệu năng làm việc của cả Con người và AI Agent:
+Legacy rules may state that a Knowledge Curator can approve artifacts, block
+Human Approval, or directly determine governed truth.
 
-*   **Template (Structure)**: Biểu mẫu sạch, chỉ chứa tiêu đề đề mục chuẩn và YAML Frontmatter để điền dữ liệu. Agent nhận Template không cần đọc Guide.
-*   **Guide (Knowledge)**: Sách hướng dẫn chi tiết cách viết, triết lý và tiêu chuẩn kỹ nghệ. Dùng để onboard người mới và train AI.
-*   **Example (Gold Standard)**: Dự án mẫu thực tế hoàn chỉnh (lưu tại `workspace/projects/archived/`) để AI học few-shot. Đây là nguồn dữ liệu huấn luyện quan trọng nhất.
+That model is no longer canonical.
 
-**Nguyên tắc tách**:
+Knowledge Curator is an MDS System Capability.
 
-| Loại | Nằm ở | Độ dài tối đa | Cập nhật khi nào |
-| :--- | :--- | :--- | :--- |
-| Template | `mds-core/templates/` | < 50 dòng | Khi thay đổi cấu trúc |
-| Guide | `mds-core/guides/` | Không giới hạn | Khi có best practice mới |
-| Example | `workspace/projects/archived/` | Toàn bộ project | Sau mỗi dự án hoàn thành |
+Its semantics belong to:
+
+```text
+../system-capabilities/
+```
+
+MDS must preserve:
+
+```text
+Knowledge Curation
+≠
+Human Approval Authority
+```
+
+A Knowledge Curator may identify structural problems and produce findings.
+
+The applicable governance process determines whether those findings block a
+transition or require human action.
+
+---
+
+## 9. Deprecated Implementation Assumptions
+
+Legacy documents may describe MDS roles or AI agents as directly generating or
+modifying managed-project implementation artifacts.
+
+Such statements must be resolved against the canonical Implementation Plane
+boundary.
+
+Implementation execution belongs to:
+
+```text
+../implementation-plane/
+```
+
+MDS must preserve:
+
+```text
+MDS Project Truth Layer
+≠
+Managed-Project Implementation Execution
+```
+
+MDS may:
+
+```text
+prepare bounded context
+
+inspect implementation evidence
+
+correlate implementation evidence
+
+validate traceability
+
+identify drift
+```
+
+MDS System Capabilities must not gain managed-project mutation authority merely
+because an older document assigned implementation tasks to an internal agent.
+
+---
+
+## 10. Deprecated Truth Assumptions
+
+Legacy documents may equate:
+
+```text
+APPROVED
+=
+Single Source of Truth
+```
+
+That assumption is no longer canonical.
+
+MDS must preserve:
+
+```text
+APPROVED
+≠
+CURRENT
+```
+
+An artifact may historically have been approved while no longer belonging to
+Current Project Truth.
+
+Artifact Truth semantics belong to:
+
+```text
+./artifact_truth.md
+```
+
+---
+
+## 11. Deprecated Completion Assumptions
+
+Legacy documents may imply that execution completion establishes authoritative
+truth.
+
+MDS must preserve:
+
+```text
+COMPLETED
+≠
+AUTHORITATIVE
+```
+
+Lifecycle, validity, and execution state are separate concerns.
+
+Their canonical owners are:
+
+```text
+Lifecycle / Execution
+→ ./lifecycle_rules.md
+
+Validity / Current Project Truth
+→ ./artifact_truth.md
+```
+
+---
+
+## 12. Deprecated Role-Coded Identity Assumptions
+
+Legacy artifacts may contain identifiers whose semantic meaning is coupled to
+role abbreviations.
+
+Examples of the general legacy pattern include:
+
+```text
+<ROLE>-<TYPE>-<NUMBER>
+```
+
+Such identifiers may remain valid historical identifiers where required for
+compatibility.
+
+However, role ownership must not be inferred solely from an identifier prefix.
+
+Identifier syntax belongs to:
+
+```text
+./naming_convention.md
+```
+
+Professional Responsibility semantics belong to:
+
+```text
+../roles/
+```
+
+The two concerns must remain separate.
+
+---
+
+## 13. Legacy Relationships
+
+Relationship names or directions appearing in older versions of this document
+must not automatically be treated as canonical.
+
+All relationship semantics must resolve through:
+
+```text
+./relationship_rules.md
+```
+
+If a legacy relationship is not present in the current canonical vocabulary,
+it should be treated as:
+
+```text
+legacy
+
+unmapped
+
+or requiring migration
+```
+
+rather than silently promoted into the canonical relationship model.
+
+---
+
+## 14. Legacy Lifecycle Rules
+
+Lifecycle states or transitions appearing in historical copies of this document
+must not override:
+
+```text
+./lifecycle_rules.md
+```
+
+If an old transition conflicts with the current lifecycle model, the legacy
+transition is stale.
+
+Historical records should remain historical records.
+
+They must not be rewritten merely to imitate current rules.
+
+---
+
+## 15. Legacy Version Rules
+
+Version numbering rules appearing in historical copies of this document must
+resolve through:
+
+```text
+./versioning_rules.md
+```
+
+Version-number changes do not independently establish:
+
+```text
+Current Project Truth
+
+Human Approval
+
+lineage head
+
+supersession
+```
+
+Those concerns belong to their respective canonical owners.
+
+---
+
+## 16. Schemas
+
+Schemas may encode standards for machine validation.
+
+However:
+
+```text
+Schema
+≠
+Independent Semantic Authority
+```
+
+Schemas belong to:
+
+```text
+../schemas/
+```
+
+If a legacy schema was derived from an obsolete rule in this document, that
+schema must be migrated to the current canonical owner.
+
+The obsolete rule must not be preserved merely because a schema still encodes
+it.
+
+---
+
+## 17. Templates
+
+Templates may historically reference Document Standards.
+
+Those references should eventually be migrated toward the specific canonical
+sources that govern the fields or semantics used by the template.
+
+Templates belong to:
+
+```text
+../templates/
+```
+
+MDS must preserve:
+
+```text
+Template
+≠
+Canonical Governance Rule
+```
+
+---
+
+## 18. Prompts
+
+Legacy prompts may reference this document as a highest-order instruction
+source.
+
+That interpretation is deprecated.
+
+Prompts belong to:
+
+```text
+../prompts/
+```
+
+Prompts consume canonical MDS rules.
+
+They do not define them.
+
+MDS must preserve:
+
+```text
+Canonical Rule
+      ↓
+Prompt
+      ↓
+AI Behaviour
+```
+
+not:
+
+```text
+Prompt
+      ↓
+Canonical Rule
+```
+
+---
+
+## 19. Guides
+
+Legacy guides may cite this file as the source of mandatory workflow behaviour.
+
+Such references should be migrated to the specific canonical standard or
+governed workflow contract that owns the requirement.
+
+Guides belong to:
+
+```text
+../guides/
+```
+
+MDS must preserve:
+
+```text
+Guide
+≠
+Governance Authority
+```
+
+---
+
+## 20. Glossary
+
+Glossary definitions must not use this compatibility document as a substitute
+for the actual canonical semantic owner.
+
+Glossary content belongs to:
+
+```text
+../glossary/
+```
+
+Glossary entries should reference the current canonical source whenever the
+term has governed semantics.
+
+---
+
+## 21. Examples
+
+Examples may reference legacy Document Standards for historical context.
+
+They must not treat this file as a recommendation source.
+
+Examples belong to:
+
+```text
+../examples/
+```
+
+MDS must preserve:
+
+```text
+Example
+≠
+Project Truth
+
+Example
+≠
+Canonical Standard
+
+Pattern
+≠
+Governed Decision
+```
+
+---
+
+## 22. Conflict Handling
+
+If a legacy rule from an older version of `document_standards.md` conflicts
+with a focused canonical source:
+
+```text
+1. Preserve the legacy source as historical evidence where required.
+
+2. Identify the concern being governed.
+
+3. Route the concern to its current canonical owner.
+
+4. Use the current canonical owner for present interpretation.
+
+5. Mark the legacy rule as stale, superseded, or pending migration where
+   applicable.
+
+6. Do not silently merge incompatible rules.
+```
+
+The existence of an older rule does not give it equal canonical authority.
+
+---
+
+## 23. Migration Guidance
+
+References to this file should be migrated gradually.
+
+A legacy reference such as:
+
+```text
+See document_standards.md for lifecycle rules.
+```
+
+should become:
+
+```text
+See lifecycle_rules.md for lifecycle and execution-state rules.
+```
+
+A legacy reference such as:
+
+```text
+See document_standards.md for relationship rules.
+```
+
+should become:
+
+```text
+See relationship_rules.md for canonical relationship semantics.
+```
+
+The same routing principle applies to every migrated concern.
+
+---
+
+## 24. Historical Compatibility
+
+Keeping this file during migration does not make its former rules canonical.
+
+Its continued presence provides:
+
+```text
+reference compatibility
+
+migration traceability
+
+legacy-path stability
+
+historical discoverability
+```
+
+It does not provide:
+
+```text
+meta-governance authority
+
+approval authority
+
+semantic precedence
+
+implementation authority
+```
+
+---
+
+## 25. Retirement Condition
+
+This file may be retired when:
+
+```text
+all canonical rules have focused owners
+
+all active references have been migrated
+
+no active schema depends on legacy semantics from this file
+
+no active template depends on legacy semantics from this file
+
+no active prompt treats this file as higher-order authority
+
+no active guide treats this file as higher-order authority
+
+repository validation confirms that removing the file creates no unresolved
+canonical dependency
+```
+
+Retirement must follow the applicable governed migration process.
+
+---
+
+## 26. Source of Truth
+
+This file owns no independent detailed governance domain.
+
+It is only a migration and compatibility index.
+
+Current canonical ownership is:
+
+```text
+Artifact Truth
+→ ./artifact_truth.md
+
+Naming
+→ ./naming_convention.md
+
+Lifecycle and Execution
+→ ./lifecycle_rules.md
+
+Relationships
+→ ./relationship_rules.md
+
+Version Numbering
+→ ./versioning_rules.md
+
+External Actors
+→ ../actors/
+
+Human Approval Authorities
+→ ../authorities/
+
+Professional Responsibilities
+→ ../roles/
+
+Implementation Plane
+→ ../implementation-plane/
+
+Runtime
+→ ../runtime/
+
+MDS System Capabilities
+→ ../system-capabilities/
+
+Structured Contracts
+→ ../schemas/
+```
+
+If this compatibility document conflicts with a current canonical owner, the
+current canonical owner governs that concern.
+
+This document must then be updated or treated as stale.

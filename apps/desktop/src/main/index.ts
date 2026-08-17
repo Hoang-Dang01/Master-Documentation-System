@@ -28,6 +28,16 @@ import {
 
 const repositoryRoot = path.resolve(__dirname, "..", "..", "..", "..");
 const seedWorkspaceRoot = path.join(repositoryRoot, "workspace");
+const desktopIconPath = path.join(
+  repositoryRoot,
+  "apps",
+  "desktop",
+  "src",
+  "renderer",
+  "public",
+  "assets",
+  "mds-logo-taskbar.png",
+);
 const isSmokeTest = process.env.MDS_SMOKE_TEST === "1";
 const smokeScreenshotPath = process.env.MDS_SMOKE_SCREENSHOT;
 const smokeGraphView = process.env.MDS_SMOKE_GRAPH_VIEW === "1";
@@ -490,6 +500,7 @@ function createMainWindow(): BrowserWindow {
     minHeight: 720,
     show: !isSmokeTest || Boolean(smokeScreenshotPath),
     backgroundColor: "#f4f2ec",
+    icon: desktopIconPath,
     title: "MDS — Engineering OS",
     autoHideMenuBar: true,
     webPreferences: {
