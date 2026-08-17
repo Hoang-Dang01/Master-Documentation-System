@@ -1,0 +1,23 @@
+```yaml
+ownership: mds
+status: canonical
+source: internal
+safe_to_modify: scoped
+update_strategy: extend only through an approved governed workflow
+
+registry:
+  id: mds-external-actor-registry
+  classification: external_actor
+  semantics_ref: ./actor-model.md
+
+actor_types:
+  - id: customer-stakeholder
+    display_name: Customer / Stakeholder
+    status: canonical
+    classification: external_actor
+    definition_ref: ./customer-stakeholder.md
+    description: >
+      A person or organisation outside the MDS professional responsibility
+      model that may provide intent, process knowledge, confirmation,
+      feedback, or change requests to a project.
+```
