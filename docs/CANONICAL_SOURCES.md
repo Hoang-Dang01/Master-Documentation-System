@@ -25,6 +25,7 @@ Boundary `README.md` metadata uses:
 | Artifact structure | `mds-core/templates/` | Skills, agents, generators | Skill-local duplicate templates are transitional unless output-specific. |
 | Glossary terms | `mds-core/glossary/data/*.yaml` | Generated glossary Markdown, prompts, UI | Generated Markdown must match YAML. |
 | Agent instructions | `mds-core/prompts/` | Agent runtime | Prompt may route to policy but should not create a conflicting policy. |
+| Desktop UI visual foundation and primitives | `apps/desktop/src/renderer/ui/` | Desktop shell, views, and renderer features | Use the semantic tokens and primitives; individual views may specialize density but must not redefine status meaning. |
 | MDS-owned skills | `skills/mds/system-engineering-copilot/` and `skills/mds/` | Agent runtime | Safe to modify within MDS guardrails. |
 | Third-party skills | `skills/vendor/` | MDS-owned routing skills | Vendor content is read-only; adapt in `skills/mds/`, not in vendor folders. |
 | Runtime automation | `workflows/definitions/*.yaml` | Workflow engine and desktop UI | UI does not hard-code workflow policy. |
