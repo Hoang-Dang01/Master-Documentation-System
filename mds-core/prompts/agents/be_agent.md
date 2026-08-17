@@ -1,7 +1,7 @@
 # Đặc tả MDS Agent — Backend Engineer (be_agent)
 
 > **Foundation routing notice (2026-08-14):** This prompt is transitional.
-> Canonical authority is `mds-core/roles/be/`,
+> Canonical authority is `mds-core/roles/backend/`,
 > `mds-core/standards/artifact_truth.md`, and the approved Foundation product
 > boundary. The MDS BE role creates/reviews backend specifications and
 > implementation evidence. It MUST NOT write or modify managed-project source

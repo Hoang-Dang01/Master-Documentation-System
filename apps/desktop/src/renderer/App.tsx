@@ -531,6 +531,72 @@ export function App() {
             </article>
           </section>
 
+          <section className="responsibility-map" aria-labelledby="responsibility-map-title">
+            <div className="responsibility-map-heading">
+              <div>
+                <span className="section-kicker">Mô hình làm việc</span>
+                <h2 id="responsibility-map-title">Bản đồ trách nhiệm</h2>
+                <p>
+                  MDS giữ Project Truth xuyên suốt các bàn giao; trách nhiệm triển khai vẫn thuộc về con người và công cụ bên ngoài.
+                </p>
+              </div>
+              <span className="model-status">Định hướng mô hình</span>
+            </div>
+
+            <div className="responsibility-flow">
+              <div className="responsibility-row">
+                <div className="responsibility-row-label">
+                  <strong>Định hướng</strong>
+                  <span>Từ nhu cầu đến quyết định kỹ thuật</span>
+                </div>
+                <div className="role-route" aria-label="Product Management đến Architecture và Tech Lead">
+                  <div className="role-node is-product"><strong>Product Management</strong><span>Giá trị &amp; ưu tiên</span></div>
+                  <div className="role-node"><strong>Business Analysis</strong><span>Yêu cầu &amp; quy tắc</span></div>
+                  <div className="role-node"><strong>System Analysis</strong><span>Phân rã giải pháp</span></div>
+                  <div className="role-node is-architecture"><strong>Architecture / Tech Lead</strong><span>Ràng buộc kỹ thuật</span></div>
+                </div>
+              </div>
+
+              <div className="responsibility-row">
+                <div className="responsibility-row-label">
+                  <strong>Đưa vào vận hành</strong>
+                  <span>Từ thiết kế đến phản hồi thực tế</span>
+                </div>
+                <div className="role-route role-route-delivery" aria-label="Các tuyến xây dựng đến vận hành và phản hồi">
+                  <div className="role-node role-build-lanes">
+                    <strong>Các tuyến xây dựng</strong>
+                    <span>UI/UX · Frontend · Backend · Database</span>
+                  </div>
+                  <div className="role-node"><strong>Quality Assurance</strong><span>Kiểm chứng &amp; cảnh báo</span></div>
+                  <div className="role-node"><strong>DevOps / SRE</strong><span>Độ tin cậy vận hành</span></div>
+                  <div className="role-node is-operations"><strong>Support / Operations</strong><span>Phản hồi về Product</span></div>
+                </div>
+              </div>
+
+              <div className="responsibility-row responsibility-crosscutting">
+                <div className="responsibility-row-label">
+                  <strong>Xuyên suốt</strong>
+                  <span>Không phải một bước tuần tự</span>
+                </div>
+                <div className="crosscutting-roles">
+                  <span className="crosscutting-role"><strong>Project Management</strong><span>Điều phối delivery, phụ thuộc &amp; rủi ro</span></span>
+                  <span className="crosscutting-role"><strong>Security</strong><span>Ràng buộc an toàn, threat &amp; bằng chứng</span></span>
+                </div>
+              </div>
+            </div>
+
+            <div className="responsibility-boundary">
+              <div>
+                <strong>MDS control plane</strong>
+                <span>Ghi nhận, chuẩn hóa, duyệt, truy vết, phân tích tác động và tạo context package.</span>
+              </div>
+              <div>
+                <strong>Implementation plane</strong>
+                <span>Developer, IDE, coding agent và CI/CD triển khai; MDS chỉ nhận evidence đọc-được.</span>
+              </div>
+            </div>
+          </section>
+
           <section className="dashboard-grid">
             <article className="panel attention-panel" id="attention-panel">
               <div className="panel-heading">

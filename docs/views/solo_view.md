@@ -8,14 +8,14 @@
 ## VIEW A — Lọc Theo Vai Trò (By Role View)
 
 Chọn vai trò bạn đang đóng để tập trung vào các thư mục liên quan:
-*   [PM (Project Manager)](../../mds-core/roles/pm) -> Lộ trình, ngân sách, phân công.
-*   [BA (Business Analyst)](../../mds-core/roles/ba) -> Business Rules, Use Cases.
-*   [SA (System Analyst)](../../mds-core/roles/sa) -> SRS, Domain Model.
-*   [ARCH (Architect)](../../mds-core/roles/arch) -> Quyết định ADR, bảo mật.
-*   [BE (Backend Dev)](../../mds-core/roles/be) -> Database, API Contract, Service.
-*   [FE (Frontend Dev)](../../mds-core/roles/fe) -> UI Specs, state flow.
-*   [QA (Quality Assurance)](../../mds-core/roles/qa) -> Test Plan, Test Cases.
-*   [DEVOPS (Platform Ops)](../../mds-core/roles/devops) -> Deployment, giám sát.
+*   [Project Management](../../mds-core/roles/project-management) -> Lộ trình, ngân sách, phân công.
+*   [Business Analysis](../../mds-core/roles/business-analysis) -> Business Rules, Use Cases.
+*   [System Analysis](../../mds-core/roles/system-analysis) -> SRS, Domain Model.
+*   [Architecture / Tech Lead](../../mds-core/roles/architecture-tech-lead) -> Quyết định ADR, bảo mật.
+*   [Backend](../../mds-core/roles/backend) -> Database, API Contract, Service.
+*   [Frontend](../../mds-core/roles/frontend) -> UI Specs, state flow.
+*   [Quality Assurance](../../mds-core/roles/quality-assurance) -> Test Plan, Test Cases.
+*   [DevOps / SRE](../../mds-core/roles/devops-sre) -> Deployment, giám sát.
 
 ---
 

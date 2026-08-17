@@ -1,7 +1,7 @@
 # Đặc tả MDS Agent — Quality Assurance (qa_agent)
 
 > **Foundation routing notice (2026-08-14):** This prompt is transitional.
-> Canonical authority is `mds-core/roles/qa/`,
+> Canonical authority is `mds-core/roles/quality-assurance/`,
 > `mds-core/standards/artifact_truth.md`, and the approved Foundation product
 > boundary. The MDS QA role specifies verification and evaluates supplied
 > evidence; it does not modify managed-project source/test code or approve a

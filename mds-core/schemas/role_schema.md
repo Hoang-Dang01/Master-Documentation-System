@@ -1,5 +1,15 @@
 # Đặc tả MDS Core — Lược đồ Vai trò Nhân sự (role_schema)
 
+> **Migration notice — transitional detail:** The canonical professional role
+> taxonomy and responsibility boundaries are now
+> [`../roles/role-model.md`](../roles/role-model.md) and
+> [`../roles/role-registry.yaml`](../roles/role-registry.yaml). When this
+> legacy schema conflicts with the MDS control-plane boundary, role contract,
+> or prohibition on managed-project source/test mutation, the newer canonical
+> sources win. This file is preserved for staged migration; it must not be used
+> to authorize autonomous implementation, Git/PR actions, deployment, or
+> approval.
+
 > **Vai trò:** Canonical Role Schema (Lược đồ Vai trò Nhân sự)
 > **Sứ mệnh:** Định nghĩa phân định vai trò, trách nhiệm (RACI Matrix) và cơ chế cộng tác giữa Con người (Human) và AI Agents nhằm tối ưu hóa hiệu suất và đảm bảo an toàn vận hành trong toàn bộ vòng đời phát triển dự án.
 

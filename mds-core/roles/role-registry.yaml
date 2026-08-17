@@ -1,0 +1,165 @@
+schema_version: 1
+registry_status: DRAFT
+canonical_model: mds-core/roles/role-model.md
+policy_sources:
+  - docs/foundation/product-boundary.md
+  - docs/foundation/architecture-decision.md
+  - mds-core/standards/artifact_truth.md
+
+non_role_classification:
+  actors:
+    - id: customer-stakeholder
+      title: Customer / Stakeholder
+      responsibility: provides intent, process knowledge, feedback, and business confirmation
+  implementation_plane:
+    - id: developer
+      title: Developer
+    - id: coding-agent
+      title: Codex or another coding agent
+    - id: ide
+      title: IDE
+    - id: ci-cd
+      title: CI/CD
+    - boundary: implements managed-project changes outside MDS and returns read-only evidence
+  authorities:
+    - id: human-approver
+      title: Human approver
+    - id: product-owner-authority
+      title: Product Owner authority
+    - id: architecture-authority
+      title: Architecture authority
+    - boundary: grants decisions at explicit human gates; it is separate from a professional role
+  runtime:
+    - id: production
+      title: Production
+      boundary: deployed operating environment and evidence source; not a role
+  system_capabilities:
+    - id: orchestrator
+      title: Orchestrator
+    - id: knowledge-curator
+      title: Knowledge Curator
+    - id: validator
+      title: Validator
+    - id: context-builder
+      title: Context Builder
+    - boundary: MDS capabilities, not professional roles or autonomous implementation authority
+
+# directory and contract_path are the one canonical location for a role. Legacy
+# short-code paths are aliases only and must never hold a second contract.
+roles:
+  - id: product-management
+    title: Product Management
+    sequence: 1
+    group: product-direction
+    directory: product-management
+    contract_path: product-management
+    contract_status: planned
+    responsibility: product outcomes, prioritization, and scope proposals
+  - id: business-analysis
+    title: Business Analysis
+    sequence: 2
+    group: product-direction
+    directory: business-analysis
+    contract_path: business-analysis
+    aliases: [BA, ba, business-analyst]
+    contract_status: migrated-customer-change-analysis
+    responsibility: traceable requirements and business rules
+  - id: system-analysis
+    title: System Analysis
+    sequence: 3
+    group: solution-definition
+    directory: system-analysis
+    contract_path: system-analysis
+    aliases: [SA, sa, system-analyst]
+    contract_status: draft
+    responsibility: system behavior, decomposition, and logical contracts
+  - id: architecture-tech-lead
+    title: Architecture / Tech Lead
+    sequence: 4
+    group: solution-definition
+    directory: architecture-tech-lead
+    contract_path: architecture-tech-lead
+    aliases: [ARCH, arch, software-architect, solution-architect, tech-lead]
+    contract_status: draft
+    responsibility: technical constraints, decisions, and architecture intent
+  - id: ui-ux
+    title: UI/UX
+    sequence: 5
+    group: delivery-design
+    directory: ui-ux
+    contract_path: ui-ux
+    contract_status: planned
+    responsibility: user experience and interaction specifications
+  - id: frontend
+    title: Frontend
+    sequence: 6
+    group: delivery-design
+    directory: frontend
+    contract_path: frontend
+    aliases: [FE, fe, frontend-engineer]
+    contract_status: draft
+    responsibility: frontend behavior specifications and implementation evidence review
+  - id: backend
+    title: Backend
+    sequence: 7
+    group: delivery-design
+    directory: backend
+    contract_path: backend
+    aliases: [BE, be, backend-engineer]
+    contract_status: migrated-customer-change-analysis
+    responsibility: backend contracts, specifications, and evidence review
+  - id: database
+    title: Database
+    sequence: 8
+    group: delivery-design
+    directory: database
+    contract_path: database
+    contract_status: planned
+    responsibility: data-model and persistence specifications
+  - id: quality-assurance
+    title: Quality Assurance
+    sequence: 9
+    group: verification-operations
+    directory: quality-assurance
+    contract_path: quality-assurance
+    aliases: [QA, qa]
+    contract_status: migrated-customer-change-analysis
+    responsibility: verification specifications, coverage, and evidence review
+  - id: devops-sre
+    title: DevOps / SRE
+    sequence: 10
+    group: verification-operations
+    directory: devops-sre
+    contract_path: devops-sre
+    aliases: [DEVOPS, devops, sre]
+    contract_status: draft
+    responsibility: operational reliability specifications and evidence review
+  - id: support-operations
+    title: Support / Operations
+    sequence: 11
+    group: verification-operations
+    directory: support-operations
+    contract_path: support-operations
+    contract_status: planned
+    responsibility: support signals, operational feedback, and incident context
+
+# These roles operate alongside the entire value flow. They appear after the
+# sequential chain to make their cross-cutting position explicit.
+cross_cutting_roles:
+  - id: project-management
+    title: Project Management
+    sequence: 12
+    group: cross-cutting-governance
+    directory: project-management
+    contract_path: project-management
+    aliases: [PM, pm, project-manager, delivery-manager]
+    contract_status: active
+    responsibility: delivery coordination, dependencies, risks, and readiness
+  - id: security
+    title: Security
+    sequence: 13
+    group: cross-cutting-governance
+    directory: security
+    contract_path: security
+    contract_status: planned
+    responsibility: security constraints, risk analysis, and evidence review

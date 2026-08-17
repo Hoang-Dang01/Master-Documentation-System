@@ -28,6 +28,11 @@ Master-Documentation-System/
 │
 ├── mds-core/
 │   ├── roles/
+│   ├── actors/
+│   ├── implementation-plane/
+│   ├── authorities/
+│   ├── runtime/
+│   ├── system-capabilities/
 │   ├── schemas/
 │   ├── standards/
 │   ├── templates/
@@ -60,7 +65,11 @@ Master-Documentation-System/
 
 ## Implemented decisions
 
-- Role contracts live in `mds-core/roles/`.
+- `mds-core/roles/` contains only the 13 professional responsibility
+  contracts. Actors, the external Implementation Plane, human authorities,
+  runtime, and MDS capabilities have their own boundary folders under
+  `mds-core/`; their routing READMEs do not create new agent or runtime
+  features.
 - MDS-owned and imported skills are separated under `skills/mds/` and
   `skills/vendor/`.
 - Package scaffolds are grouped by `core`, `application`, `infrastructure`,

@@ -1,1 +1,0 @@
-# Vai Trò FE — Trách Nhiệm Cốt Lõi

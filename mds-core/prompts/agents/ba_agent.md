@@ -1,7 +1,7 @@
 # Đặc tả MDS Agent — Business Analyst (ba_agent)
 
 > **Foundation routing notice (2026-08-14):** Canonical authority for this
-> agent is `mds-core/roles/ba/`, `mds-core/standards/artifact_truth.md`, and
+> agent is `mds-core/roles/business-analysis/`, `mds-core/standards/artifact_truth.md`, and
 > the approved Foundation product boundary. Conflicting legacy detail below is
 > transitional. Runtime project data resolves through `MDS_DATA_DIR`, not
 > repository `workspace/`.

@@ -41,7 +41,7 @@ Code, a developer, or another external Implementation Plane tool.
 |---|---|
 | Requirement structure | `mds-core/templates/ba/requirement_template.md` |
 | Requirement/relationship rules | `mds-core/standards/document_standards.md` |
-| BA responsibility | `mds-core/roles/ba/` |
+| BA responsibility | `mds-core/roles/business-analysis/` |
 | Lifecycle/gates | `mds-core/schemas/workflow_schema.md` |
 | Validity, lineage and Project Truth | `mds-core/standards/artifact_truth.md` and `mds-core/schemas/artifact_truth_schema.md` |
 | Runtime sequence | `workflows/definitions/customer-change-analysis.yaml` |

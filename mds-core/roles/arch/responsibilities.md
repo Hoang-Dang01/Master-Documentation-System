@@ -1,1 +1,0 @@
-# Vai Trò ARCH — Trách Nhiệm Cốt Lõi

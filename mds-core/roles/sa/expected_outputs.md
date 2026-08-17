@@ -1,1 +1,0 @@
-# Vai Trò SA — Kết Quả Đầu Ra

@@ -131,7 +131,12 @@ mds-core/
 ├── glossary/                              # Từ điển thuật ngữ có cấu trúc
 ├── guides/                                # Hướng dẫn theo lifecycle
 ├── prompts/                               # Prompt cho agent và orchestrator
-├── roles/                                 # Contract chuẩn cho từng vai trò
+├── roles/                                 # Đúng 13 contract trách nhiệm chuyên môn
+├── actors/                                # Customer / Stakeholder, không phải role
+├── implementation-plane/                  # Developer / Codex / IDE / CI-CD ở ngoài MDS
+├── authorities/                           # Thẩm quyền duyệt của con người
+├── runtime/                               # Production, môi trường và evidence source
+├── system-capabilities/                   # Khả năng MDS, không phải autonomous agent
 ├── schemas/                               # Schema các entity chính của MDS
 ├── standards/                             # Chuẩn tài liệu và governance
 └── templates/                             # Template artifact theo chuyên môn
@@ -210,17 +215,46 @@ mds-core/guides/
 │       └── workflow.md
 │
 └── roles/
-    ├── arch/                              # Software/Solution Architect
-    ├── ba/                                # Business Analyst
-    ├── be/                                # Backend Engineer
-    ├── devops/                            # DevOps Engineer
-    ├── fe/                                # Frontend Engineer
-    ├── pm/                                # Project/Product Manager
-    ├── qa/                                # Quality Assurance
-    └── sa/                                # System Analyst
+    ├── product-management/                # Product direction
+    ├── business-analysis/                  # Requirements and business rules
+    ├── system-analysis/                    # System behavior and decomposition
+    ├── architecture-tech-lead/             # Technical constraints and decisions
+    ├── ui-ux/                              # Experience specifications
+    ├── frontend/                           # Frontend specifications
+    ├── backend/                            # Backend specifications
+    ├── database/                           # Data specifications
+    ├── quality-assurance/                  # Verification specifications
+    ├── devops-sre/                         # Reliability specifications
+    ├── support-operations/                 # Operational feedback
+    ├── project-management/                 # Cross-cutting delivery governance
+    ├── security/                           # Cross-cutting security governance
+    ├── README.md                           # Ownership, routing, and contract shape
+    ├── role-model.md                       # Canonical responsibility model
+    └── role-registry.yaml                  # Ordered role registry and aliases
 ```
 
-Mỗi thư mục vai trò trong `roles/` có cùng contract:
+The adjacent boundaries under `mds-core/` keep non-role concepts out of the
+professional-role tree:
+
+```text
+mds-core/
+├── actors/                                 # Customer / Stakeholder
+├── implementation-plane/                   # Developer / Codex / IDE / CI-CD
+├── authorities/                            # Human approver / Product Owner / Architecture authority
+├── runtime/                                # Production environment and evidence source
+└── system-capabilities/                    # Orchestrator / Knowledge Curator / Validator / Context Builder
+```
+
+Each is a routing boundary with a canonical README. It does not add an
+autonomous agent, a runtime integration, or an approval mechanism.
+
+`role-registry.yaml` defines the sequence shown above. `ui-ux`, `frontend`,
+`backend`, and `database` are parallel delivery-design responsibilities after
+solution constraints are known; their display order does not force a waterfall.
+Short codes such as `BA` and `BE` are aliases in the registry, never a second
+role folder.
+
+Mỗi role contract that has been designed has this shape:
 
 ```text
 <role>/

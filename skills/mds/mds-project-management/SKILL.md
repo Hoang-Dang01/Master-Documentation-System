@@ -24,7 +24,7 @@ Read these MDS sources before planning:
 
 - `mds-core/standards/document_standards.md`
 - `mds-core/schemas/workflow_schema.md`
-- `mds-core/roles/pm/`
+- `mds-core/roles/project-management/`
 - `workspace/projects/active/<project-id>/project_brief.md`
 - `workspace/projects/active/<project-id>/business_context.md`
 - `workspace/projects/active/<project-id>/constraints.md`

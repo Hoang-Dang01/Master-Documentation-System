@@ -117,6 +117,10 @@ Master-Documentation-System/
 │   ├── SYSTEM_OVERVIEW.md
 │   └── TO_BE_STRUCTURE.md
 ├── mds-core/
+│   ├── actors/
+│   │   └── README.md
+│   ├── authorities/
+│   │   └── README.md
 │   ├── examples/
 │   │   └── pattern-library/
 │   │       ├── architecture/
@@ -174,6 +178,8 @@ Master-Documentation-System/
 │   │   │   └── 09_evolution/
 │   │   │       └── workflow.md
 │   │   └── README.md
+│   ├── implementation-plane/
+│   │   └── README.md
 │   ├── prompts/
 │   │   ├── agents/
 │   │   │   ├── arch_agent.md
@@ -196,46 +202,53 @@ Master-Documentation-System/
 │   │   │   └── system_prompt.md
 │   │   └── README.md
 │   ├── roles/
-│   │   ├── arch/
+│   │   ├── architecture-tech-lead/
+│   │   │   └── README.md
+│   │   ├── backend/
 │   │   │   ├── expected_outputs.md
+│   │   │   ├── README.md
 │   │   │   ├── required_inputs.md
 │   │   │   ├── responsibilities.md
 │   │   │   └── workflow.md
-│   │   ├── ba/
+│   │   ├── business-analysis/
 │   │   │   ├── expected_outputs.md
+│   │   │   ├── README.md
 │   │   │   ├── required_inputs.md
 │   │   │   ├── responsibilities.md
 │   │   │   └── workflow.md
-│   │   ├── be/
+│   │   ├── database/
+│   │   │   └── README.md
+│   │   ├── devops-sre/
+│   │   │   └── README.md
+│   │   ├── frontend/
+│   │   │   └── README.md
+│   │   ├── product-management/
+│   │   │   └── README.md
+│   │   ├── project-management/
 │   │   │   ├── expected_outputs.md
+│   │   │   ├── README.md
 │   │   │   ├── required_inputs.md
 │   │   │   ├── responsibilities.md
 │   │   │   └── workflow.md
-│   │   ├── devops/
+│   │   ├── quality-assurance/
 │   │   │   ├── expected_outputs.md
+│   │   │   ├── README.md
 │   │   │   ├── required_inputs.md
 │   │   │   ├── responsibilities.md
 │   │   │   └── workflow.md
-│   │   ├── fe/
-│   │   │   ├── expected_outputs.md
-│   │   │   ├── required_inputs.md
-│   │   │   ├── responsibilities.md
-│   │   │   └── workflow.md
-│   │   ├── pm/
-│   │   │   ├── expected_outputs.md
-│   │   │   ├── required_inputs.md
-│   │   │   ├── responsibilities.md
-│   │   │   └── workflow.md
-│   │   ├── qa/
-│   │   │   ├── expected_outputs.md
-│   │   │   ├── required_inputs.md
-│   │   │   ├── responsibilities.md
-│   │   │   └── workflow.md
-│   │   └── sa/
-│   │       ├── expected_outputs.md
-│   │       ├── required_inputs.md
-│   │       ├── responsibilities.md
-│   │       └── workflow.md
+│   │   ├── security/
+│   │   │   └── README.md
+│   │   ├── support-operations/
+│   │   │   └── README.md
+│   │   ├── system-analysis/
+│   │   │   └── README.md
+│   │   ├── ui-ux/
+│   │   │   └── README.md
+│   │   ├── README.md
+│   │   ├── role-model.md
+│   │   └── role-registry.yaml
+│   ├── runtime/
+│   │   └── README.md
 │   ├── schemas/
 │   │   ├── artifact_truth_schema.md
 │   │   ├── entity_schema.md
@@ -252,6 +265,8 @@ Master-Documentation-System/
 │   │   ├── README.md
 │   │   ├── relationship_rules.md
 │   │   └── versioning_rules.md
+│   ├── system-capabilities/
+│   │   └── README.md
 │   ├── templates/
 │   │   ├── agent/
 │   │   │   └── agent_spec_template.md

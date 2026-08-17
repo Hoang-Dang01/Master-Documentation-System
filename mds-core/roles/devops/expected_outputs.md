@@ -1,1 +1,0 @@
-# Vai Trò DEVOPS — Kết Quả Đầu Ra
