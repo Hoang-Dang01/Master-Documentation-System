@@ -5,47 +5,48 @@ safe_to_modify: approval-gated
 update_strategy: extend only through an approved governed workflow
 
 registry:
-id: mds-human-approval-authority-registry
-classification: approval_authority
-semantics_ref: ./authority-model.md
+  id: mds-human-approval-authority-registry
+  classification: approval_authority
+  semantics_ref: ./authority-model.md
 
 authority_types:
+  - id: product-authority
+    display_name: Product Authority
+    status: canonical
+    classification: approval_authority
+    definition_ref: ./product-authority.md
+    description: >
+      Human decision authority for governed product-level decisions concerning
+      product direction, product scope, prioritisation, product boundary, and
+      whether a proposal should be pursued, deferred, or rejected.
 
-id: product-authority
-  display_name: Product Authority
-  status: canonical
-  classification: approval_authority
-  definition_ref: ./product-authority.md
-  description: >
-  Human decision authority for governed product-level decisions such as
-  product scope, product direction, prioritisation, and product-level
-  acceptance or deferral decisions.
+  - id: business-authority
+    display_name: Business Authority
+    status: canonical
+    classification: approval_authority
+    definition_ref: ./business-authority.md
+    description: >
+      Human decision authority for governed business-level decisions concerning
+      business meaning, business rules, business requirements, ambiguity,
+      conflict resolution, and authoritative business interpretation.
 
-id: business-authority
-  display_name: Business Authority
-  status: canonical
-  classification: approval_authority
-  definition_ref: ./business-authority.md
-  description: >
-  Human decision authority for governed business decisions such as
-  business rules, business requirements, business interpretation, and
-  resolution of business-level ambiguity or conflict.
+  - id: architecture-authority
+    display_name: Architecture Authority
+    status: canonical
+    classification: approval_authority
+    definition_ref: ./architecture-authority.md
+    description: >
+      Human decision authority for governed architecture-level decisions
+      concerning technical direction, system boundaries, major technical
+      trade-offs, architectural constraints, and significant architecture
+      changes.
 
-id: architecture-authority
-  display_name: Architecture Authority
-  status: canonical
-  classification: approval_authority
-  definition_ref: ./architecture-authority.md
-  description: >
-  Human decision authority for governed architecture decisions, technical
-  direction, system boundaries, and architecture-level trade-offs.
-
-id: release-authority
-  display_name: Release Authority
-  status: canonical
-  classification: approval_authority
-  definition_ref: ./release-authority.md
-  description: >
-  Human decision authority for governed release decisions after the
-  required implementation, verification, risk, and release evidence has
-  been reviewed.
+  - id: release-authority
+    display_name: Release Authority
+    status: canonical
+    classification: approval_authority
+    definition_ref: ./release-authority.md
+    description: >
+      Human decision authority for governed release decisions concerning
+      release readiness, evidence sufficiency, known risk, applicable approvals,
+      and permission for an identified release to proceed.

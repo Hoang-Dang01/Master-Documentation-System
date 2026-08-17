@@ -8,70 +8,78 @@ classification: approval_authority
 update_strategy: change only through the applicable human approval gate
 ---
 
-# Human Approval Authority Model
+## 1. Purpose
 
-## 1. Mục đích
+This document defines the canonical model for **Human Approval Authority**
+within MDS.
 
-Tài liệu này định nghĩa mô hình canonical cho **Human Approval Authority** trong MDS.
+A Human Approval Authority represents a governance-recognised human decision
+right that allows a decision to take authoritative effect at an applicable
+governed gate.
 
-Approval Authority đại diện cho quyền được governance công nhận để một con người đưa ra quyết định có hiệu lực tại một approval gate xác định.
-
-Authority tồn tại để trả lời:
+The model exists to answer:
 
 ```text
-Ai được quyền quyết định?
-        ↓
-Quyết định loại gì?
-        ↓
-Trong phạm vi nào?
-        ↓
-Tại gate nào?
-        ↓
-Quyết định đó tạo ra hiệu lực gì?
+Who is allowed to decide?
+
+What kind of decision may they make?
+
+Within which scope?
+
+At which governed gate?
+
+What authoritative effect does that decision have?
 ```
 
-Tài liệu này định nghĩa semantics và invariants của authority.
+This document defines the general semantics and invariants of approval
+authority.
 
-Nó không định nghĩa:
+It does not define:
 
-* professional responsibility;
-* External Actor;
-* AI role;
+* professional responsibilities;
+* External Actors;
+* AI roles or agents;
 * implementation authority;
-* artifact lifecycle cụ thể;
-* workflow cụ thể;
-* project-specific authority holder;
-* database schema.
+* artifact-specific lifecycle rules;
+* concrete workflow execution;
+* project-specific authority holders;
+* persistence schemas.
 
-Các concern đó thuộc canonical boundary tương ứng.
+Those concerns belong to their respective canonical MDS boundaries.
 
 ---
 
-# 2. Định nghĩa
+## 2. Definition
 
-Một **Human Approval Authority** là:
+A **Human Approval Authority** is:
 
-> Quyền quyết định chính thức được governance của MDS gán cho một con người để chấp nhận, từ chối hoặc đưa ra một quyết định có hiệu lực trong một scope và tại một gate xác định.
+> A governed decision right assigned to a traceable human that allows the
+> holder to make an authoritative decision within a defined scope and at an
+> applicable governed gate.
 
-Authority không phải chức danh.
-
-Authority không phải role.
-
-Authority không phải ownership.
-
-Authority không phải khả năng AI.
-
-Authority là:
+Authority is not:
 
 ```text
-GOVERNED DECISION RIGHT
+a job title
+a professional responsibility
+an actor type
+an ownership label
+an AI capability
+a workflow
+an implementation permission
+```
+
+Authority is:
+
+```text
+A GOVERNED HUMAN DECISION RIGHT
 ```
 
 ---
 
-# 3. Professional Responsibility và Approval Authority
+## 3. Professional Responsibility and Approval Authority
 
-MDS phải phân biệt rõ:
+MDS must preserve:
 
 ```text
 Professional Responsibility
@@ -79,41 +87,41 @@ Professional Responsibility
 Approval Authority
 ```
 
-Professional Responsibility trả lời:
+Professional Responsibility answers:
 
-> Ai chịu trách nhiệm phân tích, thiết kế, kiểm tra hoặc tạo professional output?
+> Who is responsible for analysing, designing, verifying, operating, or
+> producing a professional output?
 
-Approval Authority trả lời:
+Approval Authority answers:
 
-> Ai được quyền làm cho một quyết định trở thành authoritative?
+> Who is allowed to make the applicable governed decision authoritative?
 
-Ví dụ khái niệm:
+Conceptually:
 
 ```text
-Architecture Responsibility
+Professional Responsibility
         ↓
-phân tích
-đề xuất
-đánh giá trade-off
+Analysis / Professional Work
         ↓
-Architecture Proposal
+Proposal / Professional Output
         ↓
-Approval Gate
+Governed Gate
         ↓
-Architecture Authority
+Human Approval Authority
         ↓
-Decision
+Authoritative Decision
 ```
 
-Một người có thể đồng thời giữ Professional Responsibility và Approval Authority.
+One human may hold both a Professional Responsibility and an Approval
+Authority.
 
-Nhưng việc giữ một classification không tự động cấp classification còn lại.
+Neither classification automatically grants the other.
 
 ---
 
-# 4. External Actor và Approval Authority
+## 4. External Actor and Approval Authority
 
-MDS cũng phải phân biệt:
+MDS must also preserve:
 
 ```text
 External Actor
@@ -121,33 +129,51 @@ External Actor
 Approval Authority
 ```
 
-Một Customer / Stakeholder có thể đồng thời giữ một authority nếu governance gán quyền đó.
+An External Actor may provide:
 
-Nhưng việc là stakeholder không tự động tạo approval rights.
+* intent;
+* domain knowledge;
+* clarification;
+* confirmation;
+* feedback;
+* change requests.
+
+An External Actor may also hold an Approval Authority when governance
+explicitly assigns that authority.
+
+However:
 
 ```text
-Actor Instance
-│
-├── actor relationship
-│
-└── authority assignment
+Being a Stakeholder
+≠
+Having Approval Authority
 ```
 
-Actor semantics thuộc `../actors/`.
+External Actor semantics belong to:
 
-Authority semantics thuộc `authorities/`.
+```text
+../actors/
+```
+
+Approval Authority semantics belong to this directory.
 
 ---
 
-# 5. Authority Type và Authority Assignment
+## 5. Authority Type and Authority Assignment
 
-MDS phải phân biệt hai khái niệm.
+MDS distinguishes two separate concepts:
 
-## 5.1. Authority Type
+```text
+Authority Type
+≠
+Authority Assignment
+```
 
-Authority Type là loại quyền quyết định được định nghĩa ở cấp MDS Core.
+### 5.1. Authority Type
 
-Ví dụ conceptual:
+An Authority Type defines a canonical category of governed decision right.
+
+Examples include:
 
 ```text
 Product Authority
@@ -156,62 +182,69 @@ Architecture Authority
 Release Authority
 ```
 
-Danh sách Authority Type canonical được quản lý bởi `authority-registry.yaml`.
+Canonical Authority Types are registered in:
+
+```text
+./authority-registry.yaml
+```
+
+Authority Types belong to MDS Core.
 
 ---
 
-## 5.2. Authority Assignment
+### 5.2. Authority Assignment
 
-Authority Assignment là việc một Authority Type được gán cho một human holder trong một project hoặc context cụ thể.
+An Authority Assignment connects an Authority Type to a specific human holder
+within a project or governance context.
 
-Ví dụ conceptual:
+Conceptually:
 
 ```text
 Authority Type
-Architecture Authority
-        │
-        │ assigned to
-        ▼
-Human Holder
-        │
-        ├── scope
-        ├── project
-        ├── valid period
-        └── applicable gates
+      ↓
+Authority Assignment
+      │
+      ├── Human Holder
+      ├── Scope
+      ├── Project / Context
+      ├── Validity
+      └── Provenance
 ```
 
-Authority Assignment là project/governance data.
+Authority Assignments are project or governance data.
 
-Nó không phải canonical knowledge của `mds-core/authorities/`.
+They must not be stored as canonical holder assignments inside
+`mds-core/authorities/`.
 
-Nguyên tắc:
+Principle:
 
 ```text
 MDS Core
-→ định nghĩa loại quyền
+→ defines kinds of authority
 
 Project Governance
-→ quyết định ai đang giữ quyền đó
+→ determines who currently holds them
 ```
 
 ---
 
-# 6. Human Authority Holder
+## 6. Human Authority Holder
 
-Authority Holder phải là một human identity có thể truy vết.
+A Human Approval Authority must be assigned to a traceable human identity.
 
-MDS không được gán Human Approval Authority cho:
+Human Approval Authority must not be assigned to:
 
-* AI model;
-* AI agent;
-* prompt;
-* system capability;
-* workflow engine;
+* an AI model;
+* an AI agent;
+* a prompt;
+* a validator;
+* a workflow engine;
+* an MDS system capability;
 * Codex;
 * CI/CD;
-* automated validator.
+* a runtime environment.
 
-Các hệ thống trên có thể cung cấp:
+Automation may provide:
 
 ```text
 analysis
@@ -220,92 +253,115 @@ validation
 evidence
 ```
 
-nhưng không được trở thành human authority.
+but it may not become the Human Approval Authority.
+
+Conceptually:
 
 ```text
 AI / Automation
       ↓
-recommendation / evidence
+Analysis / Evidence / Recommendation
       ↓
 HUMAN GATE
       ↓
 Human Authority Holder
       ↓
-decision
+Governed Decision
 ```
 
 ---
 
-# 7. Authority Scope
+## 7. Authority Scope
 
-Mọi authority phải có scope.
+Every Authority Assignment must have a defined scope.
 
-Scope xác định:
+Scope answers:
 
-> Authority này được quyền quyết định những gì?
+> Within which decision domain is this authority valid?
 
-Không tồn tại authority mặc định có quyền quyết định mọi concern trong project.
+Authority must never be interpreted as unlimited project-wide power by
+default.
 
-Ví dụ conceptual:
+Scope may be constrained by:
+
+* project;
+* product area;
+* business domain;
+* system;
+* subsystem;
+* architecture domain;
+* release class;
+* environment;
+* decision category;
+* validity period.
+
+Conceptually:
 
 ```text
-Authority A
+Authority Holder A
 
 Scope:
-Product decisions
+System A architecture decisions
 ```
 
-không tự động có quyền:
+does not imply authority over:
 
 ```text
-Architecture approval
-Release approval
-Security approval
-Business-rule approval
+Product decisions
+Business decisions
+System B architecture
+Release decisions
 ```
 
-Authority outside scope phải được coi là không hợp lệ.
+A decision made outside the holder's assigned scope is not a valid governed
+decision.
 
 ---
 
-# 8. Approval Gate
+## 8. Governed Gate
 
-Authority chỉ có hiệu lực tại một **explicit governed gate** phù hợp.
+Authority becomes effective only through an applicable **governed gate**.
 
-Gate là điểm trong workflow nơi một proposal, artifact hoặc decision candidate cần human decision trước khi được phép tiến tới authoritative state tiếp theo.
+A governed gate is a control point where a proposal, artifact, decision
+candidate, or release state requires an authorised human decision before it may
+continue to the next authoritative state.
+
+Conceptually:
 
 ```text
 Proposal
    ↓
-Review
+Analysis / Review
    ↓
-──────────────
-Approval Gate
-──────────────
+────────────────
+ GOVERNED GATE
+────────────────
    ↓
-Human Authority
+Applicable Authority
    ↓
 Decision
 ```
 
-Gate phải xác định tối thiểu:
+A gate should identify at minimum:
 
-* concern đang được quyết định;
-* input cần review;
-* authority type phù hợp;
-* decision rights được phép;
-* effect của decision;
-* evidence cần ghi nhận.
+* the decision concern;
+* the object being reviewed;
+* required inputs or evidence;
+* applicable Authority Type;
+* allowed decision types;
+* decision effect;
+* required provenance.
 
-Gate semantics cụ thể thuộc workflow hoặc governance standard tương ứng.
+Detailed gate behaviour belongs to the applicable governance standard or
+workflow contract.
 
 ---
 
-# 9. Decision Rights
+## 9. Decision Rights
 
-Approval Authority không chỉ có quyền `APPROVE`.
+Approval Authority is not limited to a binary approve/reject operation.
 
-Tùy gate, một Authority có thể có các decision rights như:
+Depending on the applicable gate, an Authority may issue decisions such as:
 
 ```text
 APPROVE
@@ -315,192 +371,224 @@ DEFER
 SUPERSEDE
 ```
 
-Không phải gate nào cũng hỗ trợ tất cả decision type.
+Not every gate must support every decision type.
 
-Workflow hoặc standard tương ứng phải xác định decision nào hợp lệ.
+The gate contract determines:
 
-Authority không được tạo decision type ngoài contract của gate.
+* which decisions are permitted;
+* which evidence is required;
+* what effect each decision creates.
 
----
-
-# 10. Approval
-
-`APPROVE` nghĩa là:
-
-> Human Authority xác nhận proposal đáp ứng các điều kiện của gate và cho phép governance transition tương ứng xảy ra.
-
-Approval không có nghĩa:
-
-* artifact đúng mãi mãi;
-* implementation đã hoàn thành;
-* mọi downstream artifact tự động đúng;
-* release tự động được phép;
-* mọi conflict đã biến mất.
-
-Approval chỉ có hiệu lực trong scope của gate đó.
+Authority must not invent a decision type outside the applicable gate
+contract.
 
 ---
 
-# 11. Rejection
+## 10. Approval
 
-`REJECT` nghĩa là proposal hiện tại không được phép tiến qua gate.
+`APPROVE` means:
 
-Rejection phải giữ:
+> The Human Authority accepts that the reviewed object satisfies the applicable
+> governance conditions and permits the corresponding authoritative transition.
 
-* decision;
-* authority holder;
-* timestamp;
-* reason hoặc rationale khi policy yêu cầu;
-* object/version bị reject.
+Approval is always scoped.
 
-Rejection không được xóa proposal hoặc provenance của proposal.
+Approval does not mean:
+
+* the artifact will remain correct forever;
+* implementation is complete;
+* downstream specifications are correct;
+* verification has passed;
+* release is automatically authorised;
+* runtime success is guaranteed.
+
+Approval only establishes the authoritative effect defined by the applicable
+gate.
 
 ---
 
-# 12. Return for Clarification
+## 11. Rejection
 
-`RETURN_FOR_CLARIFICATION` nghĩa là:
+`REJECT` means:
 
-> Authority chưa thể đưa ra authoritative decision vì input chưa đủ rõ, còn mâu thuẫn hoặc thiếu evidence.
+> The reviewed object is not permitted to proceed through the applicable gate.
 
-Đây không phải rejection.
+A rejection must preserve the rejected object and its provenance.
+
+Where required by policy, MDS should retain:
+
+```text
+Decision
+Authority Holder
+Authority Assignment
+Gate
+Object / Version
+Timestamp
+Rationale
+```
+
+Rejection must not erase the proposal or its history.
+
+---
+
+## 12. Return for Clarification
+
+`RETURN_FOR_CLARIFICATION` means:
+
+> An authoritative decision cannot yet be made because the available input is
+> incomplete, ambiguous, inconsistent, or insufficiently supported.
+
+This is distinct from rejection.
+
+Conceptually:
 
 ```text
 Proposal
    ↓
-Gate
+Governed Gate
    ↓
 RETURN_FOR_CLARIFICATION
    ↓
-Professional Responsibility
+Further Analysis / Clarification
    ↓
-Clarified Proposal
+Revised Proposal
    ↓
-Gate again
+Governed Gate again
 ```
 
-MDS phải giữ lineage giữa các vòng review.
+MDS should preserve lineage between review cycles.
 
 ---
 
-# 13. Defer
+## 13. Defer
 
-`DEFER` nghĩa là decision chưa được đưa ra ở thời điểm hiện tại.
+`DEFER` means:
 
-Defer có thể đi kèm:
+> The decision is intentionally postponed without approving or rejecting the
+> current proposal.
 
-* điều kiện cần thỏa;
+A deferment may preserve:
+
+* rationale;
 * dependency;
-* thời điểm xem xét lại;
 * missing information;
+* revisit condition;
+* target milestone;
 * external event.
 
-Deferred proposal không được coi là Approved hoặc Rejected.
+Deferred objects must not be represented as Approved or Rejected.
 
 ---
 
-# 14. Supersede
+## 14. Supersede
 
-Trong những gate cho phép, Authority có thể xác nhận rằng một authoritative decision mới thay thế một decision trước đó.
+Where the applicable gate permits it, an Authority may approve a new decision
+that replaces an earlier authoritative decision.
 
-Supersede phải giữ:
-
-```text
-Old Decision
-      ↓
-historical lineage
-      ↓
-New Decision
-```
-
-Không được overwrite lịch sử.
-
-Chi tiết lifecycle thuộc Artifact Truth Standard.
-
----
-
-# 15. Authority và Project Truth
-
-Approval Authority có thể tham gia vào việc chuyển một proposal sang authoritative state.
-
-Nhưng authority không tự định nghĩa Project Truth.
+Conceptually:
 
 ```text
-Authority
-→ đưa ra governed decision
-
-Artifact Truth Standard
-→ định nghĩa decision đó ảnh hưởng lifecycle/truth thế nào
-
-MDS
-→ enforce + record
+Previous Decision
+      ↓
+Historical Lineage
+      ↓
+New Governed Decision
 ```
 
-Canonical lifecycle semantics thuộc:
+Supersession must not overwrite historical truth.
+
+The exact artifact lifecycle semantics belong to:
 
 ```text
 ../standards/artifact_truth.md
 ```
 
-`authorities/` không được copy hoặc tạo lifecycle cạnh tranh.
+---
+
+## 15. Authority and Project Truth
+
+Authority participates in establishing or changing authoritative project
+knowledge.
+
+However:
+
+```text
+Authority
+→ makes the governed human decision
+
+Artifact Truth Standard
+→ defines how that decision affects artifact truth and lifecycle
+
+MDS
+→ records, validates, and enforces the governed state
+```
+
+Authority does not independently define Project Truth semantics.
+
+This directory must not create an artifact lifecycle that competes with the
+Artifact Truth Standard.
 
 ---
 
-# 16. Authority và Evidence
+## 16. Authority and Evidence
 
-Mỗi authority decision phải có khả năng audit.
+Every governed authority decision must be auditable.
 
-MDS phải có khả năng xác định:
+MDS should be able to determine:
 
 ```text
-Ai quyết định?
+Who made the decision?
 
-Authority nào được sử dụng?
+Which Authority Type was used?
 
-Gate nào?
+Which Authority Assignment was used?
 
-Đối tượng nào?
+What was the assigned scope?
 
-Version nào?
+Which gate was involved?
 
-Decision là gì?
+What object or version was reviewed?
 
-Khi nào?
+What decision was issued?
 
-Dựa trên input/evidence nào?
+When was it issued?
 
-Rationale là gì nếu policy yêu cầu?
+Which inputs or evidence were considered?
+
+What rationale was recorded when required?
 ```
 
-Authority decision là governance evidence.
+Authority decisions are governance evidence.
 
-Nó không được tồn tại chỉ dưới dạng:
+An authoritative state should not exist only as:
 
 ```text
 status: APPROVED
 ```
 
-mà không thể truy ngược decision provenance.
+without decision provenance when governance requires traceability.
+
+Concrete persistence structures belong to:
+
+```text
+../schemas/
+```
 
 ---
 
-# 17. Authority không được suy ra từ chức danh
+## 17. Authority Must Not Be Inferred from Job Titles
 
-MDS không được dùng logic:
+MDS must not use logic such as:
 
 ```text
-Tên chức danh
-      ↓
-tự động có Authority
+Job Title
+   ↓
+Automatic Authority
 ```
 
-Ví dụ:
+For example:
 
 ```text
-Architect
-≠
-Architecture Authority
-
 Product Manager
 ≠
 Product Authority
@@ -508,65 +596,79 @@ Product Authority
 Business Analyst
 ≠
 Business Authority
+
+Architect
+≠
+Architecture Authority
+
+DevOps / SRE
+≠
+Release Authority
 ```
 
-Một người có thể giữ cả hai, nhưng authority phải được gán rõ ràng.
+A human may hold both classifications.
 
-Nguyên tắc:
+The authority relationship must still be explicitly represented through
+governance.
 
-> Responsibility assignment và Authority assignment là hai quyết định governance riêng biệt.
+Principle:
+
+> Responsibility assignment and Authority assignment are separate governance
+> decisions.
 
 ---
 
-# 18. Một người có thể giữ nhiều Authority
+## 18. One Human May Hold Multiple Authorities
 
-Một Human Holder có thể được gán nhiều Authority Type nếu governance cho phép.
+A Human Holder may hold multiple Authority Types when governance allows it.
 
-Ví dụ conceptual:
+Conceptually:
 
 ```text
 Human A
-│
 ├── Product Authority
 └── Business Authority
 ```
 
-Nhưng mỗi decision vẫn phải xác định authority nào đang được sử dụng.
+Each governed decision must still identify which Authority Assignment is being
+used.
 
-Không được sử dụng một authority như quyền thay thế cho authority khác.
+One Authority Type must not be treated as a substitute for another.
 
 ---
 
-# 19. Nhiều người có thể giữ cùng một Authority Type
+## 19. Multiple Humans May Hold the Same Authority Type
 
-Một Authority Type có thể được gán cho nhiều holder nếu governance của project cho phép.
+A canonical Authority Type may be assigned to multiple human holders.
 
-Ví dụ:
+Conceptually:
 
 ```text
 Business Authority
-├── Human A
-└── Human B
+├── Human A → Domain A
+└── Human B → Domain B
 ```
 
-Nhưng việc đó không tự quyết định:
+This does not automatically define:
 
-* một người approve là đủ;
-* cần unanimous approval;
-* majority approval;
-* sequential approval.
+* whether one approval is sufficient;
+* whether unanimous approval is required;
+* whether majority approval is required;
+* whether approvals must be sequential.
 
-Quorum và multi-approval policy thuộc gate/workflow policy.
-
-Authority Model chỉ cho phép nhiều assignment.
+Quorum, joint approval, precedence, and multi-approval rules belong to the
+applicable governance policy.
 
 ---
 
-# 20. Delegation
+## 20. Delegation
 
-Authority delegation không được mặc định tồn tại.
+Authority delegation must not be assumed by default.
 
-Nếu governance cho phép delegation, delegation phải được biểu diễn rõ:
+If governance allows delegation, the delegation must be explicit and
+traceable.
+
+Conceptually:
 
 ```text
 Original Authority Holder
@@ -576,28 +678,32 @@ Delegation Record
 Delegate
 ```
 
-Delegation phải xác định tối thiểu:
+A valid delegation should identify at minimum:
 
-* authority type;
-* scope;
-* thời gian hiệu lực;
-* project/context;
+* Authority Type;
+* delegated scope;
 * delegator;
 * delegate;
-* trạng thái;
+* project or context;
+* validity period;
+* status;
 * provenance.
 
-Không được suy luận delegation từ việc:
+An informal statement such as:
 
-> “Người A nhờ người B duyệt giúp.”
+```text
+"Approve this for me."
+```
 
-Delegation chỉ có hiệu lực nếu governance cho phép và có evidence hợp lệ.
+must not automatically create valid delegated authority.
+
+Delegation is effective only when the applicable governance policy permits it.
 
 ---
 
-# 21. Authority Expiration và Revocation
+## 21. Authority Validity, Expiration, and Revocation
 
-Authority Assignment có thể:
+Authority Assignments may have lifecycle states such as:
 
 ```text
 ACTIVE
@@ -606,67 +712,75 @@ REVOKED
 SUSPENDED
 ```
 
-tùy governance model.
+depending on the applicable governance model.
 
-Một decision chỉ hợp lệ nếu Authority Assignment có hiệu lực tại thời điểm decision được đưa ra.
+A decision is valid only if the required Authority Assignment was effective at
+the time the decision was made.
 
-Việc một authority đã từng tồn tại không có nghĩa nó có hiệu lực mãi mãi.
+Historical authority does not imply current authority.
+
+Revocation or expiration must not erase historical decisions made while the
+assignment was valid.
 
 ---
 
-# 22. Self-Approval
+## 22. Self-Approval
 
-MDS không mặc định cấm hoặc cho phép self-approval.
+MDS does not globally prohibit or globally permit self-approval.
 
-Ví dụ:
+Conceptually:
 
 ```text
 Professional Output Author
-        =
+=
 Authority Holder
 ```
 
-có thể hợp lệ trong project nhỏ nhưng không phù hợp trong một số governance model khác.
+may be valid in a lightweight governance model and invalid in a stricter one.
 
-Do đó:
+Therefore:
 
-> Self-approval phải được quyết định bởi policy của gate hoặc authority type, không được suy luận toàn cục.
+> Self-approval must be governed by the applicable gate or policy rather than
+> assumed globally.
 
-Nếu gate cấm self-approval, MDS phải enforce separation of duties.
+If a gate prohibits self-approval, MDS should enforce the required separation
+of duties.
 
 ---
 
-# 23. Separation of Duties
+## 23. Separation of Duties
 
-Một gate có thể yêu cầu người tạo professional output và người approve phải khác nhau.
+A gate may require the person who produces an output to be different from the
+person who approves it.
+
+Conceptually:
 
 ```text
 Author
-  │
-  ▼
+  ↓
 Proposal
-  │
-  ▼
+  ↓
 Independent Authority
 ```
 
-Policy này có thể được dùng cho:
+Separation of duties may be required for:
 
-* high-risk decision;
-* security-sensitive change;
-* release;
-* architecture decision;
-* regulatory requirement.
+* high-risk decisions;
+* security-sensitive changes;
+* regulated processes;
+* significant architecture decisions;
+* production releases.
 
-Authority Model hỗ trợ khái niệm này nhưng không bắt buộc mọi gate phải dùng nó.
+The Authority Model supports this governance pattern but does not require it
+for every gate.
 
 ---
 
-# 24. Conflict giữa Authorities
+## 24. Authority Conflicts
 
-Có thể xảy ra trường hợp nhiều authority đưa ra decision không tương thích.
+Multiple authority holders may issue incompatible decisions.
 
-Ví dụ conceptual:
+Conceptually:
 
 ```text
 Authority A
@@ -676,55 +790,59 @@ Authority B
 → REJECT
 ```
 
-MDS không được tự chọn một decision.
+MDS must not silently select one decision.
 
-Conflict phải được xử lý theo governance policy xác định:
+Authority conflict must be resolved through an applicable governance policy,
+which may define:
 
 * precedence;
 * escalation;
 * joint approval;
-* higher authority;
-* re-review.
+* higher-scope authority;
+* re-review;
+* quorum.
 
-Nếu chưa có policy phù hợp:
+If no applicable rule resolves the conflict, MDS should preserve:
 
 ```text
 AUTHORITY CONFLICT
 status: unresolved
 ```
 
-phải được giữ nguyên.
-
-AI không được tự giải quyết authority conflict.
+AI must not resolve authority conflicts by assumption or model preference.
 
 ---
 
-# 25. Authority và AI
+## 25. Authority and AI
 
-AI có thể hỗ trợ Human Authority bằng cách:
+AI may assist Human Authorities by:
 
-* tóm tắt proposal;
-* kiểm tra completeness;
-* kiểm tra policy;
-* phát hiện conflict;
-* so sánh version;
-* trình bày impact;
-* tổng hợp evidence;
-* đề xuất decision;
-* cảnh báo risk.
+* summarising proposals;
+* retrieving relevant evidence;
+* checking completeness;
+* checking policy requirements;
+* detecting conflicts;
+* comparing versions;
+* showing downstream impact;
+* identifying missing approvals;
+* identifying scope violations;
+* highlighting risks;
+* proposing candidate decisions;
+* generating clarification questions.
 
-AI không được:
+AI must not:
 
-* tự gán authority cho chính nó;
-* impersonate Human Authority;
-* tự vượt approval gate;
-* tự approve proposal;
-* tự tạo delegation;
-* tự thay đổi Authority Assignment;
-* tự giải quyết authority conflict;
-* dùng confidence score thay cho human decision.
+* assign Human Approval Authority to itself;
+* impersonate a Human Authority;
+* bypass a required human gate;
+* autonomously approve a proposal;
+* create authority delegation;
+* modify Authority Assignments without governed human action;
+* resolve authority conflicts autonomously;
+* convert confidence scores into authority;
+* hide conflicting or missing evidence.
 
-Nguyên tắc:
+Canonical principle:
 
 ```text
 AI recommends
@@ -734,19 +852,26 @@ MDS records and enforces
 
 ---
 
-# 26. Authority và Implementation Plane
+## 26. Authority and the Implementation Plane
 
-Approval Authority không tự động tạo implementation rights.
+Approval Authority does not automatically grant implementation responsibility
+or implementation permission.
+
+MDS must preserve:
 
 ```text
 Approval Authority
 ≠
-Implementation Authority
+Implementation Responsibility
 ```
 
-Việc một người có quyền approve một technical decision không có nghĩa MDS cho phép họ hoặc AI trực tiếp sửa managed-project source code.
+A human may approve a technical decision without becoming responsible for
+implementing it.
 
-Implementation boundary thuộc:
+Likewise, an approved decision does not give MDS itself permission to modify
+managed-project source code.
+
+Implementation belongs to:
 
 ```text
 ../implementation-plane/
@@ -754,223 +879,293 @@ Implementation boundary thuộc:
 
 ---
 
-# 27. Authority và Runtime
+## 27. Authority and Runtime
 
-Release hoặc operational decisions có thể dựa trên runtime evidence.
+Runtime environments may provide evidence used by governed decision-making.
 
-Nhưng Runtime Environment không phải authority.
+Examples include:
+
+* telemetry;
+* health status;
+* incidents;
+* performance observations;
+* deployment results;
+* operational failures.
+
+Runtime is an evidence environment.
+
+Runtime is not an authority.
+
+Conceptually:
 
 ```text
 Runtime Evidence
       ↓
-Human Review
+Analysis
       ↓
-Authority Decision
+Human Authority
+      ↓
+Governed Decision
 ```
 
-Telemetry, test result hoặc production status không tự approve một decision.
+Runtime semantics belong to:
+
+```text
+../runtime/
+```
 
 ---
 
-# 28. Authority Type không phải Gate Type
+## 28. Authority Type is not Gate Type
 
-MDS phải phân biệt:
+MDS must preserve:
 
 ```text
 Authority Type
 ≠
-Approval Gate
+Governed Gate
 ```
 
-Authority Type định nghĩa:
+Authority Type answers:
 
-> loại quyền nào đang tồn tại.
+> What kind of governed decision right exists?
 
-Gate định nghĩa:
+A Gate answers:
 
-> quyền đó được sử dụng tại điểm kiểm soát nào.
+> At which control point is that decision right being exercised?
 
-Một Authority Type có thể được sử dụng ở nhiều gate nếu governance cho phép.
+One Authority Type may participate in multiple gates when governance permits.
 
-Một gate cũng có thể yêu cầu nhiều authority nếu policy yêu cầu.
+One gate may also require multiple Authority Types when policy requires it.
 
 ---
 
-# 29. Authority Assignment không phải Identity
+## 29. Authority Assignment is not Identity
 
-MDS không nên nhúng authority trực tiếp vào identity theo kiểu:
+MDS should not model identity using a permanent label such as:
 
 ```text
 Human A = APPROVER
 ```
 
-Thay vào đó:
+Instead:
 
 ```text
 Human Identity
-      │
-      ▼
+      ↓
 Authority Assignment
       │
-      ├── authority type
-      ├── scope
-      ├── project/context
-      ├── validity
-      └── provenance
+      ├── Authority Type
+      ├── Scope
+      ├── Project / Context
+      ├── Validity
+      └── Provenance
 ```
 
-Như vậy authority có thể thay đổi mà không thay đổi identity.
+This allows authority to change without changing identity.
 
 ---
 
-# 30. Các nguyên tắc bất biến
+## 30. General Invariants
 
 ### AUTHORITY-INV-001
 
-Approval Authority và Professional Responsibility là các classification độc lập.
+Approval Authority and Professional Responsibility are independent
+classifications.
 
 ### AUTHORITY-INV-002
 
-Approval Authority và External Actor là các classification độc lập.
+Approval Authority and External Actor classification are independent.
 
 ### AUTHORITY-INV-003
 
-Human Approval Authority chỉ được gán cho human holder có thể truy vết.
+Human Approval Authority may only be assigned to a traceable human holder.
 
 ### AUTHORITY-INV-004
 
-AI, agent, workflow engine và system capability không được giữ Human Approval Authority.
+AI, agents, workflow engines, runtime environments, and MDS system capabilities
+must not hold Human Approval Authority.
 
 ### AUTHORITY-INV-005
 
-Mọi Authority phải có scope.
+Every Authority Assignment must have a defined scope.
 
 ### AUTHORITY-INV-006
 
-Mọi authority decision phải xảy ra tại một governed gate phù hợp.
+Every governed authority decision must occur through an applicable governed
+gate.
 
 ### AUTHORITY-INV-007
 
-Authority outside its assigned scope không tạo decision hợp lệ.
+A decision outside the holder's assigned authority scope is not a valid
+governed decision.
 
 ### AUTHORITY-INV-008
 
-Professional title không tự động cấp Approval Authority.
+Professional titles or responsibilities must not automatically grant Approval
+Authority.
 
 ### AUTHORITY-INV-009
 
-Authority Type thuộc MDS Core; Authority Assignment thuộc project/governance data.
+Authority Types belong to MDS Core; Authority Assignments belong to project or
+governance data.
 
 ### AUTHORITY-INV-010
 
-Mọi authority decision phải có provenance và có khả năng audit.
+Every authority decision must preserve sufficient provenance for audit.
 
 ### AUTHORITY-INV-011
 
-Approval không tự động xác nhận implementation, verification hoặc release ngoài scope của gate.
+Approval does not automatically confirm implementation, verification, release,
+or runtime outcome outside the applicable gate scope.
 
 ### AUTHORITY-INV-012
 
-Delegation chỉ có hiệu lực khi governance cho phép và delegation được ghi nhận rõ ràng.
+Delegation is valid only when governance permits it and the delegation is
+explicitly recorded.
 
 ### AUTHORITY-INV-013
 
-Expired, revoked hoặc suspended Authority Assignment không được sử dụng để tạo decision mới.
+Expired, revoked, or suspended Authority Assignments must not be used to issue
+new governed decisions.
 
 ### AUTHORITY-INV-014
 
-Authority conflict không được AI tự giải quyết.
+Authority conflicts must not be resolved autonomously by AI.
 
 ### AUTHORITY-INV-015
 
-Self-approval và separation of duties phải được quyết định bởi gate/policy, không được suy luận toàn cục.
+Self-approval and separation of duties must be determined by the applicable
+gate or governance policy rather than assumed globally.
 
 ### AUTHORITY-INV-016
 
-Authority decision không được xóa hoặc overwrite lịch sử decision trước đó.
+Authority decisions must not erase or overwrite historical decision lineage.
+
+### AUTHORITY-INV-017
+
+Evidence may support a human decision but must not be treated as Human Approval
+Authority.
+
+### AUTHORITY-INV-018
+
+An Authority Type must not be created solely because a corresponding
+professional responsibility, department, team, or technology exists.
 
 ---
 
-# 31. Quan hệ với các vùng khác của MDS Core
+## 31. Relationship to Other MDS Core Boundaries
 
 ```text
 authorities/
     │
-    ├── professional responsibility ──► roles/
+    ├── professional responsibilities
+    │   → ../roles/
     │
-    ├── external actor identity ──────► actors/
+    ├── external actors
+    │   → ../actors/
     │
-    ├── approval lifecycle ───────────► standards/
+    ├── artifact truth and lifecycle
+    │   → ../standards/
     │
-    ├── authority data structure ─────► schemas/
+    ├── structured authority data
+    │   → ../schemas/
     │
-    ├── gate/workflow behaviour ──────► workflows/
+    ├── implementation responsibility
+    │   → ../implementation-plane/
     │
-    ├── implementation boundary ──────► implementation-plane/
+    ├── runtime evidence
+    │   → ../runtime/
     │
-    ├── runtime evidence ─────────────► runtime/
+    ├── MDS system capabilities
+    │   → ../system-capabilities/
     │
-    └── AI assistance instructions ───► prompts/
+    ├── AI behaviour
+    │   → ../prompts/
+    │
+    └── gate behaviour
+        → applicable governance standard or workflow contract
 ```
 
-`authorities/` chỉ sở hữu:
+This boundary owns:
 
-* authority semantics;
-* authority classification;
+* Human Approval Authority semantics;
+* Authority Type semantics;
+* Authority Assignment semantics;
 * authority scope semantics;
-* authority assignment semantics;
-* human decision-right semantics.
+* governed human decision-right semantics;
+* delegation semantics;
+* authority validity semantics;
+* authority conflict semantics.
 
-Nó không được sao chép canonical rules của các boundary khác.
+It must not duplicate canonical rules owned by other boundaries.
 
 ---
 
-# 32. Canonical Authority Types
+## 32. Canonical Authority Types
 
-Tài liệu này không đăng ký Authority Type cụ thể.
+This document defines the general authority model.
 
-Danh sách Authority Type được MDS công nhận phải được quản lý bởi:
+It does not itself register concrete Authority Types.
+
+The canonical Authority Type list is owned by:
 
 ```text
-authority-registry.yaml
+./authority-registry.yaml
 ```
 
-Sự xuất hiện của một authority name trong:
+The current canonical types are defined in:
+
+```text
+./product-authority.md
+./business-authority.md
+./architecture-authority.md
+./release-authority.md
+```
+
+The appearance of an authority name in an:
 
 * example;
 * guide;
 * prompt;
-* workflow;
+* proposal;
 * source document;
+* implementation artifact;
 
-không làm authority đó trở thành canonical.
+does not make that authority canonical.
+
+Only the Authority Registry establishes canonical Authority Types.
 
 ---
 
-# 33. Nguyên tắc mở rộng
+## 33. Extension Principle
 
-Không tạo Authority Type mới chỉ vì tồn tại một Professional Role tương ứng.
+The Authority taxonomy should remain intentionally small.
 
-Ví dụ:
+A new Authority Type must not be introduced merely because a corresponding
+professional role, department, technical layer, team, or organisational title
+exists.
+
+Before creating a new Authority Type, determine whether the need can be
+represented through:
 
 ```text
-Database Role
+Existing Authority Type
++
+Scoped Authority Assignment
++
+Applicable Gate Policy
 ```
 
-không tự động yêu cầu:
+A new canonical Authority Type should only be introduced when:
 
-```text
-Database Authority
-```
+1. a genuinely distinct decision domain exists;
+2. an explicit governed human decision gate exists;
+3. the decision right cannot be represented cleanly by an existing Authority
+   Type and scope;
+4. the distinction has meaningful governance consequences;
+5. the change passes the applicable governed approval process.
 
-Authority Type mới chỉ nên được tạo khi:
+Principle:
 
-1. tồn tại một decision domain riêng biệt;
-2. domain đó có explicit human gate;
-3. quyền quyết định cần được phân biệt với authority hiện có;
-4. sự phân biệt có ảnh hưởng governance thực tế;
-5. thay đổi được approve qua governed workflow.
-
-Nguyên tắc:
-
-> **Authority model hóa quyền quyết định thực sự, không mô phỏng org chart.**
+> **Model real governed decision rights, not organisational charts.**

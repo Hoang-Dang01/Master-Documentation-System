@@ -9,7 +9,7 @@ classification: approval_authority
 model_ref: ./authority-model.md
 registry_ref: ./authority-registry.yaml
 update_strategy: change only through the applicable human approval gate
------------------------------------------------------------------------
+---
 
 # Product Authority
 
